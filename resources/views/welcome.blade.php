@@ -26,6 +26,8 @@
         return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
     };
 
+    $hasHtml = fn (?string $value): bool => $value !== strip_tags((string) $value);
+
     $heroTitle = data_get($homepage, 'hero_title', 'Passeggiate nella natura con lama e alpaca');
     $heroTitleLines = explode("\n", wordwrap($heroTitle, 31, "\n"));
     $experienceItems = $experiences->isNotEmpty() ? $experiences : new \Illuminate\Support\Collection([
@@ -139,7 +141,13 @@
                         <a href="{{ $experience instanceof \App\Models\Experience ? route('experiences.show', $experience) : '#esperienze' }}" class="block bg-white/45 p-8 transition duration-500 hover:bg-white/70">
                             <img src="{{ $mediaUrl(data_get($experience, 'image')) }}" alt="{{ data_get($experience, 'title') }}" class="w-full h-[400px] object-cover mb-6">
                             <h3 class="text-3xl mb-4" style="font-family:'Cormorant Garamond',serif;">{{ data_get($experience, 'title') }}</h3>
-                            <p class="text-[#5f574d] leading-relaxed">{{ data_get($experience, 'description') }}</p>
+                            <div class="experience-copy text-[#5f574d] leading-relaxed">
+                                @if ($hasHtml(data_get($experience, 'description')))
+                                    {!! data_get($experience, 'description') !!}
+                                @else
+                                    {!! nl2br(e(data_get($experience, 'description'))) !!}
+                                @endif
+                            </div>
                         </a>
                     @endforeach
                 </div>

@@ -244,8 +244,8 @@
             </div>
         </section>
 
-        <section class="pt-32 pb-[70vh] px-6 md:px-12" style="background-color:#efe7da;background-image:radial-gradient(rgba(120,98,72,.03) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.02) .7px,#efe7da .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
-            <div id="prenota" class="max-w-7xl mx-auto grid scroll-mt-[calc(104px+2rem)] lg:grid-cols-[.85fr_1.15fr] gap-16">
+        <section class="pt-40 pb-[70vh] px-6 md:px-12" style="background-color:#efe7da;background-image:radial-gradient(rgba(120,98,72,.03) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.02) .7px,#efe7da .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
+            <div id="prenota" class="max-w-7xl mx-auto grid scroll-mt-[calc(104px+4rem)] lg:grid-cols-[.85fr_1.15fr] gap-16">
                 <div>
                     <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($bookingSettings, 'eyebrow', 'Prenota') }}</p>
                     <h2 class="text-5xl md:text-6xl mb-8" style="font-family:'Cormorant Garamond',serif;">
@@ -254,6 +254,10 @@
                     <p class="text-[#5f574d] leading-relaxed text-lg max-w-2xl">
                         {{ data_get($bookingSettings, 'body', 'Compila il modulo con le informazioni principali. Ti ricontatteremo per confermare disponibilità, dettagli e orari.') }}
                     </p>
+
+                    @if (data_get($bookingSettings, 'image'))
+                        <img src="{{ $mediaUrl(data_get($bookingSettings, 'image')) }}" alt="Prenota LAMAKA" class="mt-10 h-[360px] w-full max-w-2xl object-cover">
+                    @endif
                 </div>
 
                 <form method="POST" action="{{ route('booking.store') }}" class="bg-white/55 border border-[#d8cdbd] p-6 md:p-10">

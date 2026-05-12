@@ -6,6 +6,7 @@ use App\Filament\Resources\BookingFormSettings\Pages\ManageBookingFormSettings;
 use App\Models\BookingFormSetting;
 use BackedEnum;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -50,6 +51,12 @@ class BookingFormSettingResource extends Resource
                         Textarea::make('body')
                             ->label('Testo introduttivo')
                             ->rows(4)
+                            ->columnSpanFull(),
+                        FileUpload::make('image')
+                            ->label('Immagine sotto al testo')
+                            ->image()
+                            ->disk('public')
+                            ->directory('booking')
                             ->columnSpanFull(),
                         TextInput::make('submit_label')
                             ->label('Testo pulsante')

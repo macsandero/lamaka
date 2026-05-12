@@ -10,6 +10,7 @@ class BookingFormSetting extends Model
         'eyebrow',
         'heading',
         'body',
+        'image',
         'submit_label',
         'success_message',
         'is_active',

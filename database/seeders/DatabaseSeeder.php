@@ -104,6 +104,7 @@ class DatabaseSeeder extends Seeder
                 'eyebrow' => 'Prenota',
                 'heading' => 'Prenota la tua esperienza',
                 'body' => 'Compila il modulo con le informazioni principali. Ti ricontatteremo per confermare disponibilità, dettagli e orari.',
+                'image' => null,
                 'submit_label' => 'Invia richiesta',
                 'success_message' => 'Richiesta inviata correttamente. Ti ricontatteremo al più presto.',
                 'is_active' => true,

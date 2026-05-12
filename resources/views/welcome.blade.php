@@ -58,7 +58,7 @@
                 <a href="#contatti" class="js-scroll hover:text-[#2f2a24] transition">Contatti</a>
             </nav>
 
-            <a href="#contatti"
+            <a href="#prenota"
                class="js-scroll hidden md:inline-block border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-xs uppercase tracking-[0.22em] hover:bg-[#6f6a45] hover:text-white transition duration-500">
                 Prenota
             </a>
@@ -84,7 +84,7 @@
                 <a href="#animali" class="js-scroll mobile-link">Animali</a>
                 <a href="#contatti" class="js-scroll mobile-link">Contatti</a>
 
-                <a href="#contatti" class="js-scroll mobile-link border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-center">
+                <a href="#prenota" class="js-scroll mobile-link border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-center">
                     Prenota
                 </a>
             </div>
@@ -192,11 +192,9 @@
                         {{ data_get($contact, 'body', 'Per informazioni, disponibilità e prenotazioni puoi contattarci direttamente. Ti risponderemo con i dettagli più adatti alla stagione e al gruppo.') }}
                     </p>
 
-                    @if (data_get($contact, 'booking_url'))
-                        <a href="{{ data_get($contact, 'booking_url') }}" class="inline-block mt-10 bg-[#6f6a45] text-white px-8 py-4 uppercase tracking-[0.25em] text-xs hover:bg-[#4f4a35] transition duration-500">
-                            {{ data_get($contact, 'booking_label', 'Contattaci') }}
-                        </a>
-                    @endif
+                    <a href="#prenota" class="js-scroll inline-block mt-10 bg-[#6f6a45] text-white px-8 py-4 uppercase tracking-[0.25em] text-xs hover:bg-[#4f4a35] transition duration-500">
+                        {{ data_get($contact, 'booking_label', 'Prenota') }}
+                    </a>
                 </div>
 
                 <div class="space-y-8 text-[#5f574d]">
@@ -235,6 +233,87 @@
                         </div>
                     @endif
                 </div>
+            </div>
+        </section>
+
+        <section id="prenota" class="py-32 px-6 md:px-12" style="background-color:#efe7da;background-image:radial-gradient(rgba(120,98,72,.03) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.02) .7px,#efe7da .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
+            <div class="max-w-7xl mx-auto grid lg:grid-cols-[.85fr_1.15fr] gap-16">
+                <div>
+                    <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($bookingSettings, 'eyebrow', 'Prenota') }}</p>
+                    <h2 class="text-5xl md:text-6xl mb-8" style="font-family:'Cormorant Garamond',serif;">
+                        {{ data_get($bookingSettings, 'heading', 'Prenota la tua esperienza') }}
+                    </h2>
+                    <p class="text-[#5f574d] leading-relaxed text-lg max-w-2xl">
+                        {{ data_get($bookingSettings, 'body', 'Compila il modulo con le informazioni principali. Ti ricontatteremo per confermare disponibilità, dettagli e orari.') }}
+                    </p>
+                </div>
+
+                <form method="POST" action="{{ route('booking.store') }}" class="bg-white/55 border border-[#d8cdbd] p-6 md:p-10">
+                    @csrf
+                    <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden">
+
+                    @if (session('booking_success'))
+                        <div class="mb-8 border border-[#6f6a45]/30 bg-[#f3efe7] px-5 py-4 text-[#4f4a35] leading-relaxed">
+                            {{ session('booking_success') }}
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="mb-8 border border-red-300 bg-red-50 px-5 py-4 text-red-800 leading-relaxed">
+                            Controlla i campi evidenziati e riprova.
+                        </div>
+                    @endif
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        @foreach ($bookingFields as $field)
+                            @php
+                                $fieldName = "fields[{$field->key}]";
+                                $oldValue = old("fields.{$field->key}");
+                                $inputClasses = 'w-full border border-[#d8cdbd] bg-white/80 px-4 py-3 text-[#2f2a24] outline-none focus:border-[#6f6a45] transition';
+                            @endphp
+
+                            <div class="{{ $field->is_full_width || in_array($field->type, ['textarea', 'checkbox'], true) ? 'md:col-span-2' : '' }}">
+                                @if ($field->type === 'checkbox')
+                                    <label class="flex gap-3 text-[#5f574d] leading-relaxed">
+                                        <input type="checkbox" name="{{ $fieldName }}" value="1" @checked($oldValue) class="mt-1 h-5 w-5 border-[#d8cdbd] text-[#6f6a45] focus:ring-[#6f6a45]">
+                                        <span>
+                                            {{ $field->label }}@if ($field->is_required)<span class="text-red-700">*</span>@endif
+                                        </span>
+                                    </label>
+                                @else
+                                    <label class="block uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2" for="booking-{{ $field->key }}">
+                                        {{ $field->label }}@if ($field->is_required)<span class="text-red-700">*</span>@endif
+                                    </label>
+
+                                    @if ($field->type === 'textarea')
+                                        <textarea id="booking-{{ $field->key }}" name="{{ $fieldName }}" rows="5" placeholder="{{ $field->placeholder }}" class="{{ $inputClasses }}">{{ $oldValue }}</textarea>
+                                    @elseif ($field->type === 'select')
+                                        <select id="booking-{{ $field->key }}" name="{{ $fieldName }}" class="{{ $inputClasses }}">
+                                            <option value="">Seleziona</option>
+                                            @foreach ($field->optionsList() as $option)
+                                                <option value="{{ $option }}" @selected($oldValue === $option)>{{ $option }}</option>
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <input id="booking-{{ $field->key }}" type="{{ $field->type }}" name="{{ $fieldName }}" value="{{ $oldValue }}" placeholder="{{ $field->placeholder }}" class="{{ $inputClasses }}">
+                                    @endif
+                                @endif
+
+                                @error("fields.{$field->key}")
+                                    <p class="mt-2 text-sm text-red-800">{{ $message }}</p>
+                                @enderror
+
+                                @if ($field->help_text)
+                                    <p class="mt-2 text-sm text-[#7a6f63]">{{ $field->help_text }}</p>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <button type="submit" class="mt-8 w-full bg-[#6f6a45] text-white px-8 py-4 uppercase tracking-[0.25em] text-xs hover:bg-[#4f4a35] transition duration-500">
+                        {{ data_get($bookingSettings, 'submit_label', 'Invia richiesta') }}
+                    </button>
+                </form>
             </div>
         </section>
 

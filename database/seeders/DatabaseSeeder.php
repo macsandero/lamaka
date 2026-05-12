@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Animal;
+use App\Models\BookingFormField;
+use App\Models\BookingFormSetting;
 use App\Models\ContactSetting;
 use App\Models\Experience;
 use App\Models\HomepageContent;
@@ -94,5 +96,45 @@ class DatabaseSeeder extends Seeder
                 'is_active' => true,
             ],
         );
+
+        BookingFormSetting::query()->updateOrCreate(
+            ['id' => 1],
+            [
+                'eyebrow' => 'Prenota',
+                'heading' => 'Prenota la tua esperienza',
+                'body' => 'Compila il modulo con le informazioni principali. Ti ricontatteremo per confermare disponibilità, dettagli e orari.',
+                'submit_label' => 'Invia richiesta',
+                'success_message' => 'Richiesta inviata correttamente. Ti ricontatteremo al più presto.',
+                'is_active' => true,
+            ],
+        );
+
+        $bookingFields = [
+            ['label' => 'Nome e cognome', 'key' => 'nome', 'type' => 'text', 'placeholder' => 'Il tuo nome', 'sort_order' => 10, 'is_required' => true],
+            ['label' => 'Email', 'key' => 'email', 'type' => 'email', 'placeholder' => 'nome@email.it', 'sort_order' => 20, 'is_required' => true],
+            ['label' => 'Telefono', 'key' => 'telefono', 'type' => 'tel', 'placeholder' => '+39 ...', 'sort_order' => 30, 'is_required' => false],
+            ['label' => 'Esperienza', 'key' => 'esperienza', 'type' => 'select', 'placeholder' => null, 'options' => "Primo incontro\nPasseggiata al tramonto\nAltro", 'sort_order' => 40, 'is_required' => true],
+            ['label' => 'Data preferita', 'key' => 'data_preferita', 'type' => 'date', 'placeholder' => null, 'sort_order' => 50, 'is_required' => false],
+            ['label' => 'Numero partecipanti', 'key' => 'partecipanti', 'type' => 'number', 'placeholder' => null, 'sort_order' => 60, 'is_required' => false],
+            ['label' => 'Messaggio', 'key' => 'messaggio', 'type' => 'textarea', 'placeholder' => 'Raccontaci esigenze, periodo o domande particolari.', 'sort_order' => 70, 'is_required' => false, 'is_full_width' => true],
+            ['label' => 'Accetto di essere ricontattato per la gestione della richiesta.', 'key' => 'privacy', 'type' => 'checkbox', 'placeholder' => null, 'sort_order' => 80, 'is_required' => true, 'is_full_width' => true],
+        ];
+
+        foreach ($bookingFields as $field) {
+            BookingFormField::query()->updateOrCreate(
+                ['key' => $field['key']],
+                [
+                    'label' => $field['label'],
+                    'type' => $field['type'],
+                    'placeholder' => $field['placeholder'] ?? null,
+                    'help_text' => null,
+                    'options' => $field['options'] ?? null,
+                    'is_required' => $field['is_required'],
+                    'is_active' => true,
+                    'is_full_width' => $field['is_full_width'] ?? false,
+                    'sort_order' => $field['sort_order'],
+                ],
+            );
+        }
     }
 }

@@ -80,7 +80,7 @@ class BookingSubmissionController extends Controller
         ]);
 
         try {
-            Mail::to(config('mail.booking_to'))->send(new BookingSubmissionReceived($submission));
+            Mail::to($this->bookingRecipients())->send(new BookingSubmissionReceived($submission));
         } catch (Throwable $exception) {
             Log::error('Unable to send booking submission email.', [
                 'booking_submission_id' => $submission->getKey(),
@@ -95,5 +95,17 @@ class BookingSubmissionController extends Controller
         return back()
             ->withInput([])
             ->with('booking_success', $successMessage);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function bookingRecipients(): array
+    {
+        return collect(explode(',', (string) config('mail.booking_to')))
+            ->map(fn (string $email): string => trim($email))
+            ->filter(fn (string $email): bool => filter_var($email, FILTER_VALIDATE_EMAIL) !== false)
+            ->values()
+            ->all();
     }
 }

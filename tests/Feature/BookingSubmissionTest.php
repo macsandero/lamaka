@@ -16,6 +16,7 @@ class BookingSubmissionTest extends TestCase
     {
         Mail::fake();
         config(['app.display_timezone' => 'Europe/Rome']);
+        config(['mail.booking_to' => 'federicotoson07@gmail.com,vera.munzi@gmail.com']);
 
         $this->seed();
 
@@ -49,7 +50,8 @@ class BookingSubmissionTest extends TestCase
             $submission->receivedAtFormatted(),
         );
 
-        Mail::assertSent(BookingSubmissionReceived::class, fn (BookingSubmissionReceived $mail): bool => $mail->hasTo('info@lamaka.it')
+        Mail::assertSent(BookingSubmissionReceived::class, fn (BookingSubmissionReceived $mail): bool => $mail->hasTo('federicotoson07@gmail.com')
+            && $mail->hasTo('vera.munzi@gmail.com')
             && $mail->submission->is($submission));
     }
 

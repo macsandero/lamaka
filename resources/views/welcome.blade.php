@@ -52,13 +52,13 @@
             </a>
 
             <nav class="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.22em] text-[#5f574d]">
-                <a href="#esperienze" class="js-scroll hover:text-[#2f2a24] transition">Esperienze</a>
-                <a href="#chi-siamo" class="js-scroll hover:text-[#2f2a24] transition">Chi siamo</a>
-                <a href="#animali" class="js-scroll hover:text-[#2f2a24] transition">Animali</a>
-                <a href="#contatti" class="js-scroll hover:text-[#2f2a24] transition">Contatti</a>
+                <a href="/#esperienze" class="js-scroll hover:text-[#2f2a24] transition">Esperienze</a>
+                <a href="/#chi-siamo" class="js-scroll hover:text-[#2f2a24] transition">Chi siamo</a>
+                <a href="/#animali" class="js-scroll hover:text-[#2f2a24] transition">Animali</a>
+                <a href="/#contatti" class="js-scroll hover:text-[#2f2a24] transition">Contatti</a>
             </nav>
 
-            <a href="#prenota"
+            <a href="/#prenota"
                class="js-scroll hidden md:inline-block border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-xs uppercase tracking-[0.22em] hover:bg-[#6f6a45] hover:text-white transition duration-500">
                 Prenota
             </a>
@@ -79,12 +79,12 @@
 
         <div id="mobile-menu" class="hidden md:hidden border-t border-[#d8cdbd]">
             <div class="flex flex-col px-6 py-6 gap-6 text-xs uppercase tracking-[0.22em] text-[#5f574d]">
-                <a href="#esperienze" class="js-scroll mobile-link">Esperienze</a>
-                <a href="#chi-siamo" class="js-scroll mobile-link">Chi siamo</a>
-                <a href="#animali" class="js-scroll mobile-link">Animali</a>
-                <a href="#contatti" class="js-scroll mobile-link">Contatti</a>
+                <a href="/#esperienze" class="js-scroll mobile-link">Esperienze</a>
+                <a href="/#chi-siamo" class="js-scroll mobile-link">Chi siamo</a>
+                <a href="/#animali" class="js-scroll mobile-link">Animali</a>
+                <a href="/#contatti" class="js-scroll mobile-link">Contatti</a>
 
-                <a href="#prenota" class="js-scroll mobile-link border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-center">
+                <a href="/#prenota" class="js-scroll mobile-link border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-center">
                     Prenota
                 </a>
             </div>
@@ -192,7 +192,7 @@
                         {{ data_get($contact, 'body', 'Per informazioni, disponibilità e prenotazioni puoi contattarci direttamente. Ti risponderemo con i dettagli più adatti alla stagione e al gruppo.') }}
                     </p>
 
-                    <a href="#prenota" class="js-scroll inline-block mt-10 bg-[#6f6a45] text-white px-8 py-4 uppercase tracking-[0.25em] text-xs hover:bg-[#4f4a35] transition duration-500">
+                    <a href="/#prenota" class="js-scroll inline-block mt-10 bg-[#6f6a45] text-white px-8 py-4 uppercase tracking-[0.25em] text-xs hover:bg-[#4f4a35] transition duration-500">
                         {{ data_get($contact, 'booking_label', 'Prenota') }}
                     </a>
                 </div>
@@ -341,26 +341,43 @@
             });
         });
 
+        const scrollToHash = (hash, behavior = 'smooth') => {
+            if (!hash) return false;
+
+            const target = document.querySelector(hash);
+            const header = document.querySelector('#site-header');
+            if (!target || !header) return false;
+
+            const headerHeight = header.offsetHeight;
+            const targetTop = target.getBoundingClientRect().top + window.scrollY;
+
+            window.scrollTo({
+                top: targetTop - headerHeight,
+                behavior,
+            });
+
+            return true;
+        };
+
         document.querySelectorAll('.js-scroll').forEach((link) => {
             link.addEventListener('click', function (event) {
-                const targetId = this.getAttribute('href');
-                if (!targetId || !targetId.startsWith('#')) return;
+                const linkUrl = new URL(this.getAttribute('href'), window.location.href);
+                const currentUrl = new URL(window.location.href);
 
-                const target = document.querySelector(targetId);
-                const header = document.querySelector('#site-header');
-                if (!target || !header) return;
+                if (linkUrl.pathname !== currentUrl.pathname || !linkUrl.hash) return;
 
-                event.preventDefault();
-
-                const headerHeight = header.offsetHeight;
-                const targetTop = target.getBoundingClientRect().top + window.scrollY;
-
-                window.scrollTo({
-                    top: targetTop - headerHeight,
-                    behavior: 'smooth'
-                });
+                if (scrollToHash(linkUrl.hash)) {
+                    event.preventDefault();
+                    history.pushState(null, '', linkUrl.hash);
+                }
             });
         });
+
+        if (window.location.hash) {
+            window.addEventListener('load', () => {
+                setTimeout(() => scrollToHash(window.location.hash, 'auto'), 50);
+            });
+        }
     </script>
 
 </body>

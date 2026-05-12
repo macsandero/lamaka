@@ -11,7 +11,7 @@
 
         <p style="margin: 0 0 20px; line-height: 1.6;">
             Riferimento <strong>{{ $submission->reference }}</strong><br>
-            Ricevuta il {{ $submission->created_at?->timezone(config('app.timezone'))->format('d/m/Y H:i') }}
+            Ricevuta il {{ $submission->receivedAtFormatted() }}
         </p>
 
         <table style="width: 100%; border-collapse: collapse;">

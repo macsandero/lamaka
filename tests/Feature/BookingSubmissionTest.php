@@ -15,6 +15,7 @@ class BookingSubmissionTest extends TestCase
     public function test_booking_request_can_be_submitted(): void
     {
         Mail::fake();
+        config(['app.display_timezone' => 'Europe/Rome']);
 
         $this->seed();
 
@@ -43,6 +44,10 @@ class BookingSubmissionTest extends TestCase
 
         $this->assertSame('Mario Rossi', $submission->fieldValue('nome'));
         $this->assertSame('mario@example.com', $submission->fieldValue('email'));
+        $this->assertSame(
+            $submission->created_at->copy()->timezone('Europe/Rome')->format('d/m/Y H:i'),
+            $submission->receivedAtFormatted(),
+        );
 
         Mail::assertSent(BookingSubmissionReceived::class, fn (BookingSubmissionReceived $mail): bool => $mail->hasTo('info@lamaka.it')
             && $mail->submission->is($submission));

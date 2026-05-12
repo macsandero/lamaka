@@ -35,7 +35,7 @@ class BookingSubmissionsTable
                     ->badge(),
                 TextColumn::make('created_at')
                     ->label('Ricevuta')
-                    ->dateTime('d/m/Y H:i')
+                    ->state(fn (BookingSubmission $record): string => $record->receivedAtFormatted())
                     ->sortable(),
             ])
             ->filters([

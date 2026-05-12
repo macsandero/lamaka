@@ -49,4 +49,11 @@ class BookingSubmission extends Model
 
         return is_scalar($value) ? (string) $value : null;
     }
+
+    public function receivedAtFormatted(): string
+    {
+        return $this->created_at
+            ? $this->created_at->copy()->timezone(config('app.display_timezone', 'Europe/Rome'))->format('d/m/Y H:i')
+            : '';
+    }
 }

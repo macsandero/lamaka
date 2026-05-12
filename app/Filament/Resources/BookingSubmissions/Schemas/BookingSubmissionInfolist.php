@@ -24,7 +24,7 @@ class BookingSubmissionInfolist
                             ->badge(),
                         TextEntry::make('created_at')
                             ->label('Ricevuta')
-                            ->dateTime('d/m/Y H:i'),
+                            ->state(fn (BookingSubmission $record): string => $record->receivedAtFormatted()),
                     ])
                     ->columns(3),
                 Section::make('Dati inviati')

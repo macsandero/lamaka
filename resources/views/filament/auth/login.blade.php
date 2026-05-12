@@ -7,21 +7,21 @@
     }
 
     .fi-simple-main {
-        width: min(100%, 360px) !important;
-        max-width: 360px !important;
+        width: min(100%, 407px) !important;
+        max-width: 407px !important;
     }
 
     .lamaka-auth-card {
         background: rgba(255, 255, 255, .72);
         border: 1px solid #d8cdbd;
         color: #2f2a24;
-        padding: 1.65rem;
+        padding: 1.3rem 1.65rem;
     }
 
     .lamaka-auth-logo {
         width: 6.5rem;
         max-width: 45%;
-        margin-bottom: 2rem;
+        margin-bottom: 1.45rem;
     }
 
     .lamaka-auth-title {
@@ -29,14 +29,14 @@
         font-size: clamp(1.85rem, 4vw, 2.35rem);
         font-weight: 400;
         line-height: .95;
-        margin: 0 0 .75rem;
+        margin: 0 0 .55rem;
     }
 
     .lamaka-auth-copy {
         color: #5f574d;
         font-size: .95rem;
         line-height: 1.35;
-        margin-bottom: 1.75rem;
+        margin-bottom: 1.25rem;
     }
 
     .lamaka-auth-card .fi-fo-field-wrp-label span,
@@ -80,12 +80,12 @@
     }
 
     .lamaka-auth-card .fi-fo-component-ctn {
-        gap: 1rem;
+        gap: .8rem;
     }
 
     .lamaka-auth-card .fi-sc-actions,
     .lamaka-auth-card .fi-fo-actions {
-        margin-top: 1.1rem;
+        margin-top: .85rem;
     }
 </style>
 

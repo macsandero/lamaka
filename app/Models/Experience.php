@@ -2,13 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['title', 'description', 'image', 'sort_order', 'is_active'])]
 class Experience extends Model
 {
+    protected $fillable = [
+        'title',
+        'description',
+        'image',
+        'sort_order',
+        'is_active',
+    ];
+
     protected function casts(): array
     {
         return [

@@ -2,13 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['name', 'description', 'image', 'sort_order', 'is_active'])]
 class Animal extends Model
 {
+    protected $fillable = [
+        'name',
+        'description',
+        'image',
+        'sort_order',
+        'is_active',
+    ];
+
     protected function casts(): array
     {
         return [

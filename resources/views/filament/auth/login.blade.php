@@ -106,6 +106,47 @@
     .lamaka-auth-card .fi-fo-actions {
         margin-top: .85rem;
     }
+
+    .lamaka-login-form {
+        display: grid;
+        gap: .85rem;
+    }
+
+    .lamaka-login-field {
+        display: grid;
+        gap: .35rem;
+    }
+
+    .lamaka-login-input {
+        background: rgba(255, 255, 255, .86);
+        border: 1px solid #d8cdbd;
+        border-radius: 0;
+        color: #2f2a24;
+        min-height: 2.65rem;
+        padding: 0 .85rem;
+        width: 100%;
+    }
+
+    .lamaka-login-input:focus {
+        border-color: #6f6a45;
+        outline: none;
+    }
+
+    .lamaka-login-button {
+        background: #6f6a45;
+        color: #fff;
+        min-height: 3rem;
+        text-transform: uppercase;
+        letter-spacing: .24em;
+        font-size: .75rem;
+        font-weight: 500;
+        margin-top: .45rem;
+        width: 100%;
+    }
+
+    .lamaka-login-button:hover {
+        background: #4f4a35;
+    }
 </style>
 
 <div class="lamaka-auth-card">
@@ -136,5 +177,34 @@
         </div>
     @endif
 
-    {{ $this->content }}
+    <form wire:submit.prevent="authenticate" class="lamaka-login-form">
+        <div class="lamaka-login-field">
+            <label for="admin-email">Email</label>
+            <input
+                id="admin-email"
+                type="email"
+                wire:model.defer="data.email"
+                autocomplete="username"
+                autofocus
+                required
+                class="lamaka-login-input"
+            >
+        </div>
+
+        <div class="lamaka-login-field">
+            <label for="admin-password">Password</label>
+            <input
+                id="admin-password"
+                type="password"
+                wire:model.defer="data.password"
+                autocomplete="current-password"
+                required
+                class="lamaka-login-input"
+            >
+        </div>
+
+        <button type="submit" class="lamaka-login-button">
+            Accedi
+        </button>
+    </form>
 </div>

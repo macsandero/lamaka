@@ -57,14 +57,11 @@ class MakeAdminUser extends Command
             return self::FAILURE;
         }
 
-        User::query()->updateOrCreate(
-            ['email' => $email],
-            [
-                'name' => (string) $this->option('name'),
-                'password' => Hash::make($password),
-                'is_admin' => true,
-            ],
-        );
+        $user = User::query()->firstOrNew(['email' => $email]);
+        $user->name = (string) $this->option('name');
+        $user->password = Hash::make($password);
+        $user->is_admin = true;
+        $user->save();
 
         $this->info("Admin user ready: [{$email}].");
 

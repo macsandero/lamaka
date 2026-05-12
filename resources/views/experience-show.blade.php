@@ -26,6 +26,16 @@
         return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
     };
 
+    $versionedMediaUrl = function (?string $path, ?string $fallback = null) use ($mediaUrl, $experience): string {
+        $url = $mediaUrl($path, $fallback);
+
+        if (! $path || str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $url;
+        }
+
+        return $url.(str_contains($url, '?') ? '&' : '?').'v='.$experience->updated_at?->timestamp;
+    };
+
     $hasHtml = fn (?string $value): bool => $value !== strip_tags((string) $value);
 @endphp
 
@@ -66,7 +76,7 @@
                         </h1>
 
                         @if ($experience->image)
-                            <img src="{{ $mediaUrl($experience->image) }}" alt="{{ $experience->title }}" class="mb-10 w-full min-h-[320px] max-h-[560px] object-cover">
+                            <img src="{{ $versionedMediaUrl($experience->image) }}" alt="{{ $experience->title }}" class="mb-10 block w-full min-h-[320px] max-h-[560px] object-cover">
                         @endif
 
                         @if ($experience->description)

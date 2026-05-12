@@ -244,7 +244,7 @@
             </div>
         </section>
 
-        <section id="prenota" class="py-32 px-6 md:px-12" style="background-color:#efe7da;background-image:radial-gradient(rgba(120,98,72,.03) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.02) .7px,#efe7da .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
+        <section id="prenota" class="py-32 px-6 md:px-12" style="scroll-margin-top:-96px;background-color:#efe7da;background-image:radial-gradient(rgba(120,98,72,.03) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.02) .7px,#efe7da .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
             <div class="max-w-7xl mx-auto grid lg:grid-cols-[.85fr_1.15fr] gap-16">
                 <div>
                     <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($bookingSettings, 'eyebrow', 'Prenota') }}</p>

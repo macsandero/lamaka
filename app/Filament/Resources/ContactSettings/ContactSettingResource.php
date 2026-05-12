@@ -6,6 +6,7 @@ use App\Filament\Resources\ContactSettings\Pages\ManageContactSettings;
 use App\Models\ContactSetting;
 use BackedEnum;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -23,11 +24,11 @@ class ContactSettingResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 
-    protected static ?string $navigationLabel = 'Contatti';
+    protected static ?string $navigationLabel = 'Footer e contatti';
 
     protected static ?string $modelLabel = 'contatto';
 
-    protected static ?string $pluralModelLabel = 'contatti';
+    protected static ?string $pluralModelLabel = 'footer e contatti';
 
     protected static ?string $recordTitleAttribute = 'business_name';
 
@@ -35,7 +36,7 @@ class ContactSettingResource extends Resource
     {
         return $schema
             ->components([
-                Section::make('Informazioni')
+                Section::make('Contatti')
                     ->schema([
                         TextInput::make('business_name')
                             ->label('Nome attivita')
@@ -45,8 +46,11 @@ class ContactSettingResource extends Resource
                             ->label('Titolo sezione')
                             ->maxLength(255),
                         Textarea::make('body')
-                            ->label('Testo')
+                            ->label('Testo contatti')
                             ->rows(4)
+                            ->columnSpanFull(),
+                        RichEditor::make('footer_body')
+                            ->label('Testo footer')
                             ->columnSpanFull(),
                         TextInput::make('email')
                             ->label('Email')
@@ -72,6 +76,10 @@ class ContactSettingResource extends Resource
                             ->label('Instagram')
                             ->url()
                             ->maxLength(255),
+                        TextInput::make('facebook_url')
+                            ->label('Facebook')
+                            ->url()
+                            ->maxLength(255),
                         TextInput::make('booking_label')
                             ->label('Testo pulsante prenotazione')
                             ->maxLength(255),
@@ -79,8 +87,35 @@ class ContactSettingResource extends Resource
                             ->label('Link prenotazione')
                             ->maxLength(255),
                         Toggle::make('is_active')
-                            ->label('Mostra sezione contatti')
+                            ->label('Mostra footer')
                             ->default(true),
+                    ])
+                    ->columns(2),
+                Section::make('Footer')
+                    ->schema([
+                        RichEditor::make('footer_note')
+                            ->label('Nota footer')
+                            ->columnSpanFull(),
+                        TextInput::make('directions_label')
+                            ->label('Testo link indicazioni')
+                            ->maxLength(255),
+                        TextInput::make('directions_url')
+                            ->label('Link indicazioni')
+                            ->url()
+                            ->maxLength(255),
+                        TextInput::make('privacy_url')
+                            ->label('Link Privacy policy')
+                            ->maxLength(255),
+                        TextInput::make('cookie_url')
+                            ->label('Link Cookie policy')
+                            ->maxLength(255),
+                        TextInput::make('terms_url')
+                            ->label('Link Termini e condizioni')
+                            ->maxLength(255),
+                        TextInput::make('legal_text')
+                            ->label('Testo legale/copyright')
+                            ->maxLength(255)
+                            ->columnSpanFull(),
                     ])
                     ->columns(2),
             ]);

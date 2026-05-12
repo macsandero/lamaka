@@ -41,9 +41,6 @@
         ['name' => 'Gulliver', 'description' => 'Elegante e riflessivo, ama i ritmi lenti e le passeggiate silenziose immerso nella natura.', 'image' => 'images/animali/Gulliver.jpeg'],
         ['name' => 'Francis', 'description' => 'Affettuoso e socievole, crea subito empatia con adulti e bambini grazie al suo carattere gentile.', 'image' => 'images/animali/Francis.jpeg'],
     ]);
-    $mapQuery = trim((string) (data_get($contact, 'map_query') ?: data_get($contact, 'address') ?: '46.446076,12.391663'));
-    $isCoordinateQuery = preg_match('/^-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?$/', $mapQuery) === 1;
-    $mapUrl = 'https://www.google.com/maps?q='.rawurlencode($mapQuery).($isCoordinateQuery ? '&z=17' : '').'&output=embed';
 @endphp
 
 <body class="bg-[#f3efe7] text-[#2f2a24] overflow-x-hidden">
@@ -60,7 +57,6 @@
                 <a href="/#esperienze" class="js-scroll hover:text-[#2f2a24] transition">Esperienze</a>
                 <a href="/#chi-siamo" class="js-scroll hover:text-[#2f2a24] transition">Chi siamo</a>
                 <a href="/#animali" class="js-scroll hover:text-[#2f2a24] transition">Animali</a>
-                <a href="/#contatti" class="js-scroll hover:text-[#2f2a24] transition">Contatti</a>
             </nav>
 
             <a href="/#prenota"
@@ -87,7 +83,6 @@
                 <a href="/#esperienze" class="js-scroll mobile-link">Esperienze</a>
                 <a href="/#chi-siamo" class="js-scroll mobile-link">Chi siamo</a>
                 <a href="/#animali" class="js-scroll mobile-link">Animali</a>
-                <a href="/#contatti" class="js-scroll mobile-link">Contatti</a>
 
                 <a href="/#prenota" class="js-scroll mobile-link border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-center">
                     Prenota
@@ -189,67 +184,6 @@
                         </div>
                     @endforeach
                 </div>
-            </div>
-        </section>
-
-        <section id="contatti" class="min-h-[calc(100vh-104px)] py-32 px-6 md:px-12" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
-            <div class="max-w-7xl mx-auto grid lg:grid-cols-[.85fr_1.15fr] gap-16 items-start">
-                <div>
-                    <div class="mb-12">
-                        <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">Contatti</p>
-                        <h2 class="text-5xl md:text-6xl mb-8" style="font-family:'Cormorant Garamond',serif;">
-                            {{ data_get($contact, 'heading', 'Contatti') }}
-                        </h2>
-                        <p class="text-[#5f574d] leading-relaxed text-lg max-w-2xl">
-                            {{ data_get($contact, 'body', 'Trovi LAMAKA in Cadore, tra Dolomiti, natura e passo lento. Per informazioni puoi scriverci o raggiungerci dai nostri canali.') }}
-                        </p>
-                    </div>
-
-                    <div class="grid sm:grid-cols-2 lg:grid-cols-1 gap-8 text-[#5f574d]">
-                        @if (data_get($contact, 'address'))
-                            <div>
-                                <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Dove</p>
-                                <p class="leading-relaxed whitespace-pre-line">{{ data_get($contact, 'address') }}</p>
-                            </div>
-                        @endif
-
-                        @if (data_get($contact, 'email'))
-                            <div>
-                                <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Email</p>
-                                <a href="mailto:{{ data_get($contact, 'email') }}" class="hover:text-[#2f2a24] transition">{{ data_get($contact, 'email') }}</a>
-                            </div>
-                        @endif
-
-                        @if (data_get($contact, 'phone'))
-                            <div>
-                                <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Telefono</p>
-                                <a href="tel:{{ data_get($contact, 'phone') }}" class="hover:text-[#2f2a24] transition">{{ data_get($contact, 'phone') }}</a>
-                            </div>
-                        @endif
-
-                        @if (data_get($contact, 'whatsapp'))
-                            <div>
-                                <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">WhatsApp</p>
-                                <a href="https://wa.me/{{ preg_replace('/\D+/', '', data_get($contact, 'whatsapp')) }}" class="hover:text-[#2f2a24] transition">{{ data_get($contact, 'whatsapp') }}</a>
-                            </div>
-                        @endif
-
-                        @if (data_get($contact, 'instagram_url'))
-                            <div>
-                                <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Instagram</p>
-                                <a href="{{ data_get($contact, 'instagram_url') }}" class="hover:text-[#2f2a24] transition">Apri profilo</a>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-
-                <iframe
-                    src="{{ $mapUrl }}"
-                    title="Dove siamo - LAMAKA"
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                    class="min-h-[520px] w-full border border-[#d8cdbd] bg-white/50"
-                ></iframe>
             </div>
         </section>
 
@@ -356,6 +290,78 @@
         </section>
 
     </main>
+
+    @if ($contact)
+        <footer class="bg-[#3f563d] text-[#f5efe4] px-6 md:px-12 py-20">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid lg:grid-cols-[1.15fr_.85fr_.95fr] gap-14">
+                    <div>
+                        <img src="/logo.png" alt="{{ data_get($contact, 'business_name', 'LAMAKA') }}" class="mb-8 w-36 brightness-0 invert opacity-90">
+                        <div class="footer-copy max-w-lg text-[#f5efe4]/85 leading-relaxed">
+                            {!! data_get($contact, 'footer_body') ?: '<p>Esperienze lente tra Dolomiti, natura e passo calmo. Un luogo per ritrovare tempo, respiro e relazione con gli animali.</p>' !!}
+                        </div>
+
+                        @if (data_get($contact, 'whatsapp'))
+                            <a href="https://wa.me/{{ preg_replace('/\D+/', '', data_get($contact, 'whatsapp')) }}" class="mt-8 inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#25d366] text-white" aria-label="WhatsApp">
+                                W
+                            </a>
+                        @endif
+                    </div>
+
+                    <div>
+                        <h2 class="mb-7 text-4xl" style="font-family:'Cormorant Garamond',serif;">{{ data_get($contact, 'heading', 'Contatti') }}</h2>
+                        <div class="space-y-3 text-[#f5efe4]/85 leading-relaxed">
+                            @if (data_get($contact, 'email'))
+                                <p>Email: <a href="mailto:{{ data_get($contact, 'email') }}" class="hover:text-white">{{ data_get($contact, 'email') }}</a></p>
+                            @endif
+                            @if (data_get($contact, 'phone'))
+                                <p>Tel: <a href="tel:{{ data_get($contact, 'phone') }}" class="hover:text-white">{{ data_get($contact, 'phone') }}</a></p>
+                            @endif
+                            @if (data_get($contact, 'address'))
+                                <p class="whitespace-pre-line">{{ data_get($contact, 'address') }}</p>
+                            @endif
+                        </div>
+
+                        @if (data_get($contact, 'directions_url'))
+                            <a href="{{ data_get($contact, 'directions_url') }}" class="mt-8 inline-block border-b border-[#f5efe4]/60 pb-1 text-xs uppercase tracking-[0.22em] text-[#f5efe4]/85 hover:text-white" target="_blank" rel="noreferrer">
+                                {{ data_get($contact, 'directions_label', 'Indicazioni stradali') }}
+                            </a>
+                        @endif
+                    </div>
+
+                    <div>
+                        <h2 class="mb-7 text-4xl" style="font-family:'Cormorant Garamond',serif;">Seguici</h2>
+                        <div class="mb-8 flex gap-5 text-3xl">
+                            @if (data_get($contact, 'facebook_url'))
+                                <a href="{{ data_get($contact, 'facebook_url') }}" class="hover:text-white" target="_blank" rel="noreferrer" aria-label="Facebook">f</a>
+                            @endif
+                            @if (data_get($contact, 'instagram_url'))
+                                <a href="{{ data_get($contact, 'instagram_url') }}" class="hover:text-white" target="_blank" rel="noreferrer" aria-label="Instagram">◎</a>
+                            @endif
+                        </div>
+                        <div class="footer-copy text-[#f5efe4]/85 leading-relaxed italic">
+                            {!! data_get($contact, 'footer_note') ?: '<p>LAMAKA nasce per vivere la natura con rispetto, lentezza e attenzione agli animali.</p>' !!}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-20 border-t border-[#f5efe4]/60 pt-7 flex flex-col gap-5 text-[11px] uppercase tracking-[0.16em] text-[#f5efe4]/75 md:flex-row md:items-center md:justify-between">
+                    <div class="flex flex-wrap gap-7">
+                        @if (data_get($contact, 'privacy_url'))
+                            <a href="{{ data_get($contact, 'privacy_url') }}" class="hover:text-white">Privacy policy</a>
+                        @endif
+                        @if (data_get($contact, 'cookie_url'))
+                            <a href="{{ data_get($contact, 'cookie_url') }}" class="hover:text-white">Cookie policy</a>
+                        @endif
+                        @if (data_get($contact, 'terms_url'))
+                            <a href="{{ data_get($contact, 'terms_url') }}" class="hover:text-white">Termini e condizioni</a>
+                        @endif
+                    </div>
+                    <p class="normal-case tracking-normal">{{ data_get($contact, 'legal_text', '© Copyright LAMAKA') }}</p>
+                </div>
+            </div>
+        </footer>
+    @endif
 
     <script>
         const mobileMenuButton = document.getElementById('mobile-menu-button');

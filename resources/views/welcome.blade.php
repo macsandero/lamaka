@@ -184,19 +184,19 @@
         </section>
 
         <section id="contatti" class="py-32 px-6 md:px-12" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
-            <div class="max-w-7xl mx-auto">
-                <div class="max-w-3xl mb-14">
-                    <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">Contatti</p>
-                    <h2 class="text-5xl md:text-6xl mb-8" style="font-family:'Cormorant Garamond',serif;">
-                        {{ data_get($contact, 'heading', 'Contatti') }}
-                    </h2>
-                    <p class="text-[#5f574d] leading-relaxed text-lg max-w-2xl">
-                        {{ data_get($contact, 'body', 'Trovi LAMAKA in Cadore, tra Dolomiti, natura e passo lento. Per informazioni puoi scriverci o raggiungerci dai nostri canali.') }}
-                    </p>
-                </div>
+            <div class="max-w-7xl mx-auto grid lg:grid-cols-[.85fr_1.15fr] gap-16 items-start">
+                <div>
+                    <div class="mb-12">
+                        <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">Contatti</p>
+                        <h2 class="text-5xl md:text-6xl mb-8" style="font-family:'Cormorant Garamond',serif;">
+                            {{ data_get($contact, 'heading', 'Contatti') }}
+                        </h2>
+                        <p class="text-[#5f574d] leading-relaxed text-lg max-w-2xl">
+                            {{ data_get($contact, 'body', 'Trovi LAMAKA in Cadore, tra Dolomiti, natura e passo lento. Per informazioni puoi scriverci o raggiungerci dai nostri canali.') }}
+                        </p>
+                    </div>
 
-                <div class="grid lg:grid-cols-[.75fr_1.25fr] gap-12 items-stretch">
-                    <div class="space-y-8 text-[#5f574d]">
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-1 gap-8 text-[#5f574d]">
                         @if (data_get($contact, 'address'))
                             <div>
                                 <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Dove</p>
@@ -232,15 +232,15 @@
                             </div>
                         @endif
                     </div>
-
-                    <iframe
-                        src="{{ $mapUrl }}"
-                        title="Dove siamo - LAMAKA"
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        class="min-h-[420px] w-full border border-[#d8cdbd] bg-white/50"
-                    ></iframe>
                 </div>
+
+                <iframe
+                    src="{{ $mapUrl }}"
+                    title="Dove siamo - LAMAKA"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    class="min-h-[520px] w-full border border-[#d8cdbd] bg-white/50"
+                ></iframe>
             </div>
         </section>
 

@@ -183,7 +183,7 @@
             </div>
         </section>
 
-        <section id="contatti" class="py-32 px-6 md:px-12" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
+        <section id="contatti" class="min-h-[calc(100vh-104px)] py-32 px-6 md:px-12" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
             <div class="max-w-7xl mx-auto grid lg:grid-cols-[.85fr_1.15fr] gap-16 items-start">
                 <div>
                     <div class="mb-12">

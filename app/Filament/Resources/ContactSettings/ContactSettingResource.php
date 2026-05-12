@@ -63,6 +63,11 @@ class ContactSettingResource extends Resource
                             ->label('Indirizzo')
                             ->rows(3)
                             ->columnSpanFull(),
+                        TextInput::make('map_query')
+                            ->label('Ricerca Google Maps')
+                            ->helperText('Inserisci indirizzo, luogo o coordinate da mostrare nella mappa.')
+                            ->maxLength(255)
+                            ->columnSpanFull(),
                         TextInput::make('instagram_url')
                             ->label('Instagram')
                             ->url()

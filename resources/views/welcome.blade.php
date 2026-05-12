@@ -39,6 +39,8 @@
         ['name' => 'Gulliver', 'description' => 'Elegante e riflessivo, ama i ritmi lenti e le passeggiate silenziose immerso nella natura.', 'image' => 'images/animali/Gulliver.jpeg'],
         ['name' => 'Francis', 'description' => 'Affettuoso e socievole, crea subito empatia con adulti e bambini grazie al suo carattere gentile.', 'image' => 'images/animali/Francis.jpeg'],
     ]);
+    $mapQuery = data_get($contact, 'map_query') ?: data_get($contact, 'address') ?: 'Cadore Dolomiti';
+    $mapUrl = 'https://www.google.com/maps?q='.rawurlencode($mapQuery).'&output=embed';
 @endphp
 
 <body class="bg-[#f3efe7] text-[#2f2a24] overflow-x-hidden">
@@ -182,56 +184,62 @@
         </section>
 
         <section id="contatti" class="py-32 px-6 md:px-12" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
-            <div class="max-w-7xl mx-auto grid md:grid-cols-[1.2fr_.8fr] gap-16">
-                <div>
+            <div class="max-w-7xl mx-auto">
+                <div class="max-w-3xl mb-14">
                     <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">Contatti</p>
                     <h2 class="text-5xl md:text-6xl mb-8" style="font-family:'Cormorant Garamond',serif;">
-                        {{ data_get($contact, 'heading', 'Prenota la tua esperienza') }}
+                        {{ data_get($contact, 'heading', 'Contatti') }}
                     </h2>
                     <p class="text-[#5f574d] leading-relaxed text-lg max-w-2xl">
-                        {{ data_get($contact, 'body', 'Per informazioni, disponibilità e prenotazioni puoi contattarci direttamente. Ti risponderemo con i dettagli più adatti alla stagione e al gruppo.') }}
+                        {{ data_get($contact, 'body', 'Trovi LAMAKA in Cadore, tra Dolomiti, natura e passo lento. Per informazioni puoi scriverci o raggiungerci dai nostri canali.') }}
                     </p>
-
-                    <a href="/#prenota" class="js-scroll inline-block mt-10 bg-[#6f6a45] text-white px-8 py-4 uppercase tracking-[0.25em] text-xs hover:bg-[#4f4a35] transition duration-500">
-                        {{ data_get($contact, 'booking_label', 'Prenota') }}
-                    </a>
                 </div>
 
-                <div class="space-y-8 text-[#5f574d]">
-                    @if (data_get($contact, 'address'))
-                        <div>
-                            <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Dove</p>
-                            <p class="leading-relaxed whitespace-pre-line">{{ data_get($contact, 'address') }}</p>
-                        </div>
-                    @endif
+                <div class="grid lg:grid-cols-[.75fr_1.25fr] gap-12 items-stretch">
+                    <div class="space-y-8 text-[#5f574d]">
+                        @if (data_get($contact, 'address'))
+                            <div>
+                                <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Dove</p>
+                                <p class="leading-relaxed whitespace-pre-line">{{ data_get($contact, 'address') }}</p>
+                            </div>
+                        @endif
 
-                    @if (data_get($contact, 'email'))
-                        <div>
-                            <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Email</p>
-                            <a href="mailto:{{ data_get($contact, 'email') }}" class="hover:text-[#2f2a24] transition">{{ data_get($contact, 'email') }}</a>
-                        </div>
-                    @endif
+                        @if (data_get($contact, 'email'))
+                            <div>
+                                <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Email</p>
+                                <a href="mailto:{{ data_get($contact, 'email') }}" class="hover:text-[#2f2a24] transition">{{ data_get($contact, 'email') }}</a>
+                            </div>
+                        @endif
 
-                    @if (data_get($contact, 'phone'))
-                        <div>
-                            <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Telefono</p>
-                            <a href="tel:{{ data_get($contact, 'phone') }}" class="hover:text-[#2f2a24] transition">{{ data_get($contact, 'phone') }}</a>
-                        </div>
-                    @endif
+                        @if (data_get($contact, 'phone'))
+                            <div>
+                                <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Telefono</p>
+                                <a href="tel:{{ data_get($contact, 'phone') }}" class="hover:text-[#2f2a24] transition">{{ data_get($contact, 'phone') }}</a>
+                            </div>
+                        @endif
 
-                    @if (data_get($contact, 'whatsapp'))
-                        <div>
-                            <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">WhatsApp</p>
-                            <a href="https://wa.me/{{ preg_replace('/\D+/', '', data_get($contact, 'whatsapp')) }}" class="hover:text-[#2f2a24] transition">{{ data_get($contact, 'whatsapp') }}</a>
-                        </div>
-                    @endif
+                        @if (data_get($contact, 'whatsapp'))
+                            <div>
+                                <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">WhatsApp</p>
+                                <a href="https://wa.me/{{ preg_replace('/\D+/', '', data_get($contact, 'whatsapp')) }}" class="hover:text-[#2f2a24] transition">{{ data_get($contact, 'whatsapp') }}</a>
+                            </div>
+                        @endif
 
-                    @if (data_get($contact, 'instagram_url'))
-                        <div>
-                            <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Instagram</p>
-                            <a href="{{ data_get($contact, 'instagram_url') }}" class="hover:text-[#2f2a24] transition">Apri profilo</a>
-                        </div>
-                    @endif
+                        @if (data_get($contact, 'instagram_url'))
+                            <div>
+                                <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Instagram</p>
+                                <a href="{{ data_get($contact, 'instagram_url') }}" class="hover:text-[#2f2a24] transition">Apri profilo</a>
+                            </div>
+                        @endif
+                    </div>
+
+                    <iframe
+                        src="{{ $mapUrl }}"
+                        title="Dove siamo - LAMAKA"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="min-h-[420px] w-full border border-[#d8cdbd] bg-white/50"
+                    ></iframe>
                 </div>
             </div>
         </section>

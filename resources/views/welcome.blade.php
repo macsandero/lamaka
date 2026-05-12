@@ -39,8 +39,9 @@
         ['name' => 'Gulliver', 'description' => 'Elegante e riflessivo, ama i ritmi lenti e le passeggiate silenziose immerso nella natura.', 'image' => 'images/animali/Gulliver.jpeg'],
         ['name' => 'Francis', 'description' => 'Affettuoso e socievole, crea subito empatia con adulti e bambini grazie al suo carattere gentile.', 'image' => 'images/animali/Francis.jpeg'],
     ]);
-    $mapQuery = data_get($contact, 'map_query') ?: data_get($contact, 'address') ?: 'Cadore Dolomiti';
-    $mapUrl = 'https://www.google.com/maps?q='.rawurlencode($mapQuery).'&output=embed';
+    $mapQuery = trim((string) (data_get($contact, 'map_query') ?: data_get($contact, 'address') ?: '46.446076,12.391663'));
+    $isCoordinateQuery = preg_match('/^-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?$/', $mapQuery) === 1;
+    $mapUrl = 'https://www.google.com/maps?q='.rawurlencode($mapQuery).($isCoordinateQuery ? '&z=17' : '').'&output=embed';
 @endphp
 
 <body class="bg-[#f3efe7] text-[#2f2a24] overflow-x-hidden">

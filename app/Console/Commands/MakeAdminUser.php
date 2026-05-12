@@ -17,6 +17,7 @@ class MakeAdminUser extends Command
         {email : Email address of the user}
         {--name=Admin Lamaka : User display name}
         {--password= : Password to set. If omitted, it will be asked securely}
+        {--super : Grant super admin access}
         {--disable : Remove admin access instead of granting it}';
 
     /**
@@ -36,7 +37,10 @@ class MakeAdminUser extends Command
         if ($this->option('disable')) {
             $updated = User::query()
                 ->where('email', $email)
-                ->update(['is_admin' => false]);
+                ->update([
+                    'is_admin' => false,
+                    'is_super_admin' => false,
+                ]);
 
             if (! $updated) {
                 $this->warn("No user found for [{$email}].");
@@ -61,9 +65,15 @@ class MakeAdminUser extends Command
         $user->name = (string) $this->option('name');
         $user->password = Hash::make($password);
         $user->is_admin = true;
+        $user->is_super_admin = (bool) $this->option('super');
+        $user->must_set_password = false;
+        $user->setup_token = null;
+        $user->setup_token_expires_at = null;
         $user->save();
 
-        $this->info("Admin user ready: [{$email}].");
+        $role = $user->is_super_admin ? 'Super admin' : 'Admin';
+
+        $this->info("{$role} user ready: [{$email}].");
 
         return self::SUCCESS;
     }

@@ -65,6 +65,10 @@
                             {{ $experience->title }}
                         </h1>
 
+                        @if ($experience->image)
+                            <img src="{{ $mediaUrl($experience->image) }}" alt="{{ $experience->title }}" class="mb-10 w-full min-h-[320px] max-h-[560px] object-cover">
+                        @endif
+
                         @if ($experience->description)
                             <div class="experience-copy text-[#5f574d] text-lg leading-relaxed mb-10">
                                 @if ($hasHtml($experience->description))
@@ -75,9 +79,6 @@
                             </div>
                         @endif
 
-                        @if ($experience->image)
-                            <img src="{{ $mediaUrl($experience->image) }}" alt="{{ $experience->title }}" class="w-full h-[520px] object-cover">
-                        @endif
                     </div>
 
                     <div class="bg-white/55 border border-[#d8cdbd] p-6 md:p-10">

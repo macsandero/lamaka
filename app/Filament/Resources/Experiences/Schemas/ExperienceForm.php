@@ -48,6 +48,7 @@ class ExperienceForm
                 FileUpload::make('image')
                     ->label('Immagine')
                     ->image()
+                    ->previewable(false)
                     ->disk('public')
                     ->directory('experiences')
                     ->columnSpanFull(),

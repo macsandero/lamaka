@@ -357,10 +357,11 @@
             if (!target || !header) return false;
 
             const headerHeight = header.offsetHeight;
+            const sectionOffset = hash === '#prenota' ? 96 : 0;
             const targetTop = target.getBoundingClientRect().top + window.scrollY;
 
             window.scrollTo({
-                top: targetTop - headerHeight,
+                top: targetTop - headerHeight + sectionOffset,
                 behavior,
             });
 

@@ -53,14 +53,14 @@
                 <img src="{{ data_get($contact, 'footer_logo') ? $mediaUrl(data_get($contact, 'footer_logo')) : '/logo.png' }}" alt="{{ data_get($contact, 'business_name', 'LAMAKA') }}" class="w-32 md:w-44">
             </a>
 
-            <nav class="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.22em] text-[#5f574d]">
-                <a href="/#esperienze" class="js-scroll hover:text-[#2f2a24] transition">Esperienze</a>
-                <a href="/#chi-siamo" class="js-scroll hover:text-[#2f2a24] transition">Chi siamo</a>
-                <a href="/#animali" class="js-scroll hover:text-[#2f2a24] transition">Animali</a>
+            <nav class="hidden md:flex items-center gap-10 text-xs font-semibold uppercase tracking-[0.24em] text-[#3f3d32]">
+                <a href="/#esperienze" class="js-scroll border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">Esperienze</a>
+                <a href="/#chi-siamo" class="js-scroll border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">Chi siamo</a>
+                <a href="/#animali" class="js-scroll border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">Animali</a>
             </nav>
 
             <a href="/#prenota"
-               class="js-scroll hidden md:inline-block border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-xs uppercase tracking-[0.22em] hover:bg-[#6f6a45] hover:text-white transition duration-500">
+               class="js-scroll hidden md:inline-block border border-[#3f3d32] text-[#3f3d32] px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] transition duration-300 hover:bg-[#3f3d32] hover:text-[#f3efe7]">
                 Prenota
             </a>
 

@@ -130,6 +130,10 @@
         <div class="lamaka-auth-message error">
             {{ $this->loginError }}
         </div>
+    @elseif ($this->getErrorBag()->isNotEmpty())
+        <div class="lamaka-auth-message error">
+            {{ $this->getErrorBag()->first() }}
+        </div>
     @endif
 
     {{ $this->content }}

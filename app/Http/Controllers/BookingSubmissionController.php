@@ -31,10 +31,15 @@ class BookingSubmissionController extends Controller
                 'email' => 'email',
                 'number' => 'numeric',
                 'date' => 'date',
+                'datetime' => 'date',
                 'checkbox' => 'accepted',
                 'select' => Rule::in($field->optionsList()),
                 default => 'string',
             };
+
+            if (in_array($field->type, ['date', 'datetime'], true)) {
+                $fieldRules[] = 'after_or_equal:'.now()->addDay()->startOfDay()->toDateTimeString();
+            }
 
             if (in_array($field->type, ['text', 'tel', 'textarea'], true)) {
                 $fieldRules[] = 'max:2000';

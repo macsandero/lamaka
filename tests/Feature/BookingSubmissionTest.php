@@ -20,7 +20,7 @@ class BookingSubmissionTest extends TestCase
                 'email' => 'mario@example.com',
                 'telefono' => '+39 333 1234567',
                 'esperienza' => 'Primo incontro',
-                'data_preferita' => '2026-06-01',
+                'data_ora_preferita' => now()->addDays(2)->setTime(10, 0)->format('Y-m-d\TH:i'),
                 'partecipanti' => '2',
                 'messaggio' => 'Vorrei informazioni sugli orari.',
                 'privacy' => '1',
@@ -39,5 +39,24 @@ class BookingSubmissionTest extends TestCase
 
         $this->assertSame('Mario Rossi', $submission->fieldValue('nome'));
         $this->assertSame('mario@example.com', $submission->fieldValue('email'));
+    }
+
+    public function test_booking_request_cannot_use_today_as_preferred_datetime(): void
+    {
+        $this->seed();
+
+        $response = $this->from('/#prenota')->post(route('booking.store'), [
+            'fields' => [
+                'nome' => 'Mario Rossi',
+                'email' => 'mario@example.com',
+                'esperienza' => 'Primo incontro',
+                'data_ora_preferita' => now()->setTime(18, 0)->format('Y-m-d\TH:i'),
+                'privacy' => '1',
+            ],
+        ]);
+
+        $response->assertRedirect('/#prenota');
+        $response->assertSessionHasErrors('fields.data_ora_preferita');
+        $this->assertDatabaseCount(BookingSubmission::class, 0);
     }
 }

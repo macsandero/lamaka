@@ -114,7 +114,7 @@ class DatabaseSeeder extends Seeder
             ['label' => 'Email', 'key' => 'email', 'type' => 'email', 'placeholder' => 'nome@email.it', 'sort_order' => 20, 'is_required' => true],
             ['label' => 'Telefono', 'key' => 'telefono', 'type' => 'tel', 'placeholder' => '+39 ...', 'sort_order' => 30, 'is_required' => false],
             ['label' => 'Esperienza', 'key' => 'esperienza', 'type' => 'select', 'placeholder' => null, 'options' => "Primo incontro\nPasseggiata al tramonto\nAltro", 'sort_order' => 40, 'is_required' => true],
-            ['label' => 'Data preferita', 'key' => 'data_preferita', 'type' => 'date', 'placeholder' => null, 'sort_order' => 50, 'is_required' => false],
+            ['label' => 'Giorno e ora preferiti', 'key' => 'data_ora_preferita', 'type' => 'datetime', 'placeholder' => null, 'sort_order' => 50, 'is_required' => true],
             ['label' => 'Numero partecipanti', 'key' => 'partecipanti', 'type' => 'number', 'placeholder' => null, 'sort_order' => 60, 'is_required' => false],
             ['label' => 'Messaggio', 'key' => 'messaggio', 'type' => 'textarea', 'placeholder' => 'Raccontaci esigenze, periodo o domande particolari.', 'sort_order' => 70, 'is_required' => false, 'is_full_width' => true],
             ['label' => 'Accetto di essere ricontattato per la gestione della richiesta.', 'key' => 'privacy', 'type' => 'checkbox', 'placeholder' => null, 'sort_order' => 80, 'is_required' => true, 'is_full_width' => true],
@@ -136,5 +136,9 @@ class DatabaseSeeder extends Seeder
                 ],
             );
         }
+
+        BookingFormField::query()
+            ->where('key', 'data_preferita')
+            ->update(['is_active' => false]);
     }
 }

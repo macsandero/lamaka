@@ -269,6 +269,12 @@
                             @php
                                 $fieldName = "fields[{$field->key}]";
                                 $oldValue = old("fields.{$field->key}");
+                                $inputType = $field->type === 'datetime' ? 'datetime-local' : $field->type;
+                                $minimumValue = match ($field->type) {
+                                    'date' => now()->addDay()->toDateString(),
+                                    'datetime' => now()->addDay()->startOfDay()->format('Y-m-d\TH:i'),
+                                    default => null,
+                                };
                                 $inputClasses = 'w-full border border-[#d8cdbd] bg-white/80 px-4 py-3 text-[#2f2a24] outline-none focus:border-[#6f6a45] transition';
                             @endphp
 
@@ -295,7 +301,7 @@
                                             @endforeach
                                         </select>
                                     @else
-                                        <input id="booking-{{ $field->key }}" type="{{ $field->type }}" name="{{ $fieldName }}" value="{{ $oldValue }}" placeholder="{{ $field->placeholder }}" class="{{ $inputClasses }}">
+                                        <input id="booking-{{ $field->key }}" type="{{ $inputType }}" name="{{ $fieldName }}" value="{{ $oldValue }}" placeholder="{{ $field->placeholder }}" @if ($minimumValue) min="{{ $minimumValue }}" @endif class="{{ $inputClasses }}">
                                     @endif
                                 @endif
 

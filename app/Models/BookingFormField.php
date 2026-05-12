@@ -13,6 +13,7 @@ class BookingFormField extends Model
         'email' => 'Email',
         'tel' => 'Telefono',
         'date' => 'Data',
+        'datetime' => 'Data e ora',
         'number' => 'Numero',
         'select' => 'Selezione',
         'textarea' => 'Testo lungo',

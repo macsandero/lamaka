@@ -6,7 +6,6 @@ use App\Filament\Resources\HomepageContents\Pages\ManageHomepageContents;
 use App\Models\HomepageContent;
 use BackedEnum;
 use Filament\Actions\EditAction;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -68,25 +67,6 @@ class HomepageContentResource extends Resource
                         TextInput::make('experiences_title')
                             ->label('Titolo')
                             ->maxLength(255),
-                    ])
-                    ->columns(2),
-                Section::make('Chi siamo')
-                    ->schema([
-                        TextInput::make('about_eyebrow')
-                            ->label('Sopratitolo')
-                            ->maxLength(255),
-                        TextInput::make('about_title')
-                            ->label('Titolo')
-                            ->maxLength(255),
-                        RichEditor::make('about_body')
-                            ->label('Testo')
-                            ->columnSpanFull(),
-                        FileUpload::make('about_image')
-                            ->label('Immagine')
-                            ->image()
-                            ->disk('public')
-                            ->directory('homepage')
-                            ->columnSpanFull(),
                     ])
                     ->columns(2),
                 Section::make('Animali')

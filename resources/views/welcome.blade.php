@@ -14,20 +14,73 @@
 <body class="bg-[#f3efe7] text-[#2f2a24] overflow-x-hidden">
 
     <header id="site-header" class="fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
-        <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
-            <a href="#" class="flex items-center"><img src="/logo.png" alt="LAMAKA" class="w-28 md:w-36"></a>
 
-            <nav class="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.22em] text-[#5f574d]">
-                <a href="#esperienze" class="js-scroll hover:text-[#2f2a24] transition">Esperienze</a>
-                <a href="#chi-siamo" class="js-scroll hover:text-[#2f2a24] transition">Chi siamo</a>
-                <a href="#animali" class="js-scroll hover:text-[#2f2a24] transition">Animali</a>
-                <a href="#contatti" class="js-scroll hover:text-[#2f2a24] transition">Contatti</a>
-            </nav>
+    <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
 
-            <a href="#contatti" class="js-scroll hidden md:inline-block border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-xs uppercase tracking-[0.22em] hover:bg-[#6f6a45] hover:text-white transition duration-500">Prenota</a>
-            <a href="#contatti" class="js-scroll md:hidden text-xs uppercase tracking-[0.2em] text-[#4f4a35]">Prenota</a>
+        <a href="#" class="flex items-center">
+            <img src="/logo.png" alt="LAMAKA" class="w-28 md:w-36">
+        </a>
+
+        <nav class="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.22em] text-[#5f574d]">
+            <a href="#esperienze" class="js-scroll hover:text-[#2f2a24] transition">Esperienze</a>
+            <a href="#chi-siamo" class="js-scroll hover:text-[#2f2a24] transition">Chi siamo</a>
+            <a href="#animali" class="js-scroll hover:text-[#2f2a24] transition">Animali</a>
+            <a href="#contatti" class="js-scroll hover:text-[#2f2a24] transition">Contatti</a>
+        </nav>
+
+        <a href="#contatti"
+           class="js-scroll hidden md:inline-block border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-xs uppercase tracking-[0.22em] hover:bg-[#6f6a45] hover:text-white transition duration-500">
+            Prenota
+        </a>
+
+        <button
+            id="mobile-menu-button"
+            class="md:hidden flex flex-col gap-1.5"
+        >
+            <span class="w-6 h-[1px] bg-[#4f4a35]"></span>
+            <span class="w-6 h-[1px] bg-[#4f4a35]"></span>
+            <span class="w-6 h-[1px] bg-[#4f4a35]"></span>
+        </button>
+
+    </div>
+
+    <div
+        id="mobile-menu"
+        class="hidden md:hidden border-t border-[#d8cdbd]"
+    >
+        <div class="flex flex-col px-6 py-6 gap-6 text-xs uppercase tracking-[0.22em] text-[#5f574d]">
+
+            <a href="#esperienze" class="js-scroll mobile-link">Esperienze</a>
+            <a href="#chi-siamo" class="js-scroll mobile-link">Chi siamo</a>
+            <a href="#animali" class="js-scroll mobile-link">Animali</a>
+            <a href="#contatti" class="js-scroll mobile-link">Contatti</a>
+
+            <a
+                href="#contatti"
+                class="js-scroll mobile-link border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-center"
+            >
+                Prenota
+            </a>
+
         </div>
-    </header>
+    </div>
+
+</header>
+
+<script>
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+        });
+    });
+</script>
 
     <main class="pt-[104px]">
 

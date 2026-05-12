@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Mail\BookingSubmissionReceived;
 use App\Models\BookingSubmission;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class BookingSubmissionTest extends TestCase
@@ -12,6 +14,8 @@ class BookingSubmissionTest extends TestCase
 
     public function test_booking_request_can_be_submitted(): void
     {
+        Mail::fake();
+
         $this->seed();
 
         $response = $this->post(route('booking.store'), [
@@ -39,10 +43,15 @@ class BookingSubmissionTest extends TestCase
 
         $this->assertSame('Mario Rossi', $submission->fieldValue('nome'));
         $this->assertSame('mario@example.com', $submission->fieldValue('email'));
+
+        Mail::assertSent(BookingSubmissionReceived::class, fn (BookingSubmissionReceived $mail): bool => $mail->hasTo('info@lamaka.it')
+            && $mail->submission->is($submission));
     }
 
     public function test_booking_request_cannot_use_today_as_preferred_datetime(): void
     {
+        Mail::fake();
+
         $this->seed();
 
         $response = $this->from('/#prenota')->post(route('booking.store'), [
@@ -58,5 +67,6 @@ class BookingSubmissionTest extends TestCase
         $response->assertRedirect('/#prenota');
         $response->assertSessionHasErrors('fields.data_ora_preferita');
         $this->assertDatabaseCount(BookingSubmission::class, 0);
+        Mail::assertNothingSent();
     }
 }

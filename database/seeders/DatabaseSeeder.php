@@ -110,6 +110,7 @@ class DatabaseSeeder extends Seeder
             ['id' => 1],
             [
                 'business_name' => 'LAMAKA',
+                'footer_logo' => null,
                 'heading' => 'Contatti',
                 'body' => 'Trovi LAMAKA in Cadore, tra Dolomiti, natura e passo lento. Per informazioni puoi scriverci o raggiungerci dai nostri canali.',
                 'footer_body' => '<p>Esperienze lente tra Dolomiti, natura e passo calmo. Un luogo per ritrovare tempo, respiro e relazione con gli animali.</p>',
@@ -127,6 +128,9 @@ class DatabaseSeeder extends Seeder
                 'cookie_url' => null,
                 'terms_url' => null,
                 'legal_text' => '© Copyright LAMAKA',
+                'company_name' => null,
+                'tax_code' => null,
+                'vat_number' => null,
                 'booking_label' => 'Prenota',
                 'booking_url' => null,
                 'is_active' => true,

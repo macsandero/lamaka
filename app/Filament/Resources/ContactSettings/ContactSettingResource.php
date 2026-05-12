@@ -6,6 +6,7 @@ use App\Filament\Resources\ContactSettings\Pages\ManageContactSettings;
 use App\Models\ContactSetting;
 use BackedEnum;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -42,6 +43,13 @@ class ContactSettingResource extends Resource
                             ->label('Nome attivita')
                             ->required()
                             ->maxLength(255),
+                        FileUpload::make('footer_logo')
+                            ->label('Logo footer')
+                            ->image()
+                            ->previewable(false)
+                            ->disk('public')
+                            ->directory('footer')
+                            ->columnSpanFull(),
                         TextInput::make('heading')
                             ->label('Titolo sezione')
                             ->maxLength(255),
@@ -109,11 +117,18 @@ class ContactSettingResource extends Resource
                         TextInput::make('cookie_url')
                             ->label('Link Cookie policy')
                             ->maxLength(255),
-                        TextInput::make('terms_url')
-                            ->label('Link Termini e condizioni')
-                            ->maxLength(255),
                         TextInput::make('legal_text')
-                            ->label('Testo legale/copyright')
+                            ->label('Copyright')
+                            ->maxLength(255)
+                            ->columnSpanFull(),
+                        TextInput::make('company_name')
+                            ->label('Ragione sociale')
+                            ->maxLength(255),
+                        TextInput::make('tax_code')
+                            ->label('Codice fiscale')
+                            ->maxLength(255),
+                        TextInput::make('vat_number')
+                            ->label('Partita IVA')
                             ->maxLength(255)
                             ->columnSpanFull(),
                     ])

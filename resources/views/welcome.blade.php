@@ -45,7 +45,7 @@
 
 <body class="bg-[#f3efe7] text-[#2f2a24] overflow-x-hidden">
 
-    <header id="site-header" class="fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
+    <header id="site-header" class="fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]" style="background-color:#ede8dc;">
 
         <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
 

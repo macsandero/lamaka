@@ -50,7 +50,7 @@
         <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
 
             <a href="#" class="flex items-center">
-                <img src="/logo.png" alt="LAMAKA" class="w-28 md:w-36">
+                <img src="{{ data_get($contact, 'footer_logo') ? $mediaUrl(data_get($contact, 'footer_logo')) : '/logo.png' }}" alt="{{ data_get($contact, 'business_name', 'LAMAKA') }}" class="w-32 md:w-44">
             </a>
 
             <nav class="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.22em] text-[#5f574d]">

@@ -16,7 +16,7 @@
 }
 
 .experience-copy p {
-    margin: 0 0 1rem;
+    margin: 0 0 .45rem;
 }
 
 .experience-copy p:last-child {
@@ -25,8 +25,8 @@
 
 .experience-copy ul,
 .experience-copy ol {
-    margin: 1rem 0 0;
-    padding-left: 1.7rem;
+    margin: .45rem 0 0;
+    padding-left: 1.45rem;
 }
 
 .experience-copy ul {
@@ -38,7 +38,7 @@
 }
 
 .experience-copy li {
-    margin: .45rem 0;
+    margin: .2rem 0;
 }
 
 .experience-copy strong {

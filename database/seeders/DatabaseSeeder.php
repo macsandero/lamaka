@@ -90,7 +90,7 @@ class DatabaseSeeder extends Seeder
                 'phone' => null,
                 'whatsapp' => null,
                 'address' => 'Cadore - Dolomiti',
-                'map_query' => 'Cadore Dolomiti',
+                'map_query' => 'LAMAKA 46.4460542,12.3917181',
                 'instagram_url' => null,
                 'booking_label' => 'Prenota',
                 'booking_url' => null,

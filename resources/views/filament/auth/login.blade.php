@@ -167,7 +167,7 @@
         </div>
     @endif
 
-    @if ($this->loginError)
+    @if (property_exists($this, 'loginError') && $this->loginError)
         <div class="lamaka-auth-message error">
             {{ $this->loginError }}
         </div>
@@ -177,13 +177,16 @@
         </div>
     @endif
 
-    <form wire:submit.prevent="authenticate" class="lamaka-login-form">
+    <form method="POST" action="{{ route('admin.manual-login') }}" class="lamaka-login-form">
+        @csrf
+
         <div class="lamaka-login-field">
             <label for="admin-email">Email</label>
             <input
                 id="admin-email"
                 type="email"
-                wire:model.defer="data.email"
+                name="email"
+                value="{{ old('email') }}"
                 autocomplete="username"
                 autofocus
                 required
@@ -196,7 +199,7 @@
             <input
                 id="admin-password"
                 type="password"
-                wire:model.defer="data.password"
+                name="password"
                 autocomplete="current-password"
                 required
                 class="lamaka-login-input"

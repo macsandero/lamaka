@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdminPasswordSetupController;
 use App\Http\Controllers\BookingSubmissionController;
 use App\Models\Animal;
@@ -23,6 +24,10 @@ Route::get('/', function () {
 
 Route::post('/prenota', [BookingSubmissionController::class, 'store'])
     ->name('booking.store');
+
+Route::post('/admin/manual-login', [AdminLoginController::class, 'store'])
+    ->middleware('web')
+    ->name('admin.manual-login');
 
 Route::get('/admin-password/setup/{token}', [AdminPasswordSetupController::class, 'edit'])
     ->name('admin.password-setup.edit');

@@ -7,44 +7,44 @@
     }
 
     .fi-simple-main {
-        width: min(100%, 520px) !important;
-        max-width: 520px !important;
+        width: min(100%, 360px) !important;
+        max-width: 360px !important;
     }
 
     .lamaka-auth-card {
         background: rgba(255, 255, 255, .72);
         border: 1px solid #d8cdbd;
         color: #2f2a24;
-        padding: clamp(2rem, 4vw, 3rem);
+        padding: 1.65rem;
     }
 
     .lamaka-auth-logo {
-        width: 9rem;
-        max-width: 48%;
-        margin-bottom: clamp(2.5rem, 5vw, 4rem);
+        width: 6.5rem;
+        max-width: 45%;
+        margin-bottom: 2rem;
     }
 
     .lamaka-auth-title {
         font-family: 'Cormorant Garamond', serif;
-        font-size: clamp(2.4rem, 5vw, 3.25rem);
+        font-size: clamp(1.85rem, 4vw, 2.35rem);
         font-weight: 400;
         line-height: .95;
-        margin: 0 0 1.15rem;
+        margin: 0 0 .75rem;
     }
 
     .lamaka-auth-copy {
         color: #5f574d;
-        font-size: clamp(1rem, 2vw, 1.25rem);
+        font-size: .95rem;
         line-height: 1.35;
-        margin-bottom: 2.4rem;
+        margin-bottom: 1.75rem;
     }
 
     .lamaka-auth-card .fi-fo-field-wrp-label span,
     .lamaka-auth-card label {
         color: #7a6f63 !important;
-        font-size: .78rem !important;
+        font-size: .66rem !important;
         font-weight: 500 !important;
-        letter-spacing: .28em !important;
+        letter-spacing: .24em !important;
         text-transform: uppercase !important;
     }
 
@@ -56,12 +56,12 @@
     .lamaka-auth-card .fi-input-wrp {
         border-color: #d8cdbd !important;
         box-shadow: none !important;
-        min-height: 3.25rem;
+        min-height: 2.65rem;
     }
 
     .lamaka-auth-card .fi-input {
-        font-size: 1rem !important;
-        min-height: 3.25rem;
+        font-size: .9rem !important;
+        min-height: 2.65rem;
     }
 
     .lamaka-auth-card .fi-btn {
@@ -69,9 +69,9 @@
         border-radius: 0 !important;
         box-shadow: none !important;
         color: #fff !important;
-        min-height: 3.75rem;
+        min-height: 3rem;
         text-transform: uppercase;
-        letter-spacing: .28em;
+        letter-spacing: .24em;
         font-weight: 500;
     }
 
@@ -80,12 +80,12 @@
     }
 
     .lamaka-auth-card .fi-fo-component-ctn {
-        gap: 1.45rem;
+        gap: 1rem;
     }
 
     .lamaka-auth-card .fi-sc-actions,
     .lamaka-auth-card .fi-fo-actions {
-        margin-top: 1.65rem;
+        margin-top: 1.1rem;
     }
 </style>
 

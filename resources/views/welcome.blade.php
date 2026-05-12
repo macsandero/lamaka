@@ -292,7 +292,7 @@
     </main>
 
     @if ($contact)
-        <footer class="bg-[#d7b56d] text-[#2f2a24] px-6 md:px-12 py-20">
+        <footer class="bg-[#e2c987] text-[#2f2a24] px-6 md:px-12 py-20">
             <div class="max-w-7xl mx-auto">
                 <div class="grid lg:grid-cols-[1.15fr_.85fr_.95fr] gap-14">
                     <div>
@@ -351,7 +351,7 @@
                     </div>
                 </div>
 
-                <div class="mt-20 border-t border-[#2f2a24]/35 pt-7 flex flex-col gap-5 text-[11px] uppercase tracking-[0.16em] text-[#2f2a24]/75 md:flex-row md:items-center md:justify-between">
+                <div class="mt-14 border-t border-[#2f2a24]/30 pt-3.5 flex flex-col gap-2.5 text-[11px] uppercase tracking-[0.16em] text-[#2f2a24]/75 md:flex-row md:items-center md:justify-between">
                     <div class="flex flex-wrap gap-7">
                         @if (data_get($contact, 'privacy_url'))
                             <a href="{{ data_get($contact, 'privacy_url') }}" class="hover:text-[#f9f4ea]">Privacy policy</a>

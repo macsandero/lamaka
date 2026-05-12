@@ -15,8 +15,12 @@
     font-weight: 400;
 }
 
+.experience-copy {
+    line-height: 1.32;
+}
+
 .experience-copy p {
-    margin: 0 0 .45rem;
+    margin: 0 0 .25rem;
 }
 
 .experience-copy p:last-child {
@@ -25,7 +29,7 @@
 
 .experience-copy ul,
 .experience-copy ol {
-    margin: .45rem 0 0;
+    margin: .25rem 0 0;
     padding-left: 1.45rem;
 }
 
@@ -38,7 +42,8 @@
 }
 
 .experience-copy li {
-    margin: .2rem 0;
+    margin: .08rem 0;
+    line-height: 1.28;
 }
 
 .experience-copy strong {

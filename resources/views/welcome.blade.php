@@ -11,82 +11,92 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 
+@php
+    $mediaUrl = function (?string $path, ?string $fallback = null): string {
+        $path = $path ?: $fallback ?: '';
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://') || str_starts_with($path, '/')) {
+            return $path;
+        }
+
+        if (str_starts_with($path, 'images/') || str_starts_with($path, 'videos/') || $path === 'logo.png') {
+            return asset($path);
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+    };
+
+    $heroTitle = data_get($homepage, 'hero_title', 'Passeggiate nella natura con lama e alpaca');
+    $heroTitleLines = explode("\n", wordwrap($heroTitle, 31, "\n"));
+    $experienceItems = $experiences->isNotEmpty() ? $experiences : new \Illuminate\Support\Collection([
+        ['title' => 'Primo incontro', 'description' => 'Una passeggiata semplice e immersiva per conoscere lama e alpaca, camminando tra lago, sentieri e natura.', 'image' => 'images/esperienze/Foto diAlpaca e lama completa.jpeg'],
+        ['title' => 'Passeggiata al tramonto', 'description' => 'Un’esperienza lenta e romantica tra le montagne del Cadore, accompagnati dal ritmo calmo degli animali.', 'image' => 'images/esperienze/due lama al pascolo.jpeg'],
+    ]);
+    $animalItems = $animals->isNotEmpty() ? $animals : new \Illuminate\Support\Collection([
+        ['name' => 'Athos', 'description' => 'Curioso e sempre attento a ciò che succede attorno a lui. Ama osservare le persone e avvicinarsi con delicatezza.', 'image' => 'images/animali/Athos.jpeg'],
+        ['name' => 'Kairos', 'description' => 'Dolce e tranquillo, trasmette calma già dal primo incontro. È perfetto per chi cerca un momento di relax autentico.', 'image' => 'images/animali/Kairos.jpeg'],
+        ['name' => 'Skiantos', 'description' => 'Il leader del gruppo. Sicuro di sé, curioso e sempre pronto ad aprire la strada durante le passeggiate.', 'image' => 'images/animali/Skiantos-2.jpeg'],
+        ['name' => 'Gulliver', 'description' => 'Elegante e riflessivo, ama i ritmi lenti e le passeggiate silenziose immerso nella natura.', 'image' => 'images/animali/Gulliver.jpeg'],
+        ['name' => 'Francis', 'description' => 'Affettuoso e socievole, crea subito empatia con adulti e bambini grazie al suo carattere gentile.', 'image' => 'images/animali/Francis.jpeg'],
+    ]);
+@endphp
+
 <body class="bg-[#f3efe7] text-[#2f2a24] overflow-x-hidden">
 
     <header id="site-header" class="fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
 
-    <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
 
-        <a href="#" class="flex items-center">
-            <img src="/logo.png" alt="LAMAKA" class="w-28 md:w-36">
-        </a>
+            <a href="#" class="flex items-center">
+                <img src="/logo.png" alt="LAMAKA" class="w-28 md:w-36">
+            </a>
 
-        <nav class="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.22em] text-[#5f574d]">
-            <a href="#esperienze" class="js-scroll hover:text-[#2f2a24] transition">Esperienze</a>
-            <a href="#chi-siamo" class="js-scroll hover:text-[#2f2a24] transition">Chi siamo</a>
-            <a href="#animali" class="js-scroll hover:text-[#2f2a24] transition">Animali</a>
-            <a href="#contatti" class="js-scroll hover:text-[#2f2a24] transition">Contatti</a>
-        </nav>
+            <nav class="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.22em] text-[#5f574d]">
+                <a href="#esperienze" class="js-scroll hover:text-[#2f2a24] transition">Esperienze</a>
+                <a href="#chi-siamo" class="js-scroll hover:text-[#2f2a24] transition">Chi siamo</a>
+                <a href="#animali" class="js-scroll hover:text-[#2f2a24] transition">Animali</a>
+                <a href="#contatti" class="js-scroll hover:text-[#2f2a24] transition">Contatti</a>
+            </nav>
 
-        <a href="#contatti"
-           class="js-scroll hidden md:inline-block border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-xs uppercase tracking-[0.22em] hover:bg-[#6f6a45] hover:text-white transition duration-500">
-            Prenota
-        </a>
-
-        <button
-            id="mobile-menu-button"
-            class="md:hidden flex flex-col gap-1.5"
-        >
-            <span class="w-6 h-[1px] bg-[#4f4a35]"></span>
-            <span class="w-6 h-[1px] bg-[#4f4a35]"></span>
-            <span class="w-6 h-[1px] bg-[#4f4a35]"></span>
-        </button>
-
-    </div>
-
-    <div
-        id="mobile-menu"
-        class="hidden md:hidden border-t border-[#d8cdbd]"
-    >
-        <div class="flex flex-col px-6 py-6 gap-6 text-xs uppercase tracking-[0.22em] text-[#5f574d]">
-
-            <a href="#esperienze" class="js-scroll mobile-link">Esperienze</a>
-            <a href="#chi-siamo" class="js-scroll mobile-link">Chi siamo</a>
-            <a href="#animali" class="js-scroll mobile-link">Animali</a>
-            <a href="#contatti" class="js-scroll mobile-link">Contatti</a>
-
-            <a
-                href="#contatti"
-                class="js-scroll mobile-link border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-center"
-            >
+            <a href="#contatti"
+               class="js-scroll hidden md:inline-block border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-xs uppercase tracking-[0.22em] hover:bg-[#6f6a45] hover:text-white transition duration-500">
                 Prenota
             </a>
 
+            <button
+                id="mobile-menu-button"
+                type="button"
+                aria-label="Apri menu"
+                aria-expanded="false"
+                class="md:hidden flex flex-col gap-1.5"
+            >
+                <span class="w-6 h-[1px] bg-[#4f4a35]"></span>
+                <span class="w-6 h-[1px] bg-[#4f4a35]"></span>
+                <span class="w-6 h-[1px] bg-[#4f4a35]"></span>
+            </button>
+
         </div>
-    </div>
 
-</header>
+        <div id="mobile-menu" class="hidden md:hidden border-t border-[#d8cdbd]">
+            <div class="flex flex-col px-6 py-6 gap-6 text-xs uppercase tracking-[0.22em] text-[#5f574d]">
+                <a href="#esperienze" class="js-scroll mobile-link">Esperienze</a>
+                <a href="#chi-siamo" class="js-scroll mobile-link">Chi siamo</a>
+                <a href="#animali" class="js-scroll mobile-link">Animali</a>
+                <a href="#contatti" class="js-scroll mobile-link">Contatti</a>
 
-<script>
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
+                <a href="#contatti" class="js-scroll mobile-link border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-center">
+                    Prenota
+                </a>
+            </div>
+        </div>
 
-    mobileMenuButton.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
-
-    document.querySelectorAll('.mobile-link').forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-        });
-    });
-</script>
+    </header>
 
     <main class="pt-[104px]">
 
         <section class="relative h-[calc(100vh-104px)] overflow-hidden bg-[#2f2a24]">
             <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover scale-[1.03]">
-                <source src="/videos/hero-optimized.mp4" type="video/mp4">
+                <source src="{{ $mediaUrl(data_get($homepage, 'hero_video'), 'videos/hero-optimized.mp4') }}" type="video/mp4">
             </video>
 
             <div class="absolute inset-0 bg-black/30"></div>
@@ -94,20 +104,20 @@
 
             <div class="relative z-10 flex h-full items-end px-6 md:px-12 pb-16 md:pb-24">
                 <div class="max-w-3xl">
-                    <p class="text-white/75 uppercase tracking-[0.3em] text-xs mb-4">Cadore • Dolomiti</p>
+                    <p class="text-white/75 uppercase tracking-[0.3em] text-xs mb-4">{{ data_get($homepage, 'hero_eyebrow', 'Cadore - Dolomiti') }}</p>
 
                     <h1 class="text-white text-5xl md:text-7xl leading-none font-light" style="font-family:'Cormorant Garamond',serif;">
-                        Passeggiate nella natura<br>
-                        con lama e alpaca
+                        @foreach ($heroTitleLines as $line)
+                            {{ $line }}@if (! $loop->last)<br>@endif
+                        @endforeach
                     </h1>
 
-                    <p class="text-white/85 mt-6 text-base md:text-lg max-w-xl leading-relaxed">
-                        Esperienze lente tra lago, boschi e montagne.
-                        Un tempo sospeso da vivere insieme ai nostri animali.
-                    </p>
+                    <div class="text-white/85 mt-6 text-base md:text-lg max-w-xl leading-relaxed">
+                        {!! data_get($homepage, 'hero_subtitle', '<p>Esperienze lente tra lago, boschi e montagne. Un tempo sospeso da vivere insieme ai nostri animali.</p>') !!}
+                    </div>
 
-                    <a href="#esperienze" class="js-scroll inline-block mt-10 bg-[#f3efe7] text-[#2f2a24] px-8 py-4 uppercase tracking-[0.25em] text-xs hover:bg-white transition duration-500">
-                        Scopri le esperienze
+                    <a href="{{ data_get($homepage, 'hero_button_anchor', '#esperienze') }}" class="js-scroll inline-block mt-10 bg-[#f3efe7] text-[#2f2a24] px-8 py-4 uppercase tracking-[0.25em] text-xs hover:bg-white transition duration-500">
+                        {{ data_get($homepage, 'hero_button_label', 'Scopri le esperienze') }}
                     </a>
                 </div>
             </div>
@@ -115,24 +125,20 @@
 
         <section id="esperienze" class="pt-24 pb-58 px-6 md:px-12" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
             <div class="max-w-6xl mx-auto">
-                <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">Esperienze</p>
+                <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($homepage, 'experiences_eyebrow', 'Esperienze') }}</p>
 
                 <h2 class="text-5xl md:text-6xl mb-16" style="font-family:'Cormorant Garamond',serif;">
-                    Natura, lentezza e relazione
+                    {{ data_get($homepage, 'experiences_title', 'Natura, lentezza e relazione') }}
                 </h2>
 
                 <div class="grid md:grid-cols-2 gap-10">
-                    <div class="bg-white/45 p-8">
-                        <img src="/images/esperienze/Foto%20diAlpaca%20e%20lama%20completa.jpeg" alt="Lama e alpaca LAMAKA" class="w-full h-[400px] object-cover mb-6">
-                        <h3 class="text-3xl mb-4" style="font-family:'Cormorant Garamond',serif;">Primo incontro</h3>
-                        <p class="text-[#5f574d] leading-relaxed">Una passeggiata semplice e immersiva per conoscere lama e alpaca, camminando tra lago, sentieri e natura.</p>
-                    </div>
-
-                    <div class="bg-white/45 p-8">
-                        <img src="/images/esperienze/due%20lama%20al%20pascolo.jpeg" alt="Due lama al pascolo" class="w-full h-[400px] object-cover mb-6">
-                        <h3 class="text-3xl mb-4" style="font-family:'Cormorant Garamond',serif;">Passeggiata al tramonto</h3>
-                        <p class="text-[#5f574d] leading-relaxed">Un’esperienza lenta e romantica tra le montagne del Cadore, accompagnati dal ritmo calmo degli animali.</p>
-                    </div>
+                    @foreach ($experienceItems as $experience)
+                        <div class="bg-white/45 p-8">
+                            <img src="{{ $mediaUrl(data_get($experience, 'image')) }}" alt="{{ data_get($experience, 'title') }}" class="w-full h-[400px] object-cover mb-6">
+                            <h3 class="text-3xl mb-4" style="font-family:'Cormorant Garamond',serif;">{{ data_get($experience, 'title') }}</h3>
+                            <p class="text-[#5f574d] leading-relaxed">{{ data_get($experience, 'description') }}</p>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </section>
@@ -140,73 +146,116 @@
         <section id="chi-siamo" class="py-32 px-6 md:px-12" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
             <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
                 <div>
-                    <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">Chi siamo</p>
+                    <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($homepage, 'about_eyebrow', 'Chi siamo') }}</p>
 
                     <h2 class="text-5xl md:text-6xl mb-8" style="font-family:'Cormorant Garamond',serif;">
-                        Un tempo lento da condividere
+                        {{ data_get($homepage, 'about_title', 'Un tempo lento da condividere') }}
                     </h2>
 
                     <div class="space-y-6 text-[#5f574d] leading-relaxed text-lg">
-                        <p>LAMAKA nasce dal desiderio di creare esperienze autentiche nella natura, accompagnati dal passo lento e silenzioso di lama e alpaca.</p>
-                        <p>Tra boschi, montagne e paesaggi del Cadore, ogni passeggiata diventa un’occasione per rallentare, respirare e ritrovare una connessione semplice con gli animali e con il territorio.</p>
-                        <p>Non una semplice attività turistica, ma un’esperienza da vivere insieme.</p>
+                        {!! data_get($homepage, 'about_body', '<p>LAMAKA nasce dal desiderio di creare esperienze autentiche nella natura, accompagnati dal passo lento e silenzioso di lama e alpaca.</p><p>Tra boschi, montagne e paesaggi del Cadore, ogni passeggiata diventa un’occasione per rallentare, respirare e ritrovare una connessione semplice con gli animali e con il territorio.</p><p>Non una semplice attività turistica, ma un’esperienza da vivere insieme.</p>') !!}
                     </div>
                 </div>
 
                 <div>
-                    <img src="/images/about/chi-siamo.jpeg" alt="Chi siamo - LAMAKA" class="w-full h-[700px] object-cover">
+                    <img src="{{ $mediaUrl(data_get($homepage, 'about_image'), 'images/about/chi-siamo.jpeg') }}" alt="Chi siamo - LAMAKA" class="w-full h-[700px] object-cover">
                 </div>
             </div>
         </section>
 
         <section id="animali" class="py-32 px-6 md:px-12" style="background-color:#efe7da;background-image:radial-gradient(rgba(120,98,72,.03) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.02) .7px,#efe7da .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
             <div class="max-w-7xl mx-auto">
-                <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">Gli animali</p>
+                <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($homepage, 'animals_eyebrow', 'Gli animali') }}</p>
 
-                <h2 class="text-5xl md:text-6xl mb-20" style="font-family:'Cormorant Garamond',serif;">
-                    Cinque personalità,<br>
-                    un solo passo lento
-                </h2>
+                <h2 class="text-5xl md:text-6xl mb-20 whitespace-pre-line" style="font-family:'Cormorant Garamond',serif;">{{ data_get($homepage, 'animals_title', 'Cinque personalità, un solo passo lento') }}</h2>
 
                 <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-10">
-                    <div class="bg-white/50 p-6">
-                        <img src="/images/animali/Athos.jpeg" alt="Athos" class="w-full h-[500px] object-cover mb-6">
-                        <h3 class="text-3xl mb-3" style="font-family:'Cormorant Garamond',serif;">Athos</h3>
-                        <p class="text-[#5f574d] leading-relaxed">Curioso e sempre attento a ciò che succede attorno a lui. Ama osservare le persone e avvicinarsi con delicatezza.</p>
-                    </div>
-
-                    <div class="bg-white/50 p-6">
-                        <img src="/images/animali/Kairos.jpeg" alt="Kairos" class="w-full h-[500px] object-cover mb-6">
-                        <h3 class="text-3xl mb-3" style="font-family:'Cormorant Garamond',serif;">Kairos</h3>
-                        <p class="text-[#5f574d] leading-relaxed">Dolce e tranquillo, trasmette calma già dal primo incontro. È perfetto per chi cerca un momento di relax autentico.</p>
-                    </div>
-
-                    <div class="bg-white/50 p-6">
-                        <img src="/images/animali/Skiantos-2.jpeg" alt="Skiantos" class="w-full h-[500px] object-cover mb-6">
-                        <h3 class="text-3xl mb-3" style="font-family:'Cormorant Garamond',serif;">Skiantos</h3>
-                        <p class="text-[#5f574d] leading-relaxed">Il leader del gruppo. Sicuro di sé, curioso e sempre pronto ad aprire la strada durante le passeggiate.</p>
-                    </div>
-
-                    <div class="bg-white/50 p-6">
-                        <img src="/images/animali/Gulliver.jpeg" alt="Gulliver" class="w-full h-[500px] object-cover mb-6">
-                        <h3 class="text-3xl mb-3" style="font-family:'Cormorant Garamond',serif;">Gulliver</h3>
-                        <p class="text-[#5f574d] leading-relaxed">Elegante e riflessivo, ama i ritmi lenti e le passeggiate silenziose immerso nella natura.</p>
-                    </div>
-
-                    <div class="bg-white/50 p-6">
-                        <img src="/images/animali/Francis.jpeg" alt="Francis" class="w-full h-[500px] object-cover mb-6">
-                        <h3 class="text-3xl mb-3" style="font-family:'Cormorant Garamond',serif;">Francis</h3>
-                        <p class="text-[#5f574d] leading-relaxed">Affettuoso e socievole, crea subito empatia con adulti e bambini grazie al suo carattere gentile.</p>
-                    </div>
+                    @foreach ($animalItems as $animal)
+                        <div class="bg-white/50 p-6">
+                            <img src="{{ $mediaUrl(data_get($animal, 'image')) }}" alt="{{ data_get($animal, 'name') }}" class="w-full h-[500px] object-cover mb-6">
+                            <h3 class="text-3xl mb-3" style="font-family:'Cormorant Garamond',serif;">{{ data_get($animal, 'name') }}</h3>
+                            <p class="text-[#5f574d] leading-relaxed">{{ data_get($animal, 'description') }}</p>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </section>
 
-        <section id="contatti"></section>
+        <section id="contatti" class="py-32 px-6 md:px-12" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
+            <div class="max-w-7xl mx-auto grid md:grid-cols-[1.2fr_.8fr] gap-16">
+                <div>
+                    <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">Contatti</p>
+                    <h2 class="text-5xl md:text-6xl mb-8" style="font-family:'Cormorant Garamond',serif;">
+                        {{ data_get($contact, 'heading', 'Prenota la tua esperienza') }}
+                    </h2>
+                    <p class="text-[#5f574d] leading-relaxed text-lg max-w-2xl">
+                        {{ data_get($contact, 'body', 'Per informazioni, disponibilità e prenotazioni puoi contattarci direttamente. Ti risponderemo con i dettagli più adatti alla stagione e al gruppo.') }}
+                    </p>
+
+                    @if (data_get($contact, 'booking_url'))
+                        <a href="{{ data_get($contact, 'booking_url') }}" class="inline-block mt-10 bg-[#6f6a45] text-white px-8 py-4 uppercase tracking-[0.25em] text-xs hover:bg-[#4f4a35] transition duration-500">
+                            {{ data_get($contact, 'booking_label', 'Contattaci') }}
+                        </a>
+                    @endif
+                </div>
+
+                <div class="space-y-8 text-[#5f574d]">
+                    @if (data_get($contact, 'address'))
+                        <div>
+                            <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Dove</p>
+                            <p class="leading-relaxed whitespace-pre-line">{{ data_get($contact, 'address') }}</p>
+                        </div>
+                    @endif
+
+                    @if (data_get($contact, 'email'))
+                        <div>
+                            <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Email</p>
+                            <a href="mailto:{{ data_get($contact, 'email') }}" class="hover:text-[#2f2a24] transition">{{ data_get($contact, 'email') }}</a>
+                        </div>
+                    @endif
+
+                    @if (data_get($contact, 'phone'))
+                        <div>
+                            <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Telefono</p>
+                            <a href="tel:{{ data_get($contact, 'phone') }}" class="hover:text-[#2f2a24] transition">{{ data_get($contact, 'phone') }}</a>
+                        </div>
+                    @endif
+
+                    @if (data_get($contact, 'whatsapp'))
+                        <div>
+                            <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">WhatsApp</p>
+                            <a href="https://wa.me/{{ preg_replace('/\D+/', '', data_get($contact, 'whatsapp')) }}" class="hover:text-[#2f2a24] transition">{{ data_get($contact, 'whatsapp') }}</a>
+                        </div>
+                    @endif
+
+                    @if (data_get($contact, 'instagram_url'))
+                        <div>
+                            <p class="uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2">Instagram</p>
+                            <a href="{{ data_get($contact, 'instagram_url') }}" class="hover:text-[#2f2a24] transition">Apri profilo</a>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </section>
 
     </main>
 
     <script>
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.toggle('hidden');
+            mobileMenuButton.setAttribute('aria-expanded', String(!isHidden));
+        });
+
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+            });
+        });
+
         document.querySelectorAll('.js-scroll').forEach((link) => {
             link.addEventListener('click', function (event) {
                 const targetId = this.getAttribute('href');

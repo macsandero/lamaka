@@ -45,14 +45,12 @@
 
 <body class="bg-[#f3efe7] text-[#2f2a24] overflow-x-hidden">
 
-    <header id="site-header" class="fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]" style="background-color:#e9e2d4;">
+    <header id="site-header" class="fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]" style="background-color:#ede8dc;">
 
         <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
 
             <a href="#" class="flex items-center">
-                <span class="inline-flex bg-[#ede8dc] shadow-[0_0_28px_28px_#e9e2d4]">
-                    <img src="{{ data_get($contact, 'footer_logo') ? $mediaUrl(data_get($contact, 'footer_logo')) : '/logo.png' }}" alt="{{ data_get($contact, 'business_name', 'LAMAKA') }}" class="w-32 mix-blend-multiply md:w-44">
-                </span>
+                <img src="{{ data_get($contact, 'footer_logo') ? $mediaUrl(data_get($contact, 'footer_logo')) : '/logo.png' }}" alt="{{ data_get($contact, 'business_name', 'LAMAKA') }}" class="w-32 md:w-44">
             </a>
 
             <nav class="hidden md:flex items-center gap-10 text-xs font-semibold uppercase tracking-[0.24em] text-[#3f3d32]">

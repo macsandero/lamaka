@@ -54,8 +54,34 @@ class DatabaseSeeder extends Seeder
         );
 
         $experiences = [
-            ['title' => 'Primo incontro', 'description' => 'Una passeggiata semplice e immersiva per conoscere lama e alpaca, camminando tra lago, sentieri e natura.', 'image' => 'images/esperienze/Foto diAlpaca e lama completa.jpeg', 'sort_order' => 10],
-            ['title' => 'Passeggiata al tramonto', 'description' => 'Un’esperienza lenta e romantica tra le montagne del Cadore, accompagnati dal ritmo calmo degli animali.', 'image' => 'images/esperienze/due lama al pascolo.jpeg', 'sort_order' => 20],
+            [
+                'title' => 'Primo incontro',
+                'description' => 'Una passeggiata semplice e immersiva per conoscere lama e alpaca, camminando tra lago, sentieri e natura.',
+                'experience_type' => 'Esperienza con alpaca ideale per famiglie, coppie, gruppi di persone o da soli',
+                'purpose' => 'Scopri il mondo di lama e alpaca con una passeggiata facile nei dintorni del Lago di Calalzo, perfetta per chi vuole provare per la prima volta questa attività.',
+                'experience_details' => "conoscerai gli animali da vicino\nimparerai a condurli\ncamminerai immerso nella natura",
+                'short_duration' => '30 min',
+                'short_price' => '20€ a persona',
+                'long_duration' => '1 ora',
+                'long_price' => '35€ a persona',
+                'ideal_for' => 'Ideale per chi cerca cosa fare a Calalzo di Cadore',
+                'image' => 'images/esperienze/Foto diAlpaca e lama completa.jpeg',
+                'sort_order' => 10,
+            ],
+            [
+                'title' => 'Passeggiata al tramonto',
+                'description' => 'Un’esperienza lenta e romantica tra le montagne del Cadore, accompagnati dal ritmo calmo degli animali.',
+                'experience_type' => 'Esperienza nella natura al tramonto con lama e alpaca',
+                'purpose' => 'Vivi un momento lento e suggestivo tra luce, paesaggio e relazione con gli animali.',
+                'experience_details' => "camminerai al passo degli animali\nvivrai il tramonto tra i panorami del Cadore\ncondividerai un’esperienza rilassante e autentica",
+                'short_duration' => null,
+                'short_price' => null,
+                'long_duration' => '1 ora',
+                'long_price' => '35€ a persona',
+                'ideal_for' => 'Ideale per coppie, famiglie e piccoli gruppi',
+                'image' => 'images/esperienze/due lama al pascolo.jpeg',
+                'sort_order' => 20,
+            ],
         ];
 
         foreach ($experiences as $experience) {

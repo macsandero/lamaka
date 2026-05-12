@@ -22,6 +22,15 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/esperienze/{experience}', function (Experience $experience) {
+    abort_unless($experience->is_active, 404);
+
+    return view('experience-show', [
+        'experience' => $experience,
+        'contact' => ContactSetting::query()->where('is_active', true)->first(),
+    ]);
+})->name('experiences.show');
+
 Route::post('/prenota', [BookingSubmissionController::class, 'store'])
     ->name('booking.store');
 

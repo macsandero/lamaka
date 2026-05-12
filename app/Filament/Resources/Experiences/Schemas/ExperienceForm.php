@@ -19,8 +19,37 @@ class ExperienceForm
                     ->required()
                     ->maxLength(255),
                 Textarea::make('description')
-                    ->label('Descrizione')
+                    ->label('Descrizione breve')
                     ->rows(4)
+                    ->columnSpanFull(),
+                TextInput::make('experience_type')
+                    ->label('Tipo esperienza')
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+                Textarea::make('purpose')
+                    ->label('Finalità')
+                    ->rows(4)
+                    ->columnSpanFull(),
+                Textarea::make('experience_details')
+                    ->label('Durante l’esperienza')
+                    ->helperText('Inserisci un punto per riga.')
+                    ->rows(5)
+                    ->columnSpanFull(),
+                TextInput::make('short_duration')
+                    ->label('Durata 1')
+                    ->maxLength(255),
+                TextInput::make('short_price')
+                    ->label('Prezzo 1')
+                    ->maxLength(255),
+                TextInput::make('long_duration')
+                    ->label('Durata 2')
+                    ->maxLength(255),
+                TextInput::make('long_price')
+                    ->label('Prezzo 2')
+                    ->maxLength(255),
+                Textarea::make('ideal_for')
+                    ->label('Ideale per')
+                    ->rows(3)
                     ->columnSpanFull(),
                 FileUpload::make('image')
                     ->label('Immagine')

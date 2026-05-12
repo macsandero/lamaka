@@ -136,11 +136,11 @@
 
                 <div class="grid md:grid-cols-2 gap-10">
                     @foreach ($experienceItems as $experience)
-                        <div class="bg-white/45 p-8">
+                        <a href="{{ $experience instanceof \App\Models\Experience ? route('experiences.show', $experience) : '#esperienze' }}" class="block bg-white/45 p-8 transition duration-500 hover:bg-white/70">
                             <img src="{{ $mediaUrl(data_get($experience, 'image')) }}" alt="{{ data_get($experience, 'title') }}" class="w-full h-[400px] object-cover mb-6">
                             <h3 class="text-3xl mb-4" style="font-family:'Cormorant Garamond',serif;">{{ data_get($experience, 'title') }}</h3>
                             <p class="text-[#5f574d] leading-relaxed">{{ data_get($experience, 'description') }}</p>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
             </div>
@@ -281,13 +281,24 @@
                         @foreach ($bookingFields as $field)
                             @php
                                 $fieldName = "fields[{$field->key}]";
-                                $oldValue = old("fields.{$field->key}");
+                                $oldValue = old("fields.{$field->key}", request($field->key));
                                 $inputType = $field->type === 'datetime' ? 'datetime-local' : $field->type;
                                 $minimumValue = match ($field->type) {
                                     'date' => now()->addDay()->toDateString(),
                                     'datetime' => now()->addDay()->startOfDay()->format('Y-m-d\TH:i'),
                                     default => null,
                                 };
+                                $selectOptions = $field->optionsList();
+
+                                if ($field->key === 'esperienza') {
+                                    $selectOptions = collect($selectOptions)
+                                        ->merge(collect($experienceItems)->map(fn ($experience) => data_get($experience, 'title')))
+                                        ->filter()
+                                        ->unique()
+                                        ->values()
+                                        ->all();
+                                }
+
                                 $inputClasses = 'w-full border border-[#d8cdbd] bg-white/80 px-4 py-3 text-[#2f2a24] outline-none focus:border-[#6f6a45] transition';
                             @endphp
 
@@ -309,7 +320,7 @@
                                     @elseif ($field->type === 'select')
                                         <select id="booking-{{ $field->key }}" name="{{ $fieldName }}" class="{{ $inputClasses }}">
                                             <option value="">Seleziona</option>
-                                            @foreach ($field->optionsList() as $option)
+                                            @foreach ($selectOptions as $option)
                                                 <option value="{{ $option }}" @selected($oldValue === $option)>{{ $option }}</option>
                                             @endforeach
                                         </select>

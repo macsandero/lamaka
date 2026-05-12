@@ -26,6 +26,10 @@ class ExperiencesTable
                     ->label('Titolo')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('experience_type')
+                    ->label('Tipo')
+                    ->searchable()
+                    ->toggleable(),
                 IconColumn::make('is_active')
                     ->label('Visibile')
                     ->boolean(),

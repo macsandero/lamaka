@@ -37,6 +37,7 @@ class Login extends BaseLogin
         return TextInput::make('email')
             ->label('Email')
             ->email()
+            ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? strtolower(trim($state)) : $state)
             ->required()
             ->autocomplete()
             ->autofocus();
@@ -56,5 +57,13 @@ class Login extends BaseLogin
         return Action::make('authenticate')
             ->label('Accedi')
             ->submit('authenticate');
+    }
+
+    protected function getCredentialsFromFormData(array $data): array
+    {
+        return [
+            'email' => strtolower(trim((string) $data['email'])),
+            'password' => $data['password'],
+        ];
     }
 }

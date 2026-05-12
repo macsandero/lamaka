@@ -39,6 +39,25 @@
         margin-bottom: 1.25rem;
     }
 
+    .lamaka-auth-message {
+        border: 1px solid #d8cdbd;
+        color: #4f4a35;
+        font-size: .85rem;
+        line-height: 1.4;
+        margin-bottom: 1rem;
+        padding: .75rem .9rem;
+    }
+
+    .lamaka-auth-message.error {
+        background: #fff4f0;
+        border-color: #d9a79b;
+        color: #8a3528;
+    }
+
+    .lamaka-auth-message.success {
+        background: #f3efe7;
+    }
+
     .lamaka-auth-card .fi-fo-field-wrp-label span,
     .lamaka-auth-card label {
         color: #7a6f63 !important;
@@ -94,6 +113,18 @@
 
     <h1 class="lamaka-auth-title">Accesso admin</h1>
     <p class="lamaka-auth-copy">Entra nell’area riservata LAMAKA.</p>
+
+    @if (session('status'))
+        <div class="lamaka-auth-message success">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="lamaka-auth-message error">
+            {{ $errors->first() }}
+        </div>
+    @endif
 
     {{ $this->content }}
 </div>

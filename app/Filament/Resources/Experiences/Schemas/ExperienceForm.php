@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\Experiences\Schemas;
 
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
@@ -18,22 +18,17 @@ class ExperienceForm
                     ->label('Titolo')
                     ->required()
                     ->maxLength(255),
-                Textarea::make('description')
+                RichEditor::make('description')
                     ->label('Descrizione breve')
-                    ->rows(4)
                     ->columnSpanFull(),
-                TextInput::make('experience_type')
+                RichEditor::make('experience_type')
                     ->label('Tipo esperienza')
-                    ->maxLength(255)
                     ->columnSpanFull(),
-                Textarea::make('purpose')
+                RichEditor::make('purpose')
                     ->label('Finalità')
-                    ->rows(4)
                     ->columnSpanFull(),
-                Textarea::make('experience_details')
+                RichEditor::make('experience_details')
                     ->label('Durante l’esperienza')
-                    ->helperText('Inserisci un punto per riga.')
-                    ->rows(5)
                     ->columnSpanFull(),
                 TextInput::make('short_duration')
                     ->label('Durata 1')
@@ -47,9 +42,8 @@ class ExperienceForm
                 TextInput::make('long_price')
                     ->label('Prezzo 2')
                     ->maxLength(255),
-                Textarea::make('ideal_for')
+                RichEditor::make('ideal_for')
                     ->label('Ideale per')
-                    ->rows(3)
                     ->columnSpanFull(),
                 FileUpload::make('image')
                     ->label('Immagine')

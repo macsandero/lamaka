@@ -25,6 +25,8 @@
 
         return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
     };
+
+    $hasHtml = fn (?string $value): bool => $value !== strip_tags((string) $value);
 @endphp
 
 <body class="bg-[#f3efe7] text-[#2f2a24] overflow-x-hidden">
@@ -64,7 +66,13 @@
                         </h1>
 
                         @if ($experience->description)
-                            <p class="text-[#5f574d] text-lg leading-relaxed mb-10">{{ $experience->description }}</p>
+                            <div class="experience-copy text-[#5f574d] text-lg leading-relaxed mb-10">
+                                @if ($hasHtml($experience->description))
+                                    {!! $experience->description !!}
+                                @else
+                                    {!! nl2br(e($experience->description)) !!}
+                                @endif
+                            </div>
                         @endif
 
                         @if ($experience->image)
@@ -75,37 +83,54 @@
                     <div class="bg-white/55 border border-[#d8cdbd] p-6 md:p-10">
                         @if ($experience->experience_type)
                             <div class="mb-8">
-                                <p class="text-red-700 text-xl md:text-2xl font-semibold mb-2" style="font-family:'Cormorant Garamond',serif;">Tipo esperienza</p>
-                                <p class="text-[#2f2a24] text-xl leading-relaxed font-semibold">{{ $experience->experience_type }}</p>
+                                <p class="experience-label text-xl md:text-2xl mb-3" style="font-family:'Cormorant Garamond',serif;">Tipo esperienza</p>
+                                <div class="experience-copy text-[#2f2a24] text-xl leading-relaxed">
+                                    @if ($hasHtml($experience->experience_type))
+                                        {!! $experience->experience_type !!}
+                                    @else
+                                        {!! nl2br(e($experience->experience_type)) !!}
+                                    @endif
+                                </div>
                             </div>
                         @endif
 
                         @if ($experience->purpose)
                             <div class="mb-8">
-                                <p class="text-red-700 text-xl md:text-2xl font-semibold mb-2" style="font-family:'Cormorant Garamond',serif;">Finalità</p>
-                                <p class="text-[#2f2a24] text-xl leading-relaxed whitespace-pre-line">{{ $experience->purpose }}</p>
+                                <p class="experience-label text-xl md:text-2xl mb-3" style="font-family:'Cormorant Garamond',serif;">Finalità</p>
+                                <div class="experience-copy text-[#2f2a24] text-xl leading-relaxed">
+                                    @if ($hasHtml($experience->purpose))
+                                        {!! $experience->purpose !!}
+                                    @else
+                                        {!! nl2br(e($experience->purpose)) !!}
+                                    @endif
+                                </div>
                             </div>
                         @endif
 
                         @if ($experience->experience_details)
                             <div class="mb-8">
-                                <p class="text-red-700 text-xl md:text-2xl font-semibold mb-2" style="font-family:'Cormorant Garamond',serif;">Durante l’esperienza</p>
-                                <p class="text-[#2f2a24] text-xl leading-relaxed mb-4">Durante l’esperienza:</p>
-                                <ul class="list-disc pl-8 space-y-2 text-xl leading-relaxed">
-                                    @foreach ($experience->detailsList() as $detail)
-                                        <li>{{ $detail }}</li>
-                                    @endforeach
-                                </ul>
+                                <p class="experience-label text-xl md:text-2xl mb-3" style="font-family:'Cormorant Garamond',serif;">Durante l’esperienza</p>
+                                <div class="experience-copy text-[#2f2a24] text-xl leading-relaxed">
+                                    @if ($hasHtml($experience->experience_details))
+                                        {!! $experience->experience_details !!}
+                                    @else
+                                        <ul>
+                                            @foreach ($experience->detailsList() as $detail)
+                                                <li>{{ $detail }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </div>
                             </div>
                         @endif
 
                         @if ($experience->short_duration || $experience->short_price)
                             <div class="mb-8 text-xl leading-relaxed">
                                 @if ($experience->short_duration)
-                                    <p><span class="text-red-700 font-semibold">Durata</span> {{ $experience->short_duration }}</p>
+                                    <p><span class="experience-label">Durata</span> {{ $experience->short_duration }}</p>
                                 @endif
                                 @if ($experience->short_price)
-                                    <p><span class="text-red-700 font-semibold">Prezzo</span> <strong>{{ $experience->short_price }}</strong></p>
+                                    <p><span class="experience-label">Prezzo</span> <strong>{{ $experience->short_price }}</strong></p>
                                 @endif
                             </div>
                         @endif
@@ -113,17 +138,24 @@
                         @if ($experience->long_duration || $experience->long_price)
                             <div class="mb-8 text-xl leading-relaxed">
                                 @if ($experience->long_duration)
-                                    <p><span class="text-red-700 font-semibold">Durata</span> {{ $experience->long_duration }}</p>
+                                    <p><span class="experience-label">Durata</span> {{ $experience->long_duration }}</p>
                                 @endif
                                 @if ($experience->long_price)
-                                    <p><span class="text-red-700 font-semibold">Prezzo</span> <strong>{{ $experience->long_price }}</strong></p>
+                                    <p><span class="experience-label">Prezzo</span> <strong>{{ $experience->long_price }}</strong></p>
                                 @endif
                             </div>
                         @endif
 
                         @if ($experience->ideal_for)
                             <div class="text-xl leading-relaxed">
-                                <p><span class="text-red-700 font-semibold">Ideale per</span> {{ $experience->ideal_for }}</p>
+                                <p class="experience-label mb-3" style="font-family:'Cormorant Garamond',serif;">Ideale per</p>
+                                <div class="experience-copy text-[#2f2a24] text-xl leading-relaxed">
+                                    @if ($hasHtml($experience->ideal_for))
+                                        {!! $experience->ideal_for !!}
+                                    @else
+                                        {!! nl2br(e($experience->ideal_for)) !!}
+                                    @endif
+                                </div>
                             </div>
                         @endif
 

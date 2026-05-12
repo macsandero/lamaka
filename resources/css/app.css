@@ -9,3 +9,38 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+.experience-label {
+    color: #9b624b;
+    font-weight: 400;
+}
+
+.experience-copy p {
+    margin: 0 0 1rem;
+}
+
+.experience-copy p:last-child {
+    margin-bottom: 0;
+}
+
+.experience-copy ul,
+.experience-copy ol {
+    margin: 1rem 0 0;
+    padding-left: 1.7rem;
+}
+
+.experience-copy ul {
+    list-style: disc;
+}
+
+.experience-copy ol {
+    list-style: decimal;
+}
+
+.experience-copy li {
+    margin: .45rem 0;
+}
+
+.experience-copy strong {
+    font-weight: 600;
+}

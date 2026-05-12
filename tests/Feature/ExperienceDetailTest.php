@@ -31,6 +31,7 @@ class ExperienceDetailTest extends TestCase
             ->assertOk()
             ->assertSee('Tipo esperienza')
             ->assertSee('Prenota questa esperienza')
+            ->assertDontSee('Durante l’esperienza:', false)
             ->assertSee('/?esperienza=Primo%20incontro#prenota', false);
     }
 

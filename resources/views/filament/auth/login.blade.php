@@ -126,5 +126,11 @@
         </div>
     @endif
 
+    @if ($this->loginError)
+        <div class="lamaka-auth-message error">
+            {{ $this->loginError }}
+        </div>
+    @endif
+
     {{ $this->content }}
 </div>

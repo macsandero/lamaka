@@ -3,15 +3,33 @@
 namespace App\Filament\Pages\Auth;
 
 use Filament\Actions\Action;
+use Filament\Auth\Http\Responses\Contracts\LoginResponse;
 use Filament\Auth\Pages\Login as BaseLogin;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Validation\ValidationException;
 
 class Login extends BaseLogin
 {
     protected string $view = 'filament.auth.login';
+
+    public ?string $loginError = null;
+
+    public function authenticate(): ?LoginResponse
+    {
+        $this->loginError = null;
+
+        try {
+            return parent::authenticate();
+        } catch (ValidationException $exception) {
+            $this->loginError = 'Email o password non corretti, oppure utente non abilitato all’area admin.';
+            $this->data['password'] = null;
+
+            return null;
+        }
+    }
 
     public function getTitle(): string|Htmlable
     {

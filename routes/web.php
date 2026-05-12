@@ -16,7 +16,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/admin/setup-password/{token}', [AdminPasswordSetupController::class, 'edit'])
+Route::get('/admin-password/setup/{token}', [AdminPasswordSetupController::class, 'edit'])
     ->name('admin.password-setup.edit');
-Route::post('/admin/setup-password/{token}', [AdminPasswordSetupController::class, 'update'])
+Route::post('/admin-password/setup/{token}', [AdminPasswordSetupController::class, 'update'])
     ->name('admin.password-setup.update');

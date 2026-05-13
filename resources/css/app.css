@@ -123,15 +123,23 @@
     font-size: 1.65rem;
 }
 
-.legal-copy p,
-.legal-copy ul,
-.legal-copy ol {
+.legal-copy p {
     margin: 0 0 1rem;
 }
 
 .legal-copy ul,
 .legal-copy ol {
+    margin: 0 0 .6rem;
+}
+
+.legal-copy ul,
+.legal-copy ol {
     padding-left: 1.5rem;
+    line-height: 1.38;
+}
+
+.legal-copy li {
+    margin: .12rem 0;
 }
 
 .legal-copy ul {

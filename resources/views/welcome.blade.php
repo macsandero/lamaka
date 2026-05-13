@@ -244,7 +244,7 @@
                                 $inputClasses = 'w-full min-w-0 max-w-full border border-[#d8cdbd] bg-white/80 px-4 py-3 text-[#2f2a24] outline-none focus:border-[#6f6a45] transition';
                             @endphp
 
-                            <div class="min-w-0 {{ $field->is_full_width || in_array($field->type, ['textarea', 'checkbox'], true) ? 'md:col-span-2' : '' }}">
+                            <div class="min-w-0 {{ $field->type === 'datetime' ? 'booking-datetime-field' : '' }} {{ $field->is_full_width || in_array($field->type, ['textarea', 'checkbox'], true) ? 'md:col-span-2' : '' }}">
                                 @if ($field->type === 'checkbox')
                                     <label class="flex gap-3 text-[#5f574d] leading-relaxed">
                                         <input type="checkbox" name="{{ $fieldName }}" value="1" @checked($oldValue) class="mt-1 h-5 w-5 border-[#d8cdbd] text-[#6f6a45] focus:ring-[#6f6a45]">

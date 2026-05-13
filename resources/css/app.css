@@ -55,15 +55,38 @@
 }
 
 .booking-datetime-input {
+    inline-size: 100%;
     min-width: 0;
+    min-inline-size: 0;
     max-width: 100%;
+    max-inline-size: 100%;
 }
 
 @media (max-width: 640px) {
+    .booking-datetime-field {
+        overflow: hidden;
+    }
+
     .booking-datetime-input {
-        padding-left: .75rem;
-        padding-right: .5rem;
+        display: block;
+        width: 100% !important;
+        inline-size: 100% !important;
+        min-width: 0 !important;
+        min-inline-size: 0 !important;
+        max-width: 100% !important;
+        max-inline-size: 100% !important;
+        padding-left: .75rem !important;
+        padding-right: .75rem !important;
         font-size: .95rem;
+        line-height: 1.25;
+        appearance: none;
+        -webkit-appearance: none;
+    }
+
+    .booking-datetime-input::-webkit-date-and-time-value {
+        margin: 0;
+        min-width: 0;
+        text-align: left;
     }
 }
 

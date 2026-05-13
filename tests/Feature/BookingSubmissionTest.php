@@ -83,6 +83,7 @@ class BookingSubmissionTest extends TestCase
 
         $this->get('/#prenota')
             ->assertOk()
+            ->assertSee('booking-datetime-field', false)
             ->assertSee('booking-datetime-input', false);
     }
 }

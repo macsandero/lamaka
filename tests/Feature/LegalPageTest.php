@@ -62,4 +62,32 @@ class LegalPageTest extends TestCase
             ->assertSee('/privacy-policy', false)
             ->assertSee('/cookie-policy', false);
     }
+
+    public function test_legal_pages_show_footer_when_contact_settings_exist(): void
+    {
+        LegalPage::query()->updateOrCreate(
+            ['slug' => 'privacy-policy'],
+            [
+                'title' => 'Privacy Policy',
+                'body' => '<p>Testo privacy personalizzato.</p>',
+                'is_active' => true,
+            ],
+        );
+
+        ContactSetting::query()->updateOrCreate(
+            ['id' => 1],
+            [
+                'business_name' => 'LAMAKA',
+                'heading' => 'Contatti',
+                'legal_text' => '© Copyright LAMAKA',
+                'is_active' => true,
+            ],
+        );
+
+        $this->get(route('legal.privacy'))
+            ->assertOk()
+            ->assertSee('Contatti')
+            ->assertSee('Cookie policy')
+            ->assertSee('© Copyright LAMAKA');
+    }
 }

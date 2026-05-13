@@ -63,5 +63,87 @@
             </article>
         </section>
     </main>
+
+    @if ($contact)
+        <footer class="recycled-paper paper-footer text-[#2f2a24] px-6 md:px-12 py-20">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid lg:grid-cols-[1.15fr_.85fr_.95fr] gap-14">
+                    <div>
+                        <img src="{{ data_get($contact, 'footer_logo') ? $mediaUrl(data_get($contact, 'footer_logo')) : '/logo.png' }}" alt="{{ data_get($contact, 'business_name', 'LAMAKA') }}" class="mb-8 w-40 max-h-32 object-contain opacity-90">
+                        <div class="footer-copy max-w-lg text-[#2f2a24]/80 leading-relaxed">
+                            {!! data_get($contact, 'footer_body') ?: '<p>Esperienze lente tra Dolomiti, natura e passo calmo. Un luogo per ritrovare tempo, respiro e relazione con gli animali.</p>' !!}
+                        </div>
+
+                        @if (data_get($contact, 'whatsapp'))
+                            <a href="https://wa.me/{{ preg_replace('/\D+/', '', data_get($contact, 'whatsapp')) }}" class="mt-8 inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#25d366] text-white transition hover:scale-105" aria-label="WhatsApp">
+                                <svg class="h-5 w-5" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+                                    <path d="M16.02 4.03A11.86 11.86 0 0 0 5.93 22.1L4 29l7.06-1.86a11.83 11.83 0 0 0 4.96 1.09h.01A11.86 11.86 0 0 0 16.02 4.03Zm0 21.99a9.63 9.63 0 0 1-4.9-1.34l-.35-.21-4.18 1.1 1.11-4.08-.23-.38a9.64 9.64 0 1 1 8.55 4.91Zm5.29-7.22c-.29-.15-1.72-.85-1.98-.94-.27-.1-.46-.15-.66.15-.19.29-.76.94-.93 1.13-.17.2-.34.22-.63.08-.29-.15-1.22-.45-2.33-1.43-.86-.77-1.44-1.72-1.61-2.01-.17-.29-.02-.45.13-.59.13-.13.29-.34.44-.51.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.51-.08-.15-.66-1.59-.9-2.18-.24-.57-.48-.49-.66-.5h-.56c-.2 0-.51.07-.78.37-.27.29-1.03 1.01-1.03 2.47s1.06 2.86 1.21 3.06c.15.2 2.08 3.18 5.04 4.46.7.3 1.25.48 1.68.62.71.22 1.35.19 1.86.12.57-.09 1.72-.7 1.96-1.38.24-.68.24-1.26.17-1.38-.07-.13-.26-.2-.55-.35Z"/>
+                                </svg>
+                            </a>
+                        @endif
+                    </div>
+
+                    <div>
+                        <h2 class="mb-7 text-4xl" style="font-family:'Cormorant Garamond',serif;">{{ data_get($contact, 'heading', 'Contatti') }}</h2>
+                        <div class="space-y-3 text-[#2f2a24]/80 leading-relaxed">
+                            @if (data_get($contact, 'email'))
+                                <p>Email: <a href="mailto:{{ data_get($contact, 'email') }}" class="hover:text-[#f9f4ea]">{{ data_get($contact, 'email') }}</a></p>
+                            @endif
+                            @if (data_get($contact, 'phone'))
+                                <p>Tel: <a href="tel:{{ data_get($contact, 'phone') }}" class="hover:text-[#f9f4ea]">{{ data_get($contact, 'phone') }}</a></p>
+                            @endif
+                            @if (data_get($contact, 'address'))
+                                <p class="whitespace-pre-line">{{ data_get($contact, 'address') }}</p>
+                            @endif
+                        </div>
+
+                        @if (data_get($contact, 'directions_url'))
+                            <a href="{{ data_get($contact, 'directions_url') }}" class="mt-8 inline-block border-b border-[#2f2a24]/45 pb-1 text-xs uppercase tracking-[0.22em] text-[#2f2a24]/80 hover:text-[#f9f4ea]" target="_blank" rel="noreferrer">
+                                {{ data_get($contact, 'directions_label', 'Indicazioni stradali') }}
+                            </a>
+                        @endif
+                    </div>
+
+                    <div>
+                        <h2 class="mb-7 text-4xl" style="font-family:'Cormorant Garamond',serif;">Seguici</h2>
+                        <div class="mb-8 flex gap-5 text-3xl">
+                            @if (data_get($contact, 'facebook_url'))
+                                <a href="{{ data_get($contact, 'facebook_url') }}" class="hover:text-[#f9f4ea]" target="_blank" rel="noreferrer" aria-label="Facebook">
+                                    <svg class="h-8 w-8" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8.5V6.6c0-.8.2-1.2 1.3-1.2H17V2.2c-.8-.1-1.6-.2-2.4-.2-2.4 0-4.1 1.5-4.1 4.2v2.3H7.7V12h2.8v10H14V12h2.9l.4-3.5H14Z"/></svg>
+                                </a>
+                            @endif
+                            @if (data_get($contact, 'instagram_url'))
+                                <a href="{{ data_get($contact, 'instagram_url') }}" class="hover:text-[#f9f4ea]" target="_blank" rel="noreferrer" aria-label="Instagram">
+                                    <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+                                </a>
+                            @endif
+                        </div>
+                        <div class="footer-copy text-[#2f2a24]/80 leading-relaxed italic">
+                            {!! data_get($contact, 'footer_note') ?: '<p>LAMAKA nasce per vivere la natura con rispetto, lentezza e attenzione agli animali.</p>' !!}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-14 border-t border-[#2f2a24]/30 pt-3.5 flex flex-col gap-2.5 text-[11px] uppercase tracking-[0.16em] text-[#2f2a24]/75 md:flex-row md:items-center md:justify-between">
+                    <div class="flex flex-wrap gap-7">
+                        <a href="{{ data_get($contact, 'privacy_url') ?: route('legal.privacy') }}" class="hover:text-[#f9f4ea]">Privacy policy</a>
+                        <a href="{{ data_get($contact, 'cookie_url') ?: route('legal.cookie') }}" class="hover:text-[#f9f4ea]">Cookie policy</a>
+                    </div>
+                    <div class="normal-case tracking-normal md:text-right">
+                        <span>{{ data_get($contact, 'legal_text', '© Copyright LAMAKA') }}</span>
+                        @if (data_get($contact, 'company_name'))
+                            <span> - {{ data_get($contact, 'company_name') }}</span>
+                        @endif
+                        @if (data_get($contact, 'tax_code'))
+                            <span> - {{ data_get($contact, 'tax_code') }}</span>
+                        @endif
+                        @if (data_get($contact, 'vat_number'))
+                            <span> - {{ data_get($contact, 'vat_number') }}</span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </footer>
+    @endif
 </body>
 </html>

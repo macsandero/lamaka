@@ -178,7 +178,7 @@ class DatabaseSeeder extends Seeder
             ['label' => 'Giorno e ora preferiti', 'key' => 'data_ora_preferita', 'type' => 'datetime', 'placeholder' => null, 'sort_order' => 50, 'is_required' => true],
             ['label' => 'Numero partecipanti', 'key' => 'partecipanti', 'type' => 'number', 'placeholder' => null, 'sort_order' => 60, 'is_required' => false],
             ['label' => 'Messaggio', 'key' => 'messaggio', 'type' => 'textarea', 'placeholder' => 'Raccontaci esigenze, periodo o domande particolari.', 'sort_order' => 70, 'is_required' => false, 'is_full_width' => true],
-            ['label' => 'Accetto di essere ricontattato per la gestione della richiesta.', 'key' => 'privacy', 'type' => 'checkbox', 'placeholder' => null, 'sort_order' => 80, 'is_required' => true, 'is_full_width' => true],
+            ['label' => 'Ho letto l’Informativa Privacy e acconsento al trattamento dei miei dati per la gestione della richiesta.', 'key' => 'privacy', 'type' => 'checkbox', 'placeholder' => null, 'sort_order' => 80, 'is_required' => true, 'is_full_width' => true],
         ];
 
         foreach ($bookingFields as $field) {

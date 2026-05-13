@@ -86,4 +86,16 @@ class BookingSubmissionTest extends TestCase
             ->assertSee('booking-datetime-field', false)
             ->assertSee('booking-datetime-input', false);
     }
+
+    public function test_privacy_booking_field_links_to_legal_page(): void
+    {
+        $this->seed();
+
+        $this->get('/#prenota')
+            ->assertOk()
+            ->assertSee('Ho letto l’', false)
+            ->assertSee('href="http://localhost/privacy-policy"', false)
+            ->assertSee('Informativa Privacy')
+            ->assertSee('acconsento al trattamento dei miei dati per la gestione della richiesta.');
+    }
 }

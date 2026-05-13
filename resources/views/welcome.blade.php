@@ -249,7 +249,15 @@
                                     <label class="flex gap-3 text-[#5f574d] leading-relaxed">
                                         <input type="checkbox" name="{{ $fieldName }}" value="1" @checked($oldValue) class="mt-1 h-5 w-5 border-[#d8cdbd] text-[#6f6a45] focus:ring-[#6f6a45]">
                                         <span>
-                                            {{ $field->label }}@if ($field->is_required)<span class="text-red-700">*</span>@endif
+                                            @if ($field->key === 'privacy' && str_contains($field->label, 'Informativa Privacy'))
+                                                @php
+                                                    [$privacyLabelBefore, $privacyLabelAfter] = explode('Informativa Privacy', $field->label, 2);
+                                                @endphp
+                                                {{ $privacyLabelBefore }}<a href="{{ route('legal.privacy') }}" class="border-b border-[#6f6a45]/45 text-[#4f4a35] transition hover:text-[#2f2a24]" target="_blank">Informativa Privacy</a>{{ $privacyLabelAfter }}
+                                            @else
+                                                {{ $field->label }}
+                                            @endif
+                                            @if ($field->is_required)<span class="text-red-700">*</span>@endif
                                         </span>
                                     </label>
                                 @else

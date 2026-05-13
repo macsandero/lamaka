@@ -187,7 +187,7 @@
             </div>
         </section>
 
-        <section class="recycled-paper paper-booking pt-40 pb-[70vh] px-6 md:px-12">
+        <section class="recycled-paper paper-booking pt-40 pb-[21vh] px-6 md:px-12">
             <div id="prenota" class="max-w-7xl mx-auto grid scroll-mt-[calc(104px+7rem)] lg:grid-cols-[.85fr_1.15fr] gap-16">
                 <div>
                     <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($bookingSettings, 'eyebrow', 'Prenota') }}</p>

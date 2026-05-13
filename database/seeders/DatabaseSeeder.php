@@ -121,6 +121,7 @@ class DatabaseSeeder extends Seeder
                 'address' => 'Cadore - Dolomiti',
                 'map_query' => '46.446076,12.391663',
                 'instagram_url' => null,
+                'instagram_note' => null,
                 'facebook_url' => null,
                 'footer_note' => '<p>LAMAKA nasce per vivere la natura con rispetto, lentezza e attenzione agli animali.</p>',
                 'directions_label' => 'Indicazioni stradali',

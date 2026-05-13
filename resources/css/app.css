@@ -48,6 +48,25 @@
     background-color: #c8b287;
 }
 
+.booking-form input,
+.booking-form select,
+.booking-form textarea {
+    box-sizing: border-box;
+}
+
+.booking-datetime-input {
+    min-width: 0;
+    max-width: 100%;
+}
+
+@media (max-width: 640px) {
+    .booking-datetime-input {
+        padding-left: .75rem;
+        padding-right: .5rem;
+        font-size: .95rem;
+    }
+}
+
 .experience-label {
     color: #9b624b;
     font-weight: 400;

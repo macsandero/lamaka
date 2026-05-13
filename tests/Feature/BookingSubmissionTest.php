@@ -76,4 +76,13 @@ class BookingSubmissionTest extends TestCase
         $this->assertDatabaseCount(BookingSubmission::class, 0);
         Mail::assertNothingSent();
     }
+
+    public function test_booking_datetime_field_has_mobile_safe_class(): void
+    {
+        $this->seed();
+
+        $this->get('/#prenota')
+            ->assertOk()
+            ->assertSee('booking-datetime-input', false);
+    }
 }

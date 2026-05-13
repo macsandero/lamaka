@@ -84,6 +84,9 @@ class ContactSettingResource extends Resource
                             ->label('Instagram')
                             ->url()
                             ->maxLength(255),
+                        RichEditor::make('instagram_note')
+                            ->label('Testo sotto Instagram')
+                            ->columnSpanFull(),
                         TextInput::make('facebook_url')
                             ->label('Facebook')
                             ->url()

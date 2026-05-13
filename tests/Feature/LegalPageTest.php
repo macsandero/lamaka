@@ -79,6 +79,8 @@ class LegalPageTest extends TestCase
             [
                 'business_name' => 'LAMAKA',
                 'heading' => 'Contatti',
+                'instagram_url' => 'https://instagram.com/lamaka',
+                'instagram_note' => '<p>Testo sotto Instagram.</p>',
                 'legal_text' => '© Copyright LAMAKA',
                 'is_active' => true,
             ],
@@ -87,6 +89,8 @@ class LegalPageTest extends TestCase
         $this->get(route('legal.privacy'))
             ->assertOk()
             ->assertSee('Contatti')
+            ->assertSee('https://instagram.com/lamaka', false)
+            ->assertSee('Testo sotto Instagram.')
             ->assertSee('Cookie policy')
             ->assertSee('© Copyright LAMAKA');
     }

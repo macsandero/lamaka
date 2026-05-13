@@ -18,6 +18,7 @@ class ContactSetting extends Model
         'address',
         'map_query',
         'instagram_url',
+        'instagram_note',
         'facebook_url',
         'footer_note',
         'directions_label',

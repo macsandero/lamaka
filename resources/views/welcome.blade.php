@@ -123,7 +123,7 @@
             </div>
         </section>
 
-        <section id="esperienze" class="recycled-paper paper-cream pt-24 pb-58 px-6 md:px-12">
+        <section id="esperienze" class="recycled-paper paper-experiences pt-24 pb-58 px-6 md:px-12">
             <div class="max-w-6xl mx-auto">
                 <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($homepage, 'experiences_eyebrow', 'Esperienze') }}</p>
 
@@ -149,7 +149,7 @@
             </div>
         </section>
 
-        <section id="chi-siamo" class="recycled-paper paper-cream py-32 px-6 md:px-12">
+        <section id="chi-siamo" class="recycled-paper paper-about py-32 px-6 md:px-12">
             <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
                 <div>
                     <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($homepage, 'about_eyebrow', 'Chi siamo') }}</p>
@@ -169,7 +169,7 @@
             </div>
         </section>
 
-        <section id="animali" class="recycled-paper paper-warm py-32 px-6 md:px-12">
+        <section id="animali" class="recycled-paper paper-animals py-32 px-6 md:px-12">
             <div class="max-w-7xl mx-auto">
                 <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($homepage, 'animals_eyebrow', 'Gli animali') }}</p>
 
@@ -187,7 +187,7 @@
             </div>
         </section>
 
-        <section class="recycled-paper paper-warm pt-40 pb-[70vh] px-6 md:px-12">
+        <section class="recycled-paper paper-booking pt-40 pb-[70vh] px-6 md:px-12">
             <div id="prenota" class="max-w-7xl mx-auto grid scroll-mt-[calc(104px+7rem)] lg:grid-cols-[.85fr_1.15fr] gap-16">
                 <div>
                     <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($bookingSettings, 'eyebrow', 'Prenota') }}</p>

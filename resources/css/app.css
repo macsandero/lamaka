@@ -25,12 +25,23 @@
     background-color: #e5dfd3;
 }
 
-.paper-cream {
+.paper-experiences {
     background-color: #f0e8dc;
 }
 
-.paper-warm {
-    background-color: #e9dfcd;
+.paper-about {
+    background-color: #ece2d4;
+    background-position: 6px 4px, 3px 7px, 2px 1px, 12px 5px, 10px 14px;
+}
+
+.paper-animals {
+    background-color: #e8dcc8;
+    background-position: 4px 8px, 8px 2px, 3px 5px, 9px 13px, 14px 7px;
+}
+
+.paper-booking {
+    background-color: #efe3cf;
+    background-position: 10px 3px, 5px 10px, 1px 4px, 14px 9px, 8px 15px;
 }
 
 .paper-footer {

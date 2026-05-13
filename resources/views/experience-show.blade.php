@@ -64,7 +64,7 @@
     </header>
 
     <main class="pt-[104px]">
-        <section class="recycled-paper paper-cream py-24 md:py-32 px-6 md:px-12">
+        <section class="recycled-paper paper-experiences py-24 md:py-32 px-6 md:px-12">
             <div class="max-w-6xl mx-auto">
                 <a href="/#esperienze" class="inline-block mb-10 text-xs uppercase tracking-[0.25em] text-[#7a6f63] hover:text-[#2f2a24] transition">Torna alle esperienze</a>
 

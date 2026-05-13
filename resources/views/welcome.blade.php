@@ -43,9 +43,9 @@
     ]);
 @endphp
 
-<body class="bg-[#f3efe7] text-[#2f2a24] overflow-x-hidden">
+<body class="bg-[#f0e8dc] text-[#2f2a24] overflow-x-hidden">
 
-    <header id="site-header" class="fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]" style="background-color:#e5dfd3;">
+    <header id="site-header" class="paper-header recycled-paper fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]">
 
         <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
 
@@ -123,7 +123,7 @@
             </div>
         </section>
 
-        <section id="esperienze" class="pt-24 pb-58 px-6 md:px-12" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
+        <section id="esperienze" class="recycled-paper paper-cream pt-24 pb-58 px-6 md:px-12">
             <div class="max-w-6xl mx-auto">
                 <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($homepage, 'experiences_eyebrow', 'Esperienze') }}</p>
 
@@ -149,7 +149,7 @@
             </div>
         </section>
 
-        <section id="chi-siamo" class="py-32 px-6 md:px-12" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
+        <section id="chi-siamo" class="recycled-paper paper-cream py-32 px-6 md:px-12">
             <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
                 <div>
                     <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($homepage, 'about_eyebrow', 'Chi siamo') }}</p>
@@ -169,7 +169,7 @@
             </div>
         </section>
 
-        <section id="animali" class="py-32 px-6 md:px-12" style="background-color:#efe7da;background-image:radial-gradient(rgba(120,98,72,.03) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.02) .7px,#efe7da .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
+        <section id="animali" class="recycled-paper paper-warm py-32 px-6 md:px-12">
             <div class="max-w-7xl mx-auto">
                 <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($homepage, 'animals_eyebrow', 'Gli animali') }}</p>
 
@@ -187,7 +187,7 @@
             </div>
         </section>
 
-        <section class="pt-40 pb-[70vh] px-6 md:px-12" style="background-color:#efe7da;background-image:radial-gradient(rgba(120,98,72,.03) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.02) .7px,#efe7da .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
+        <section class="recycled-paper paper-warm pt-40 pb-[70vh] px-6 md:px-12">
             <div id="prenota" class="max-w-7xl mx-auto grid scroll-mt-[calc(104px+7rem)] lg:grid-cols-[.85fr_1.15fr] gap-16">
                 <div>
                     <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ data_get($bookingSettings, 'eyebrow', 'Prenota') }}</p>
@@ -292,7 +292,7 @@
     </main>
 
     @if ($contact)
-        <footer class="bg-[#c8b287] text-[#2f2a24] px-6 md:px-12 py-20">
+        <footer class="recycled-paper paper-footer text-[#2f2a24] px-6 md:px-12 py-20">
             <div class="max-w-7xl mx-auto">
                 <div class="grid lg:grid-cols-[1.15fr_.85fr_.95fr] gap-14">
                     <div>

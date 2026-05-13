@@ -39,8 +39,8 @@
     $hasHtml = fn (?string $value): bool => $value !== strip_tags((string) $value);
 @endphp
 
-<body class="bg-[#f3efe7] text-[#2f2a24] overflow-x-hidden">
-    <header class="fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
+<body class="bg-[#f0e8dc] text-[#2f2a24] overflow-x-hidden">
+    <header class="paper-header recycled-paper fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]">
         <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
             <a href="/" class="flex items-center">
                 <img src="/logo.png" alt="LAMAKA" class="w-28 md:w-36">
@@ -64,7 +64,7 @@
     </header>
 
     <main class="pt-[104px]">
-        <section class="py-24 md:py-32 px-6 md:px-12" style="background-color:#f3efe7;background-image:radial-gradient(rgba(120,98,72,.035) .7px,transparent .7px),radial-gradient(rgba(120,98,72,.025) .7px,#f3efe7 .7px);background-size:18px 18px;background-position:0 0,9px 9px;">
+        <section class="recycled-paper paper-cream py-24 md:py-32 px-6 md:px-12">
             <div class="max-w-6xl mx-auto">
                 <a href="/#esperienze" class="inline-block mb-10 text-xs uppercase tracking-[0.25em] text-[#7a6f63] hover:text-[#2f2a24] transition">Torna alle esperienze</a>
 

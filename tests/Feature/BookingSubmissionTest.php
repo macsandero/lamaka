@@ -98,4 +98,17 @@ class BookingSubmissionTest extends TestCase
             ->assertSee('Informativa Privacy')
             ->assertSee('acconsento al trattamento dei miei dati per la gestione della richiesta.');
     }
+
+    public function test_booking_experience_options_are_sorted_with_other_last(): void
+    {
+        $this->seed();
+
+        $this->get('/#prenota')
+            ->assertOk()
+            ->assertSeeInOrder([
+                '<option value="Passeggiata al tramonto"',
+                '<option value="Primo incontro"',
+                '<option value="Altro"',
+            ], false);
+    }
 }

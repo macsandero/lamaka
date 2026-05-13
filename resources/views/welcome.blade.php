@@ -236,7 +236,17 @@
                                     $selectOptions = collect($selectOptions)
                                         ->merge(collect($experienceItems)->map(fn ($experience) => data_get($experience, 'title')))
                                         ->filter()
-                                        ->unique()
+                                        ->unique(fn ($option) => \Illuminate\Support\Str::lower(trim($option)))
+                                        ->sortBy(fn ($option) => \Illuminate\Support\Str::lower(trim($option)))
+                                        ->values()
+                                        ->all();
+
+                                    $selectOptions = collect($selectOptions)
+                                        ->reject(fn ($option) => \Illuminate\Support\Str::lower(trim($option)) === 'altro')
+                                        ->concat(
+                                            collect($selectOptions)
+                                                ->filter(fn ($option) => \Illuminate\Support\Str::lower(trim($option)) === 'altro')
+                                        )
                                         ->values()
                                         ->all();
                                 }

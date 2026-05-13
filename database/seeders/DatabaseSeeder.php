@@ -8,6 +8,7 @@ use App\Models\BookingFormSetting;
 use App\Models\ContactSetting;
 use App\Models\Experience;
 use App\Models\HomepageContent;
+use App\Models\LegalPage;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -133,6 +134,24 @@ class DatabaseSeeder extends Seeder
                 'vat_number' => null,
                 'booking_label' => 'Prenota',
                 'booking_url' => null,
+                'is_active' => true,
+            ],
+        );
+
+        LegalPage::query()->updateOrCreate(
+            ['slug' => 'privacy-policy'],
+            [
+                'title' => 'Privacy Policy',
+                'body' => '<p>Inserisci qui il testo della Privacy Policy.</p>',
+                'is_active' => true,
+            ],
+        );
+
+        LegalPage::query()->updateOrCreate(
+            ['slug' => 'cookie-policy'],
+            [
+                'title' => 'Cookie Policy',
+                'body' => '<p>Inserisci qui il testo della Cookie Policy.</p>',
                 'is_active' => true,
             ],
         );

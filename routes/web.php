@@ -9,6 +9,7 @@ use App\Models\BookingFormSetting;
 use App\Models\ContactSetting;
 use App\Models\Experience;
 use App\Models\HomepageContent;
+use App\Models\LegalPage;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -30,6 +31,30 @@ Route::get('/esperienze/{experience}', function (Experience $experience) {
         'contact' => ContactSetting::query()->where('is_active', true)->first(),
     ]);
 })->name('experiences.show');
+
+Route::get('/privacy-policy', function () {
+    $page = LegalPage::query()
+        ->where('slug', 'privacy-policy')
+        ->where('is_active', true)
+        ->firstOrFail();
+
+    return view('legal-page', [
+        'page' => $page,
+        'contact' => ContactSetting::query()->where('is_active', true)->first(),
+    ]);
+})->name('legal.privacy');
+
+Route::get('/cookie-policy', function () {
+    $page = LegalPage::query()
+        ->where('slug', 'cookie-policy')
+        ->where('is_active', true)
+        ->firstOrFail();
+
+    return view('legal-page', [
+        'page' => $page,
+        'contact' => ContactSetting::query()->where('is_active', true)->first(),
+    ]);
+})->name('legal.cookie');
 
 Route::post('/prenota', [BookingSubmissionController::class, 'store'])
     ->name('booking.store');

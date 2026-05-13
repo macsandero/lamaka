@@ -99,3 +99,49 @@
 .footer-copy strong {
     font-weight: 600;
 }
+
+.legal-copy {
+    color: #4f4a35;
+    font-size: 1.05rem;
+    line-height: 1.72;
+}
+
+.legal-copy h2,
+.legal-copy h3 {
+    color: #2f2a24;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    line-height: 1.05;
+    margin: 2rem 0 .75rem;
+}
+
+.legal-copy h2 {
+    font-size: 2.2rem;
+}
+
+.legal-copy h3 {
+    font-size: 1.65rem;
+}
+
+.legal-copy p,
+.legal-copy ul,
+.legal-copy ol {
+    margin: 0 0 1rem;
+}
+
+.legal-copy ul,
+.legal-copy ol {
+    padding-left: 1.5rem;
+}
+
+.legal-copy ul {
+    list-style: disc;
+}
+
+.legal-copy ol {
+    list-style: decimal;
+}
+
+.legal-copy a {
+    border-bottom: 1px solid rgba(47, 42, 36, .35);
+}

@@ -353,12 +353,8 @@
 
                 <div class="mt-14 border-t border-[#2f2a24]/30 pt-3.5 flex flex-col gap-2.5 text-[11px] uppercase tracking-[0.16em] text-[#2f2a24]/75 md:flex-row md:items-center md:justify-between">
                     <div class="flex flex-wrap gap-7">
-                        @if (data_get($contact, 'privacy_url'))
-                            <a href="{{ data_get($contact, 'privacy_url') }}" class="hover:text-[#f9f4ea]">Privacy policy</a>
-                        @endif
-                        @if (data_get($contact, 'cookie_url'))
-                            <a href="{{ data_get($contact, 'cookie_url') }}" class="hover:text-[#f9f4ea]">Cookie policy</a>
-                        @endif
+                        <a href="{{ data_get($contact, 'privacy_url') ?: route('legal.privacy') }}" class="hover:text-[#f9f4ea]">Privacy policy</a>
+                        <a href="{{ data_get($contact, 'cookie_url') ?: route('legal.cookie') }}" class="hover:text-[#f9f4ea]">Cookie policy</a>
                     </div>
                     <div class="normal-case tracking-normal md:text-right">
                         <span>{{ data_get($contact, 'legal_text', '© Copyright LAMAKA') }}</span>

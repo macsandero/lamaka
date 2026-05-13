@@ -113,9 +113,11 @@ class ContactSettingResource extends Resource
                             ->maxLength(255),
                         TextInput::make('privacy_url')
                             ->label('Link Privacy policy')
+                            ->helperText('Se vuoto, il footer userà la pagina Privacy Policy gestita in admin.')
                             ->maxLength(255),
                         TextInput::make('cookie_url')
                             ->label('Link Cookie policy')
+                            ->helperText('Se vuoto, il footer userà la pagina Cookie Policy gestita in admin.')
                             ->maxLength(255),
                         TextInput::make('legal_text')
                             ->label('Copyright')

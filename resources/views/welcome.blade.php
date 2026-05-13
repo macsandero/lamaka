@@ -45,7 +45,7 @@
 
 <body class="bg-[#f3efe7] text-[#2f2a24] overflow-x-hidden">
 
-    <header id="site-header" class="fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]" style="background-color:#ede8dc;">
+    <header id="site-header" class="fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]" style="background-color:#e5dfd3;">
 
         <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
 

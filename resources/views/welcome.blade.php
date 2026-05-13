@@ -292,7 +292,7 @@
     </main>
 
     @if ($contact)
-        <footer class="bg-[#e2c987] text-[#2f2a24] px-6 md:px-12 py-20">
+        <footer class="bg-[#c8b287] text-[#2f2a24] px-6 md:px-12 py-20">
             <div class="max-w-7xl mx-auto">
                 <div class="grid lg:grid-cols-[1.15fr_.85fr_.95fr] gap-14">
                     <div>

@@ -6,6 +6,7 @@ use App\Filament\Resources\HomepageContents\Pages\ManageHomepageContents;
 use App\Models\HomepageContent;
 use BackedEnum;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;

@@ -69,7 +69,10 @@
             <div class="max-w-7xl mx-auto">
                 <div class="grid lg:grid-cols-[1.15fr_.85fr_.95fr] gap-14">
                     <div>
-                        <img src="{{ data_get($contact, 'footer_logo') ? $mediaUrl(data_get($contact, 'footer_logo')) : '/logo.png' }}" alt="{{ data_get($contact, 'business_name', 'LAMAKA') }}" class="mb-8 w-40 max-h-32 object-contain opacity-90">
+                        <span class="mb-8 inline-block" style="position: relative; line-height: 0; box-shadow: 0 12px 24px rgba(47, 42, 36, .18);">
+                            <img src="{{ data_get($contact, 'footer_logo') ? $mediaUrl(data_get($contact, 'footer_logo')) : '/logo.png' }}" alt="{{ data_get($contact, 'business_name', 'LAMAKA') }}" style="display: block; width: 10rem; max-height: 8rem; object-fit: contain; opacity: .9;">
+                            <span aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 22px rgba(47, 42, 36, .36), inset 0 0 0 1px rgba(47, 42, 36, .18);"></span>
+                        </span>
                         <div class="footer-copy max-w-lg text-[#2f2a24]/80 leading-relaxed">
                             {!! data_get($contact, 'footer_body') ?: '<p>Esperienze lente tra Dolomiti, natura e passo calmo. Un luogo per ritrovare tempo, respiro e relazione con gli animali.</p>' !!}
                         </div>

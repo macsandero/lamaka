@@ -318,7 +318,7 @@
                             <img src="{{ data_get($contact, 'footer_logo') ? $mediaUrl(data_get($contact, 'footer_logo')) : '/logo.png' }}" alt="{{ data_get($contact, 'business_name', 'LAMAKA') }}" style="display: block; width: 10rem; max-height: 8rem; object-fit: contain; opacity: .9;">
                             <span aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 22px rgba(47, 42, 36, .36), inset 0 0 0 1px rgba(47, 42, 36, .18);"></span>
                         </span>
-                        <div class="footer-copy max-w-lg text-[#2f2a24]/80 leading-relaxed">
+                        <div class="footer-copy max-w-lg text-[#4f4a35] leading-relaxed">
                             {!! data_get($contact, 'footer_body') ?: '<p>Esperienze lente tra Dolomiti, natura e passo calmo. Un luogo per ritrovare tempo, respiro e relazione con gli animali.</p>' !!}
                         </div>
 

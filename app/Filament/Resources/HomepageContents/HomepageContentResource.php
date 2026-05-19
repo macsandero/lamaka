@@ -8,6 +8,7 @@ use BackedEnum;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
@@ -39,10 +40,12 @@ class HomepageContentResource extends Resource
                         TextInput::make('hero_eyebrow')
                             ->label('Sopratitolo')
                             ->maxLength(255),
-                        TextInput::make('hero_title')
+                        Textarea::make('hero_title')
                             ->label('Titolo')
                             ->required()
-                            ->maxLength(255),
+                            ->rows(3)
+                            ->maxLength(255)
+                            ->columnSpanFull(),
                         RichEditor::make('hero_subtitle')
                             ->label('Testo')
                             ->columnSpanFull(),

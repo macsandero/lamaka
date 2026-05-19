@@ -28,8 +28,8 @@
 
     $hasHtml = fn (?string $value): bool => $value !== strip_tags((string) $value);
 
-    $heroTitle = data_get($homepage, 'hero_title', 'Passeggiate nella natura con lama e alpaca');
-    $heroTitleLines = explode("\n", wordwrap($heroTitle, 31, "\n"));
+    $heroTitle = trim((string) data_get($homepage, 'hero_title', 'Passeggiate nella natura con lama e alpaca'));
+    $heroTitleLines = preg_split('/\R/u', $heroTitle) ?: [$heroTitle];
     $experienceItems = $experiences->isNotEmpty() ? $experiences : new \Illuminate\Support\Collection([
         ['title' => 'Primo incontro', 'description' => 'Una passeggiata semplice e immersiva per conoscere lama e alpaca, camminando tra lago, sentieri e natura.', 'image' => 'images/esperienze/Foto diAlpaca e lama completa.jpeg'],
         ['title' => 'Passeggiata al tramonto', 'description' => 'Un’esperienza lenta e romantica tra le montagne del Cadore, accompagnati dal ritmo calmo degli animali.', 'image' => 'images/esperienze/due lama al pascolo.jpeg'],

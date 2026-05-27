@@ -143,6 +143,10 @@
                                     {!! nl2br(e(data_get($experience, 'description'))) !!}
                                 @endif
                             </div>
+                            <span class="mt-6 inline-flex items-center gap-3 text-xs uppercase tracking-[0.22em]" style="color: #4f4a35;">
+                                <span>Scopri i dettagli</span>
+                                <span aria-hidden="true" style="font-size: 1.15rem; line-height: 1;">&rarr;</span>
+                            </span>
                         </a>
                     @endforeach
                 </div>

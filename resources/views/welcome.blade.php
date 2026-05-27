@@ -205,7 +205,10 @@
 
                 <form method="POST" action="{{ route('booking.store') }}" class="booking-form bg-white/55 border border-[#d8cdbd] p-6 md:p-10">
                     @csrf
-                    <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden">
+                    <div aria-hidden="true" style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;">
+                        <label for="lamaka-confirm-url">Lascia vuoto questo campo</label>
+                        <input id="lamaka-confirm-url" type="text" name="lamaka_confirm_url" tabindex="-1" autocomplete="new-password" inputmode="none">
+                    </div>
 
                     @if (session('booking_success'))
                         <div class="mb-8 border border-[#6f6a45]/30 bg-[#f3efe7] px-5 py-4 text-[#4f4a35] leading-relaxed">

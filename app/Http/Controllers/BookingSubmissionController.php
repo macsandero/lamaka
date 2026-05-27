@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Throwable;
@@ -19,8 +20,13 @@ class BookingSubmissionController extends Controller
 {
     public function store(Request $request): RedirectResponse
     {
-        if (filled($request->input('website'))) {
-            return back()->with('booking_success', 'Richiesta inviata.');
+        if (filled($request->input('lamaka_confirm_url'))) {
+            Log::info('Booking submission blocked by honeypot.', [
+                'ip_address' => $request->ip(),
+                'user_agent' => (string) $request->userAgent(),
+            ]);
+
+            return redirect('/#prenota')->with('booking_success', 'Richiesta inviata.');
         }
 
         $fields = BookingFormField::query()->published()->ordered()->get();
@@ -53,7 +59,15 @@ class BookingSubmissionController extends Controller
             $attributes["fields.{$field->key}"] = strtolower($field->label);
         }
 
-        $validated = $request->validate($rules, [], $attributes);
+        $validator = Validator::make($request->all(), $rules, [], $attributes);
+
+        if ($validator->fails()) {
+            return redirect('/#prenota')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $validated = $validator->validated();
         $input = Arr::get($validated, 'fields', []);
         $data = [];
 
@@ -92,7 +106,7 @@ class BookingSubmissionController extends Controller
             ->where('is_active', true)
             ->value('success_message') ?: 'Richiesta inviata. Ti risponderemo al più presto.';
 
-        return back()
+        return redirect('/#prenota')
             ->withInput([])
             ->with('booking_success', $successMessage);
     }

@@ -33,7 +33,7 @@ class BookingSubmissionTest extends TestCase
             ],
         ]);
 
-        $response->assertRedirect();
+        $response->assertRedirect('/#prenota');
         $response->assertSessionHas('booking_success');
 
         $this->assertDatabaseCount(BookingSubmission::class, 1);
@@ -53,6 +53,57 @@ class BookingSubmissionTest extends TestCase
         Mail::assertSent(BookingSubmissionReceived::class, fn (BookingSubmissionReceived $mail): bool => $mail->hasTo('federicotoson07@gmail.com')
             && $mail->hasTo('vera.munzi@gmail.com')
             && $mail->submission->is($submission));
+    }
+
+    public function test_legacy_autofilled_website_field_does_not_block_booking_submission(): void
+    {
+        Mail::fake();
+
+        $this->seed();
+
+        $response = $this->post(route('booking.store'), [
+            'website' => 'https://lamaka.it',
+            'fields' => [
+                'nome' => 'Mario Rossi',
+                'email' => 'mario@example.com',
+                'telefono' => '+39 333 1234567',
+                'esperienza' => 'Primo incontro',
+                'data_ora_preferita' => now()->addDays(2)->setTime(10, 0)->format('Y-m-d\TH:i'),
+                'partecipanti' => '2',
+                'messaggio' => 'Vorrei informazioni sugli orari.',
+                'privacy' => '1',
+            ],
+        ]);
+
+        $response->assertRedirect('/#prenota');
+        $response->assertSessionHas('booking_success');
+
+        $this->assertDatabaseCount(BookingSubmission::class, 1);
+        Mail::assertSent(BookingSubmissionReceived::class);
+    }
+
+    public function test_booking_honeypot_field_blocks_submission_without_saving(): void
+    {
+        Mail::fake();
+
+        $this->seed();
+
+        $response = $this->post(route('booking.store'), [
+            'lamaka_confirm_url' => 'https://spam.example',
+            'fields' => [
+                'nome' => 'Mario Rossi',
+                'email' => 'mario@example.com',
+                'esperienza' => 'Primo incontro',
+                'data_ora_preferita' => now()->addDays(2)->setTime(10, 0)->format('Y-m-d\TH:i'),
+                'privacy' => '1',
+            ],
+        ]);
+
+        $response->assertRedirect('/#prenota');
+        $response->assertSessionHas('booking_success');
+
+        $this->assertDatabaseCount(BookingSubmission::class, 0);
+        Mail::assertNothingSent();
     }
 
     public function test_booking_request_cannot_use_today_as_preferred_datetime(): void

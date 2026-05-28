@@ -21,6 +21,7 @@ class Experience extends Model
         'third_price',
         'fourth_duration',
         'fourth_price',
+        'duration_notes',
         'ideal_for',
         'image',
         'sort_order',

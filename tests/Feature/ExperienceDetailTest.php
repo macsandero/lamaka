@@ -24,6 +24,7 @@ class ExperienceDetailTest extends TestCase
             'long_price' => '35€ a persona',
             'third_duration' => '2 ore',
             'third_price' => '50€ a persona',
+            'duration_notes' => '<ul><li>Scarpe comode consigliate</li><li>Arrivare 10 minuti prima</li></ul>',
             'ideal_for' => 'Ideale per famiglie',
             'sort_order' => 10,
             'is_active' => true,
@@ -34,10 +35,29 @@ class ExperienceDetailTest extends TestCase
             ->assertSee('Tipo esperienza')
             ->assertSee('2 ore')
             ->assertSee('50€ a persona')
+            ->assertSee('Note')
+            ->assertSee('Scarpe comode consigliate')
+            ->assertSee('Arrivare 10 minuti prima')
             ->assertDontSee('Durata 4')
             ->assertSee('Prenota questa esperienza')
             ->assertDontSee('Durante l’esperienza:', false)
             ->assertSee('/?esperienza=Primo%20incontro#prenota', false);
+    }
+
+    public function test_public_experience_detail_hides_notes_when_empty(): void
+    {
+        $experience = Experience::query()->create([
+            'title' => 'Primo incontro',
+            'description' => 'Descrizione breve',
+            'short_duration' => '30 min',
+            'short_price' => '20€ a persona',
+            'sort_order' => 10,
+            'is_active' => true,
+        ]);
+
+        $this->get(route('experiences.show', $experience))
+            ->assertOk()
+            ->assertDontSee('Note');
     }
 
     public function test_booking_form_preselects_experience_from_query_string(): void

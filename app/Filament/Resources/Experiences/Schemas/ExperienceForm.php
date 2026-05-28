@@ -54,6 +54,9 @@ class ExperienceForm
                 TextInput::make('fourth_price')
                     ->label('Prezzo 4')
                     ->maxLength(255),
+                RichEditor::make('duration_notes')
+                    ->label('Note')
+                    ->columnSpanFull(),
                 RichEditor::make('ideal_for')
                     ->label('Ideale per')
                     ->columnSpanFull(),

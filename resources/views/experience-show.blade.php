@@ -153,6 +153,19 @@
                             @endif
                         @endforeach
 
+                        @if ($experience->duration_notes)
+                            <div class="mb-8 text-xl leading-relaxed">
+                                <p class="experience-label mb-3" style="font-family:'Cormorant Garamond',serif;">Note</p>
+                                <div class="experience-copy text-[#2f2a24] text-xl leading-relaxed">
+                                    @if ($hasHtml($experience->duration_notes))
+                                        {!! $experience->duration_notes !!}
+                                    @else
+                                        {!! nl2br(e($experience->duration_notes)) !!}
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+
                         @if ($experience->ideal_for)
                             <div class="text-xl leading-relaxed">
                                 <p class="experience-label mb-3" style="font-family:'Cormorant Garamond',serif;">Ideale per</p>

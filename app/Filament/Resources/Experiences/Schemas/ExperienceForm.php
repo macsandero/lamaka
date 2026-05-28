@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Experiences\Schemas;
 
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
@@ -54,8 +55,10 @@ class ExperienceForm
                 TextInput::make('fourth_price')
                     ->label('Prezzo 4')
                     ->maxLength(255),
-                RichEditor::make('duration_notes')
+                Textarea::make('duration_notes')
                     ->label('Note')
+                    ->helperText('Inserisci una nota per riga: nella pagina pubblica verranno mostrate come elenco puntato.')
+                    ->rows(5)
                     ->columnSpanFull(),
                 RichEditor::make('ideal_for')
                     ->label('Ideale per')

@@ -24,7 +24,7 @@ class ExperienceDetailTest extends TestCase
             'long_price' => '35€ a persona',
             'third_duration' => '2 ore',
             'third_price' => '50€ a persona',
-            'duration_notes' => '<ul><li>Scarpe comode consigliate</li><li>Arrivare 10 minuti prima</li></ul>',
+            'duration_notes' => "Scarpe comode consigliate\nArrivare 10 minuti prima",
             'ideal_for' => 'Ideale per famiglie',
             'sort_order' => 10,
             'is_active' => true,
@@ -42,6 +42,24 @@ class ExperienceDetailTest extends TestCase
             ->assertSee('Prenota questa esperienza')
             ->assertDontSee('Durante l’esperienza:', false)
             ->assertSee('/?esperienza=Primo%20incontro#prenota', false);
+    }
+
+    public function test_public_experience_detail_converts_legacy_html_notes_to_bullets(): void
+    {
+        $experience = Experience::query()->create([
+            'title' => 'Primo incontro',
+            'description' => 'Descrizione breve',
+            'duration_notes' => '<ul><li><p>Scarpe comode consigliate</p></li><li><p>Arrivare 10 minuti prima</p></li></ul>',
+            'sort_order' => 10,
+            'is_active' => true,
+        ]);
+
+        $this->get(route('experiences.show', $experience))
+            ->assertOk()
+            ->assertSee('Note')
+            ->assertSee('Scarpe comode consigliate')
+            ->assertSee('Arrivare 10 minuti prima')
+            ->assertDontSee('<p>Scarpe comode consigliate</p>', false);
     }
 
     public function test_public_experience_detail_hides_notes_when_empty(): void

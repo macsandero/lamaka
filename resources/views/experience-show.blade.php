@@ -153,16 +153,14 @@
                             @endif
                         @endforeach
 
-                        @if ($experience->duration_notes)
+                        @if ($experience->durationNotesList())
                             <div class="mb-8 text-xl leading-relaxed">
                                 <p class="experience-label mb-3" style="font-family:'Cormorant Garamond',serif;">Note</p>
-                                <div class="experience-copy text-[#2f2a24] text-xl leading-relaxed">
-                                    @if ($hasHtml($experience->duration_notes))
-                                        {!! $experience->duration_notes !!}
-                                    @else
-                                        {!! nl2br(e($experience->duration_notes)) !!}
-                                    @endif
-                                </div>
+                                <ul class="experience-copy list-disc space-y-2 pl-6 text-[#2f2a24] text-xl leading-relaxed">
+                                    @foreach ($experience->durationNotesList() as $note)
+                                        <li>{{ $note }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
                         @endif
 

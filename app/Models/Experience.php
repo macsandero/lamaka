@@ -56,4 +56,26 @@ class Experience extends Model
             ->values()
             ->all();
     }
+
+    /**
+     * @return array<int, string>
+     */
+    public function durationNotesList(): array
+    {
+        $notes = (string) $this->duration_notes;
+
+        if (preg_match_all('/<li\b[^>]*>(.*?)<\/li>/is', $notes, $matches)) {
+            return collect($matches[1])
+                ->map(fn (string $item): string => trim(html_entity_decode(strip_tags($item), ENT_QUOTES | ENT_HTML5, 'UTF-8')))
+                ->filter()
+                ->values()
+                ->all();
+        }
+
+        return collect(preg_split('/\r\n|\r|\n/', strip_tags($notes)))
+            ->map(fn (string $item): string => trim($item))
+            ->filter()
+            ->values()
+            ->all();
+    }
 }

@@ -22,6 +22,8 @@ class ExperienceDetailTest extends TestCase
             'short_price' => '20€ a persona',
             'long_duration' => '1 ora',
             'long_price' => '35€ a persona',
+            'third_duration' => '2 ore',
+            'third_price' => '50€ a persona',
             'ideal_for' => 'Ideale per famiglie',
             'sort_order' => 10,
             'is_active' => true,
@@ -30,6 +32,9 @@ class ExperienceDetailTest extends TestCase
         $this->get(route('experiences.show', $experience))
             ->assertOk()
             ->assertSee('Tipo esperienza')
+            ->assertSee('2 ore')
+            ->assertSee('50€ a persona')
+            ->assertDontSee('Durata 4')
             ->assertSee('Prenota questa esperienza')
             ->assertDontSee('Durante l’esperienza:', false)
             ->assertSee('/?esperienza=Primo%20incontro#prenota', false);

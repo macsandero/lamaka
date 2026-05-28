@@ -135,27 +135,23 @@
                             </div>
                         @endif
 
-                        @if ($experience->short_duration || $experience->short_price)
-                            <div class="mb-8 text-xl leading-relaxed">
-                                @if ($experience->short_duration)
-                                    <p><span class="experience-label">Durata</span> {{ $experience->short_duration }}</p>
-                                @endif
-                                @if ($experience->short_price)
-                                    <p><span class="experience-label">Prezzo</span> <strong>{{ $experience->short_price }}</strong></p>
-                                @endif
-                            </div>
-                        @endif
-
-                        @if ($experience->long_duration || $experience->long_price)
-                            <div class="mb-8 text-xl leading-relaxed">
-                                @if ($experience->long_duration)
-                                    <p><span class="experience-label">Durata</span> {{ $experience->long_duration }}</p>
-                                @endif
-                                @if ($experience->long_price)
-                                    <p><span class="experience-label">Prezzo</span> <strong>{{ $experience->long_price }}</strong></p>
-                                @endif
-                            </div>
-                        @endif
+                        @foreach ([
+                            ['duration' => $experience->short_duration, 'price' => $experience->short_price],
+                            ['duration' => $experience->long_duration, 'price' => $experience->long_price],
+                            ['duration' => $experience->third_duration, 'price' => $experience->third_price],
+                            ['duration' => $experience->fourth_duration, 'price' => $experience->fourth_price],
+                        ] as $option)
+                            @if ($option['duration'] || $option['price'])
+                                <div class="mb-8 text-xl leading-relaxed">
+                                    @if ($option['duration'])
+                                        <p><span class="experience-label">Durata</span> {{ $option['duration'] }}</p>
+                                    @endif
+                                    @if ($option['price'])
+                                        <p><span class="experience-label">Prezzo</span> <strong>{{ $option['price'] }}</strong></p>
+                                    @endif
+                                </div>
+                            @endif
+                        @endforeach
 
                         @if ($experience->ideal_for)
                             <div class="text-xl leading-relaxed">

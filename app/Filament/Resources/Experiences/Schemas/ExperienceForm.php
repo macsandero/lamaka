@@ -42,6 +42,18 @@ class ExperienceForm
                 TextInput::make('long_price')
                     ->label('Prezzo 2')
                     ->maxLength(255),
+                TextInput::make('third_duration')
+                    ->label('Durata 3')
+                    ->maxLength(255),
+                TextInput::make('third_price')
+                    ->label('Prezzo 3')
+                    ->maxLength(255),
+                TextInput::make('fourth_duration')
+                    ->label('Durata 4')
+                    ->maxLength(255),
+                TextInput::make('fourth_price')
+                    ->label('Prezzo 4')
+                    ->maxLength(255),
                 RichEditor::make('ideal_for')
                     ->label('Ideale per')
                     ->columnSpanFull(),

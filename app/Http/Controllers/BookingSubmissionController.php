@@ -6,6 +6,7 @@ use App\Mail\BookingSubmissionReceived;
 use App\Models\BookingFormField;
 use App\Models\BookingFormSetting;
 use App\Models\BookingSubmission;
+use App\Models\Experience;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -37,13 +38,24 @@ class BookingSubmissionController extends Controller
         foreach ($fields as $field) {
             $fieldRules = $field->is_required ? ['required'] : ['nullable'];
 
+            $selectOptions = $field->optionsList();
+
+            if ($field->key === 'esperienza') {
+                $selectOptions = collect($selectOptions)
+                    ->merge(Experience::query()->published()->pluck('title'))
+                    ->filter()
+                    ->unique(fn ($option) => Str::lower(trim((string) $option)))
+                    ->values()
+                    ->all();
+            }
+
             $fieldRules[] = match ($field->type) {
                 'email' => 'email',
                 'number' => 'numeric',
                 'date' => 'date',
                 'datetime' => 'date',
                 'checkbox' => 'accepted',
-                'select' => Rule::in($field->optionsList()),
+                'select' => Rule::in($selectOptions),
                 default => 'string',
             };
 

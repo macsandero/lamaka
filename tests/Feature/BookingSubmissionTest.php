@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Mail\BookingSubmissionReceived;
 use App\Models\BookingSubmission;
+use App\Models\Experience;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
@@ -53,6 +54,39 @@ class BookingSubmissionTest extends TestCase
         Mail::assertSent(BookingSubmissionReceived::class, fn (BookingSubmissionReceived $mail): bool => $mail->hasTo('federicotoson07@gmail.com')
             && $mail->hasTo('vera.munzi@gmail.com')
             && $mail->submission->is($submission));
+    }
+
+    public function test_booking_request_accepts_an_active_experience_created_from_admin(): void
+    {
+        Mail::fake();
+
+        $this->seed();
+
+        Experience::query()->create([
+            'title' => 'Custode per un giorno',
+            'description' => '<p>Esperienza educativa.</p>',
+            'sort_order' => 50,
+            'is_active' => true,
+        ]);
+
+        $response = $this->post(route('booking.store'), [
+            'fields' => [
+                'nome' => 'Mario Rossi',
+                'email' => 'mario@example.com',
+                'esperienza' => 'Custode per un giorno',
+                'data_ora_preferita' => now()->addDays(2)->toDateString(),
+                'privacy' => '1',
+            ],
+        ]);
+
+        $response->assertRedirect('/#prenota');
+        $response->assertSessionHasNoErrors();
+        $response->assertSessionHas('booking_success');
+
+        $submission = BookingSubmission::query()->firstOrFail();
+
+        $this->assertSame('Custode per un giorno', $submission->fieldValue('esperienza'));
+        Mail::assertSent(BookingSubmissionReceived::class);
     }
 
     public function test_legacy_autofilled_website_field_does_not_block_booking_submission(): void

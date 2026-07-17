@@ -26,7 +26,7 @@ class BookingSubmissionTest extends TestCase
                 'email' => 'mario@example.com',
                 'telefono' => '+39 333 1234567',
                 'esperienza' => 'Primo incontro',
-                'data_ora_preferita' => now()->addDays(2)->setTime(10, 0)->format('Y-m-d\TH:i'),
+                'data_ora_preferita' => now()->addDays(2)->toDateString(),
                 'partecipanti' => '2',
                 'messaggio' => 'Vorrei informazioni sugli orari.',
                 'privacy' => '1',
@@ -34,7 +34,7 @@ class BookingSubmissionTest extends TestCase
         ]);
 
         $response->assertRedirect('/#prenota');
-        $response->assertSessionHas('booking_success');
+        $response->assertSessionHas('booking_success', "Richiesta inviata correttamente. Sarai contattato al più presto per concordare l'orario dell'attività");
 
         $this->assertDatabaseCount(BookingSubmission::class, 1);
         $this->assertDatabaseHas('booking_submissions', [
@@ -68,7 +68,7 @@ class BookingSubmissionTest extends TestCase
                 'email' => 'mario@example.com',
                 'telefono' => '+39 333 1234567',
                 'esperienza' => 'Primo incontro',
-                'data_ora_preferita' => now()->addDays(2)->setTime(10, 0)->format('Y-m-d\TH:i'),
+                'data_ora_preferita' => now()->addDays(2)->toDateString(),
                 'partecipanti' => '2',
                 'messaggio' => 'Vorrei informazioni sugli orari.',
                 'privacy' => '1',
@@ -94,7 +94,7 @@ class BookingSubmissionTest extends TestCase
                 'nome' => 'Mario Rossi',
                 'email' => 'mario@example.com',
                 'esperienza' => 'Primo incontro',
-                'data_ora_preferita' => now()->addDays(2)->setTime(10, 0)->format('Y-m-d\TH:i'),
+                'data_ora_preferita' => now()->addDays(2)->toDateString(),
                 'privacy' => '1',
             ],
         ]);
@@ -106,7 +106,7 @@ class BookingSubmissionTest extends TestCase
         Mail::assertNothingSent();
     }
 
-    public function test_booking_request_cannot_use_today_as_preferred_datetime(): void
+    public function test_booking_request_cannot_use_today_as_preferred_date(): void
     {
         Mail::fake();
 
@@ -117,7 +117,7 @@ class BookingSubmissionTest extends TestCase
                 'nome' => 'Mario Rossi',
                 'email' => 'mario@example.com',
                 'esperienza' => 'Primo incontro',
-                'data_ora_preferita' => now()->setTime(18, 0)->format('Y-m-d\TH:i'),
+                'data_ora_preferita' => now()->toDateString(),
                 'privacy' => '1',
             ],
         ]);
@@ -128,14 +128,22 @@ class BookingSubmissionTest extends TestCase
         Mail::assertNothingSent();
     }
 
-    public function test_booking_datetime_field_has_mobile_safe_class(): void
+    public function test_booking_form_uses_date_only_and_shows_success_alert(): void
     {
         $this->seed();
 
         $this->get('/#prenota')
             ->assertOk()
-            ->assertSee('booking-datetime-field', false)
-            ->assertSee('booking-datetime-input', false);
+            ->assertSee('Giorno preferito')
+            ->assertSee('type="date"', false)
+            ->assertDontSee('type="datetime-local"', false);
+
+        $this->withSession([
+            'booking_success' => "Richiesta inviata correttamente. Sarai contattato al più presto per concordare l'orario dell'attività",
+        ])->get('/#prenota')
+            ->assertOk()
+            ->assertSee('window.alert(', false)
+            ->assertSee("Richiesta inviata correttamente. Sarai contattato al più presto per concordare l'orario dell'attività");
     }
 
     public function test_privacy_booking_field_links_to_legal_page(): void

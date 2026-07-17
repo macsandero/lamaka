@@ -26,7 +26,7 @@ class BookingSubmissionController extends Controller
                 'user_agent' => (string) $request->userAgent(),
             ]);
 
-            return redirect('/#prenota')->with('booking_success', 'Richiesta inviata.');
+            return redirect('/#prenota')->with('booking_success', "Richiesta inviata correttamente. Sarai contattato al più presto per concordare l'orario dell'attività");
         }
 
         $fields = BookingFormField::query()->published()->ordered()->get();
@@ -104,7 +104,7 @@ class BookingSubmissionController extends Controller
 
         $successMessage = BookingFormSetting::query()
             ->where('is_active', true)
-            ->value('success_message') ?: 'Richiesta inviata. Ti risponderemo al più presto.';
+            ->value('success_message') ?: "Richiesta inviata correttamente. Sarai contattato al più presto per concordare l'orario dell'attività";
 
         return redirect('/#prenota')
             ->withInput([])

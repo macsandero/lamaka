@@ -45,6 +45,12 @@
 
 <body class="bg-[#f0e8dc] text-[#2f2a24] overflow-x-hidden">
 
+    @if (session('booking_success'))
+        <script>
+            window.alert(@json(session('booking_success')));
+        </script>
+    @endif
+
     <header id="site-header" class="paper-header recycled-paper fixed top-0 left-0 right-0 z-50 border-b border-[#d8cdbd]">
 
         <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">

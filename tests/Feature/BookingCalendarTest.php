@@ -25,6 +25,21 @@ class BookingCalendarTest extends TestCase
             ->assertHeader('Content-Type', 'application/manifest+json');
     }
 
+    public function test_bookings_remain_visible_when_month_is_passed_in_query_string(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $date = now()->addDays(3)->toDateString();
+        BookingSubmission::create([
+            'reference' => 'VISIBLE', 'data' => [], 'booking_date' => $date,
+            'customer_name' => 'Cliente visibile', 'origin' => 'website', 'status' => 'new',
+        ]);
+
+        $this->actingAs($admin)->get(route('agenda.index', [
+            'date' => $date,
+            'month' => now()->addDays(3)->format('Y-m'),
+        ]))->assertOk()->assertSee('Cliente visibile');
+    }
+
     public function test_admin_can_create_a_confirmed_booking_from_agenda(): void
     {
         $admin = User::factory()->create(['is_admin' => true]);

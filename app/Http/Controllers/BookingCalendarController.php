@@ -19,7 +19,7 @@ class BookingCalendarController extends Controller
         $this->ensureAdmin($request);
 
         $selectedDate = $request->date('date')?->toDateString() ?? now()->toDateString();
-        $month = $request->date('month')?->startOfMonth() ?? CarbonImmutable::parse($selectedDate)->startOfMonth();
+        $month = CarbonImmutable::parse($request->string('month')->value() ?: $selectedDate)->startOfMonth();
         $editBooking = $request->integer('edit')
             ? BookingSubmission::query()->findOrFail($request->integer('edit'))
             : null;

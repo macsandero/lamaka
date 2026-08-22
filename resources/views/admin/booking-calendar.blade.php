@@ -38,14 +38,14 @@
                             $date = $day->toDateString(); $items = $monthBookings->get($date, collect());
                             $total = (int) $items->whereNotNull('confirmed_at')->sum('animals');
                         @endphp
-                        <a class="day {{ !$day->isSameMonth($month)?'muted':'' }} {{ $date===$selectedDate?'selected':'' }} {{ $total>=5?'full':'' }}" href="{{ route('agenda.index',['date'=>$date,'month'=>$month->format('Y-m')]) }}">
+                        <a class="day {{ !$day->isSameMonth($month)?'muted':'' }} {{ $date===$selectedDate?'selected':'' }} {{ $total>=5?'full':'' }}" href="{{ route('agenda.index',['date'=>$date,'month'=>$day->format('Y-m')]) }}#day-details">
                             <span class="num">{{ $day->day }}</span>
                             @foreach($items->take(3) as $item)<span class="dot {{ $item->confirmed_at?'':'pending' }}">{{ $item->customer_name ?: 'Senza nome' }}</span>@endforeach
                         </a>
                     @endfor
                 </div>
             </div>
-            <div class="card" style="margin-top:24px">
+            <div id="day-details" class="card" style="margin-top:24px;scroll-margin-top:20px">
                 <h2>{{ \Carbon\Carbon::parse($selectedDate)->locale('it')->translatedFormat('l d F Y') }}</h2>
                 <p class="capacity">Animali confermati: {{ $usedAnimals }}/5</p>
                 @forelse($dayBookings as $booking)

@@ -40,12 +40,28 @@ class BookingCalendarTest extends TestCase
         ]))->assertOk()->assertSee('Cliente visibile');
     }
 
+    public function test_legacy_website_booking_preselects_website_source(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $booking = BookingSubmission::create([
+            'reference' => 'WEBSITE', 'data' => [], 'booking_date' => now()->addDay(),
+            'origin' => 'website', 'source' => null, 'status' => 'new',
+        ]);
+
+        $this->actingAs($admin)->get(route('agenda.index', [
+            'date' => $booking->booking_date->toDateString(),
+            'edit' => $booking->id,
+        ]))->assertOk()->assertSee('<option selected>Sito web</option>', false);
+    }
+
     public function test_admin_can_create_a_confirmed_booking_from_agenda(): void
     {
         $admin = User::factory()->create(['is_admin' => true]);
 
         $response = $this->actingAs($admin)->post(route('agenda.store'), [
             'booking_date' => now()->addDays(3)->toDateString(),
+            'start_time' => '10:30',
+            'end_time' => '12:00',
             'participants' => 4,
             'animals' => 2,
             'customer_name' => 'Mario Rossi',
@@ -55,6 +71,7 @@ class BookingCalendarTest extends TestCase
         $response->assertRedirect();
         $this->assertDatabaseHas('booking_submissions', [
             'customer_name' => 'Mario Rossi', 'animals' => 2,
+            'start_time' => '10:30', 'end_time' => '12:00',
             'origin' => 'admin', 'status' => 'confirmed',
         ]);
         $this->assertNotNull(BookingSubmission::firstOrFail()->confirmed_at);

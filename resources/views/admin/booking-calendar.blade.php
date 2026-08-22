@@ -53,6 +53,7 @@
                         @if(!$booking->confirmed_at)<div class="badge">Da completare · richiesta dal sito</div>@endif
                         <strong>{{ $booking->customer_name ?: 'Cliente senza nome' }}</strong><br>
                         {{ $booking->participants ?? '–' }} partecipanti · {{ $booking->animals ?? '–' }} animali
+                        @if($booking->start_time || $booking->end_time)<br>Orario: {{ $booking->start_time ? substr($booking->start_time, 0, 5) : '–' }}–{{ $booking->end_time ? substr($booking->end_time, 0, 5) : '–' }}@endif
                         @if($booking->phone)<br>{{ $booking->phone }}@endif @if($booking->email) · {{ $booking->email }}@endif
                         <br><a href="{{ route('agenda.index',['date'=>$selectedDate,'month'=>$month->format('Y-m'),'edit'=>$booking->id]) }}">{{ $booking->confirmed_at?'Modifica':'Completa e conferma' }}</a>
                     </article>
@@ -65,11 +66,13 @@
             <form method="post" action="{{ $formBooking ? route('agenda.update',$formBooking) : route('agenda.store') }}">
                 @csrf @if($formBooking) @method('PUT') @endif
                 <label for="booking_date">Giorno</label><input id="booking_date" type="date" name="booking_date" value="{{ old('booking_date',$formBooking?->booking_date?->toDateString() ?? $selectedDate) }}" required>
+                <div class="two"><div><label for="start_time">Dalle ore</label><input id="start_time" type="time" name="start_time" value="{{ old('start_time', $formBooking?->start_time ? substr($formBooking->start_time, 0, 5) : null) }}"></div><div><label for="end_time">Alle ore</label><input id="end_time" type="time" name="end_time" value="{{ old('end_time', $formBooking?->end_time ? substr($formBooking->end_time, 0, 5) : null) }}"></div></div>
                 <div class="two"><div><label for="participants">Numero partecipanti</label><input id="participants" type="number" min="0" name="participants" value="{{ old('participants',$formBooking?->participants) }}"></div><div><label for="animals">Numero animali</label><input id="animals" type="number" min="0" max="5" name="animals" value="{{ old('animals',$formBooking?->animals) }}"></div></div>
                 <label for="customer_name">Nome e cognome del cliente</label><input id="customer_name" name="customer_name" value="{{ old('customer_name',$formBooking?->customer_name) }}">
                 <label for="phone">Numero di telefono</label><input id="phone" type="tel" name="phone" value="{{ old('phone',$formBooking?->phone) }}">
                 <label for="email">Indirizzo email</label><input id="email" type="email" name="email" value="{{ old('email',$formBooking?->email) }}">
-                <label for="source">Fonte</label><select id="source" name="source"><option value="">Seleziona</option>@foreach($sources as $source)<option @selected(old('source',$formBooking?->source)===$source)>{{ $source }}</option>@endforeach</select>
+                @php($selectedSource = old('source', $formBooking?->source ?: ($formBooking?->origin === 'website' ? 'Sito web' : null)))
+                <label for="source">Fonte</label><select id="source" name="source"><option value="">Seleziona</option>@foreach($sources as $source)<option @selected($selectedSource===$source)>{{ $source }}</option>@endforeach</select>
                 <div id="source-other"><label for="source_other">Specifica altra fonte</label><input id="source_other" name="source_other" value="{{ old('source_other',$formBooking?->source_other) }}"></div>
                 <label for="notes">Note</label><textarea id="notes" name="notes">{{ old('notes',$formBooking?->notes) }}</textarea>
                 <button class="button" type="submit">Conferma prenotazione</button>

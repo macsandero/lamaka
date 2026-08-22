@@ -62,7 +62,13 @@ class BookingCalendarController extends Controller
     public function update(Request $request, BookingSubmission $bookingSubmission): RedirectResponse
     {
         $this->ensureAdmin($request);
-        $bookingSubmission->fill($this->validated($request));
+        $values = $this->validated($request);
+
+        if ($bookingSubmission->origin === 'website' && blank($values['source'] ?? null)) {
+            $values['source'] = 'Sito web';
+        }
+
+        $bookingSubmission->fill($values);
         $bookingSubmission->status = 'confirmed';
         $bookingSubmission->confirmed_at = now();
         $this->saveWithinCapacity($bookingSubmission);
@@ -74,6 +80,8 @@ class BookingCalendarController extends Controller
     {
         $values = $request->validate([
             'booking_date' => ['required', 'date'],
+            'start_time' => ['nullable', 'date_format:H:i'],
+            'end_time' => ['nullable', 'date_format:H:i', 'after:start_time'],
             'participants' => ['nullable', 'integer', 'min:0'],
             'animals' => ['nullable', 'integer', 'min:0', 'max:5'],
             'customer_name' => ['nullable', 'string', 'max:255'],

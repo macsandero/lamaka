@@ -27,6 +27,8 @@ class BookingSubmission extends Model
         'ip_address',
         'user_agent',
         'booking_date',
+        'start_time',
+        'end_time',
         'participants',
         'animals',
         'customer_name',

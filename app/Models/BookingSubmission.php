@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class BookingSubmission extends Model
 {
+    public const MAX_DAILY_ANIMALS = 5;
+
+    public const SOURCES = [
+        'Sito web', 'Instagram', 'Facebook', 'Google', 'Passaparola', 'Volantino', 'Altro',
+    ];
+
     public const STATUSES = [
         'new' => 'Nuova',
         'contacted' => 'Contattata',
@@ -20,13 +26,49 @@ class BookingSubmission extends Model
         'notes',
         'ip_address',
         'user_agent',
+        'booking_date',
+        'participants',
+        'animals',
+        'customer_name',
+        'phone',
+        'email',
+        'source',
+        'source_other',
+        'origin',
+        'confirmed_at',
     ];
 
     protected function casts(): array
     {
         return [
             'data' => 'array',
+            'booking_date' => 'date',
+            'participants' => 'integer',
+            'animals' => 'integer',
+            'confirmed_at' => 'datetime',
         ];
+    }
+
+    public static function confirmedAnimalsForDate(string $date, ?int $exceptId = null): int
+    {
+        return (int) static::query()
+            ->whereDate('booking_date', $date)
+            ->whereNotNull('confirmed_at')
+            ->when($exceptId, fn ($query) => $query->whereKeyNot($exceptId))
+            ->sum('animals');
+    }
+
+    public static function unavailableDates(): array
+    {
+        return static::query()
+            ->selectRaw('booking_date, SUM(animals) as animals_total')
+            ->whereNotNull('booking_date')
+            ->whereNotNull('confirmed_at')
+            ->groupBy('booking_date')
+            ->havingRaw('SUM(animals) >= ?', [static::MAX_DAILY_ANIMALS])
+            ->pluck('booking_date')
+            ->map(fn ($date) => substr((string) $date, 0, 10))
+            ->values()->all();
     }
 
     /**

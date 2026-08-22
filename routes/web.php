@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdminPasswordSetupController;
+use App\Http\Controllers\BookingCalendarController;
 use App\Http\Controllers\BookingSubmissionController;
 use App\Models\Animal;
 use App\Models\BookingFormField;
 use App\Models\BookingFormSetting;
+use App\Models\BookingSubmission;
 use App\Models\ContactSetting;
 use App\Models\Experience;
 use App\Models\HomepageContent;
@@ -20,6 +22,7 @@ Route::get('/', function () {
         'contact' => ContactSetting::query()->where('is_active', true)->first(),
         'bookingSettings' => BookingFormSetting::query()->where('is_active', true)->first(),
         'bookingFields' => BookingFormField::query()->published()->ordered()->get(),
+        'unavailableBookingDates' => BookingSubmission::unavailableDates(),
     ]);
 });
 
@@ -58,6 +61,18 @@ Route::get('/cookie-policy', function () {
 
 Route::post('/prenota', [BookingSubmissionController::class, 'store'])
     ->name('booking.store');
+
+Route::middleware('auth')->prefix('agenda')->name('agenda.')->group(function () {
+    Route::get('/', [BookingCalendarController::class, 'index'])->name('index');
+    Route::post('/prenotazioni', [BookingCalendarController::class, 'store'])->name('store');
+    Route::put('/prenotazioni/{bookingSubmission}', [BookingCalendarController::class, 'update'])->name('update');
+});
+
+Route::get('/agenda.webmanifest', fn () => response(json_encode([
+    'name' => 'LAMAKA Agenda', 'short_name' => 'Agenda', 'start_url' => '/agenda',
+    'display' => 'standalone', 'background_color' => '#f4efe7', 'theme_color' => '#6f6a45',
+    'icons' => [['src' => '/logo.png', 'sizes' => '512x512', 'type' => 'image/png']],
+], JSON_UNESCAPED_SLASHES), 200, ['Content-Type' => 'application/manifest+json']))->name('agenda.manifest');
 
 Route::post('/admin/manual-login', [AdminLoginController::class, 'store'])
     ->middleware('web')

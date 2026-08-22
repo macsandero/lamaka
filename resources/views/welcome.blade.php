@@ -418,6 +418,19 @@
     @endif
 
     <script>
+        const unavailableBookingDates = @json($unavailableBookingDates ?? []);
+        const bookingDateInput = document.getElementById('booking-data_ora_preferita')
+            || document.getElementById('booking-data_preferita');
+
+        if (bookingDateInput) {
+            bookingDateInput.addEventListener('change', () => {
+                if (unavailableBookingDates.includes(bookingDateInput.value)) {
+                    window.alert('Questa giornata ha già raggiunto il numero massimo di animali. Scegli un altro giorno.');
+                    bookingDateInput.value = '';
+                }
+            });
+        }
+
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
 

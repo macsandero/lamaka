@@ -79,6 +79,15 @@ class BookingSubmissionController extends Controller
                 ->withInput();
         }
 
+        $requestedDate = Arr::get($validator->validated(), 'fields.data_ora_preferita')
+            ?: Arr::get($validator->validated(), 'fields.data_preferita');
+
+        if ($requestedDate && BookingSubmission::confirmedAnimalsForDate($requestedDate) >= BookingSubmission::MAX_DAILY_ANIMALS) {
+            return redirect('/#prenota')
+                ->withErrors(['fields.data_ora_preferita' => 'La giornata selezionata non è più disponibile. Scegli un altro giorno.'])
+                ->withInput();
+        }
+
         $validated = $validator->validated();
         $input = Arr::get($validated, 'fields', []);
         $data = [];
@@ -101,6 +110,13 @@ class BookingSubmissionController extends Controller
             'reference' => 'LAMAKA-'.now()->format('Ymd').'-'.Str::upper(Str::random(6)),
             'data' => $data,
             'status' => 'new',
+            'booking_date' => $requestedDate,
+            'participants' => is_numeric(Arr::get($input, 'partecipanti')) ? (int) Arr::get($input, 'partecipanti') : null,
+            'customer_name' => Arr::get($input, 'nome') ?: Arr::get($input, 'name'),
+            'phone' => Arr::get($input, 'telefono'),
+            'email' => Arr::get($input, 'email'),
+            'source' => 'Sito web',
+            'origin' => 'website',
             'ip_address' => $request->ip(),
             'user_agent' => (string) $request->userAgent(),
         ]);

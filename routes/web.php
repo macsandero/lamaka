@@ -23,6 +23,10 @@ Route::get('/', function () {
         'bookingSettings' => BookingFormSetting::query()->where('is_active', true)->first(),
         'bookingFields' => BookingFormField::query()->published()->ordered()->get(),
         'unavailableBookingDates' => BookingSubmission::unavailableDates(),
+        'experienceAvailability' => Experience::query()->published()->get()
+            ->mapWithKeys(fn (Experience $experience) => [
+                $experience->title => $experience->available_weekdays ?? [1, 2, 3, 4, 5, 6, 7],
+            ]),
     ]);
 });
 

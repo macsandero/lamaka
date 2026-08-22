@@ -23,6 +23,7 @@ class Experience extends Model
         'fourth_price',
         'duration_notes',
         'ideal_for',
+        'available_weekdays',
         'image',
         'sort_order',
         'is_active',
@@ -32,7 +33,14 @@ class Experience extends Model
     {
         return [
             'is_active' => 'boolean',
+            'available_weekdays' => 'array',
         ];
+    }
+
+    public function isAvailableOn(int $isoWeekday): bool
+    {
+        return $this->available_weekdays === null
+            || in_array($isoWeekday, array_map('intval', $this->available_weekdays), true);
     }
 
     public function scopePublished(Builder $query): Builder

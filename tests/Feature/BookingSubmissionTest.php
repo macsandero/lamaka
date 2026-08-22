@@ -169,7 +169,8 @@ class BookingSubmissionTest extends TestCase
         $this->get('/#prenota')
             ->assertOk()
             ->assertSee('Giorno preferito')
-            ->assertSee('type="date"', false)
+            ->assertSee('booking-availability-calendar', false)
+            ->assertSee('type="hidden" name="fields[data_ora_preferita]"', false)
             ->assertDontSee('type="datetime-local"', false);
 
         $this->withSession([
@@ -178,6 +179,43 @@ class BookingSubmissionTest extends TestCase
             ->assertOk()
             ->assertSee('window.alert(', false)
             ->assertSee("Richiesta inviata correttamente. Sarai contattato al più presto per concordare l'orario dell'attività");
+    }
+
+    public function test_booking_request_must_use_an_available_weekday_for_experience(): void
+    {
+        Mail::fake();
+        $this->seed();
+        $monday = now()->addWeek()->startOfWeek();
+
+        $experience = Experience::query()->where('title', 'Primo incontro')->firstOrFail();
+        $experience->update(['available_weekdays' => [2]]);
+
+        $this->post(route('booking.store'), ['fields' => [
+            'nome' => 'Mario Rossi',
+            'email' => 'mario@example.com',
+            'esperienza' => 'Primo incontro',
+            'data_ora_preferita' => $monday->toDateString(),
+            'privacy' => '1',
+        ]])->assertSessionHasErrors('fields.data_ora_preferita');
+
+        $this->assertDatabaseCount('booking_submissions', 0);
+    }
+
+    public function test_experience_is_required_before_choosing_a_booking_date(): void
+    {
+        Mail::fake();
+        $this->seed();
+
+        $this->post(route('booking.store'), ['fields' => [
+            'nome' => 'Mario Rossi',
+            'email' => 'mario@example.com',
+            'data_ora_preferita' => now()->addDays(3)->toDateString(),
+            'privacy' => '1',
+        ]])->assertSessionHasErrors('fields.esperienza');
+
+        $this->get('/#prenota')
+            ->assertOk()
+            ->assertSee('Seleziona prima un’esperienza per visualizzare le date disponibili.');
     }
 
     public function test_privacy_booking_field_links_to_legal_page(): void

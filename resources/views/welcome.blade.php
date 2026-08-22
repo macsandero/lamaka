@@ -9,6 +9,10 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .booking-availability-calendar{border:1px solid #d8cdbd;background:#ffffffcc;padding:1rem}.booking-calendar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}.booking-calendar-header button{padding:.25rem .75rem;color:#6f6a45;font-size:1.5rem}.booking-calendar-weekdays,.booking-calendar-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.25rem;text-align:center}.booking-calendar-weekdays{margin-bottom:.35rem;color:#7a6f63;font-size:.7rem;text-transform:uppercase}.booking-calendar-day{position:relative;aspect-ratio:1;border:1px solid #d8cdbd;background:white;color:#2f2a24;transition:.2s}.booking-calendar-day:not(:disabled):hover{background:#eee8d9;border-color:#6f6a45}.booking-calendar-day.is-selected{background:#6f6a45;color:white;border-color:#6f6a45}.booking-calendar-day.is-unavailable{color:#aaa39b;background:#f4f0eb;cursor:not-allowed}.booking-calendar-day.is-unavailable::after{content:'';position:absolute;left:18%;right:18%;top:50%;height:1px;background:#a8392e;transform:rotate(-18deg)}.booking-calendar-legend{margin-top:.65rem;color:#7a6f63;font-size:.78rem}.booking-calendar-unavailable{display:inline-block;position:relative;padding:0 .3rem;color:#aaa39b}.booking-calendar-unavailable::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:#a8392e;transform:rotate(-18deg)}
+        .booking-calendar-prompt{margin:0 0 .8rem;padding:.65rem;background:#f3efe7;color:#5f574d;text-align:center;font-size:.85rem}
+    </style>
 </head>
 
 @php
@@ -285,18 +289,22 @@
                                     </label>
                                 @else
                                     <label class="block uppercase tracking-[0.25em] text-xs text-[#7a6f63] mb-2" for="booking-{{ $field->key }}">
-                                        {{ $field->label }}@if ($field->is_required)<span class="text-red-700">*</span>@endif
+                                        {{ $field->label }}@if ($field->is_required || $field->key === 'esperienza')<span class="text-red-700">*</span>@endif
                                     </label>
 
                                     @if ($field->type === 'textarea')
                                         <textarea id="booking-{{ $field->key }}" name="{{ $fieldName }}" rows="5" placeholder="{{ $field->placeholder }}" class="{{ $inputClasses }}">{{ $oldValue }}</textarea>
                                     @elseif ($field->type === 'select')
-                                        <select id="booking-{{ $field->key }}" name="{{ $fieldName }}" class="{{ $inputClasses }}">
+                                        <select id="booking-{{ $field->key }}" name="{{ $fieldName }}" class="{{ $inputClasses }}" @if($field->key === 'esperienza') required @endif>
                                             <option value="">Seleziona</option>
                                             @foreach ($selectOptions as $option)
                                                 <option value="{{ $option }}" @selected($oldValue === $option)>{{ $option }}</option>
                                             @endforeach
                                         </select>
+                                    @elseif ($field->type === 'date')
+                                        <input id="booking-{{ $field->key }}" type="hidden" name="{{ $fieldName }}" value="{{ $oldValue }}">
+                                        <div id="booking-availability-calendar" class="booking-availability-calendar" aria-label="Calendario disponibilità"></div>
+                                        <p class="booking-calendar-legend"><span class="booking-calendar-unavailable">15</span> Giorno non disponibile o completo</p>
                                     @else
                                         <input id="booking-{{ $field->key }}" type="{{ $inputType }}" name="{{ $fieldName }}" value="{{ $oldValue }}" placeholder="{{ $field->placeholder }}" @if ($minimumValue) min="{{ $minimumValue }}" @endif class="{{ $inputClasses }} {{ $field->type === 'datetime' ? 'booking-datetime-input' : '' }}">
                                     @endif
@@ -419,16 +427,86 @@
 
     <script>
         const unavailableBookingDates = @json($unavailableBookingDates ?? []);
+        const experienceAvailability = @json($experienceAvailability ?? []);
         const bookingDateInput = document.getElementById('booking-data_ora_preferita')
             || document.getElementById('booking-data_preferita');
+        const bookingExperienceInput = document.getElementById('booking-esperienza');
+        const availabilityCalendar = document.getElementById('booking-availability-calendar');
 
-        if (bookingDateInput) {
-            bookingDateInput.addEventListener('change', () => {
-                if (unavailableBookingDates.includes(bookingDateInput.value)) {
-                    window.alert('Questa giornata ha già raggiunto il numero massimo di animali. Scegli un altro giorno.');
-                    bookingDateInput.value = '';
+        if (bookingDateInput && availabilityCalendar) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            let visibleMonth = bookingDateInput.value
+                ? new Date(`${bookingDateInput.value}T12:00:00`)
+                : new Date(today.getFullYear(), today.getMonth(), 1);
+
+            const localDate = date => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+
+            const hasSelectedExperience = () => Boolean(bookingExperienceInput?.value);
+            const allowedWeekdays = () => experienceAvailability[bookingExperienceInput?.value] ?? [];
+            const experienceMissingMessage = () => hasSelectedExperience()
+                ? ''
+                : '<p class="booking-calendar-prompt">Seleziona prima un’esperienza per visualizzare le date disponibili.</p>';
+
+            const renderAvailabilityCalendar = () => {
+                const year = visibleMonth.getFullYear();
+                const month = visibleMonth.getMonth();
+                const first = new Date(year, month, 1);
+                const last = new Date(year, month + 1, 0);
+                const leading = (first.getDay() + 6) % 7;
+                const monthName = first.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });
+                let days = '';
+
+                for (let index = 0; index < leading; index++) days += '<span class="booking-calendar-empty"></span>';
+
+                for (let number = 1; number <= last.getDate(); number++) {
+                    const date = new Date(year, month, number, 12);
+                    const dateValue = localDate(date);
+                    const isoWeekday = date.getDay() === 0 ? 7 : date.getDay();
+                    const tooSoon = date <= today;
+                    const full = unavailableBookingDates.includes(dateValue);
+                    const wrongWeekday = !allowedWeekdays().map(Number).includes(isoWeekday);
+                    const experienceMissing = !hasSelectedExperience();
+                    const disabled = experienceMissing || tooSoon || full || wrongWeekday;
+                    const selected = bookingDateInput.value === dateValue;
+                    const reason = experienceMissing ? 'Seleziona prima un’esperienza' : (full ? 'Giornata completa' : (wrongWeekday ? 'Esperienza non disponibile' : 'Non disponibile'));
+                    days += `<button type="button" class="booking-calendar-day ${disabled ? 'is-unavailable' : ''} ${selected ? 'is-selected' : ''}" data-date="${dateValue}" ${disabled ? 'disabled' : ''} title="${disabled ? reason : 'Seleziona il giorno'}">${number}</button>`;
                 }
+
+                availabilityCalendar.innerHTML = `${experienceMissingMessage()}
+                    <div class="booking-calendar-header">
+                        <button type="button" data-calendar-nav="prev" aria-label="Mese precedente">‹</button>
+                        <strong>${monthName.charAt(0).toUpperCase() + monthName.slice(1)}</strong>
+                        <button type="button" data-calendar-nav="next" aria-label="Mese successivo">›</button>
+                    </div>
+                    <div class="booking-calendar-weekdays"><span>Lun</span><span>Mar</span><span>Mer</span><span>Gio</span><span>Ven</span><span>Sab</span><span>Dom</span></div>
+                    <div class="booking-calendar-days">${days}</div>`;
+
+                availabilityCalendar.querySelectorAll('[data-calendar-nav]').forEach(button => button.addEventListener('click', () => {
+                    visibleMonth = new Date(year, month + (button.dataset.calendarNav === 'next' ? 1 : -1), 1);
+                    renderAvailabilityCalendar();
+                }));
+                availabilityCalendar.querySelectorAll('[data-date]:not(:disabled)').forEach(button => button.addEventListener('click', () => {
+                    bookingDateInput.value = button.dataset.date;
+                    renderAvailabilityCalendar();
+                }));
+            };
+
+            bookingExperienceInput?.addEventListener('change', () => {
+                if (bookingDateInput.value) {
+                    const selected = new Date(`${bookingDateInput.value}T12:00:00`);
+                    const isoWeekday = selected.getDay() === 0 ? 7 : selected.getDay();
+                    if (!allowedWeekdays().map(Number).includes(isoWeekday)) bookingDateInput.value = '';
+                }
+                renderAvailabilityCalendar();
             });
+
+            renderAvailabilityCalendar();
         }
 
         const mobileMenuButton = document.getElementById('mobile-menu-button');

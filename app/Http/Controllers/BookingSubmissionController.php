@@ -7,6 +7,7 @@ use App\Models\BookingFormField;
 use App\Models\BookingFormSetting;
 use App\Models\BookingSubmission;
 use App\Models\Experience;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -36,7 +37,7 @@ class BookingSubmissionController extends Controller
         $attributes = [];
 
         foreach ($fields as $field) {
-            $fieldRules = $field->is_required ? ['required'] : ['nullable'];
+            $fieldRules = ($field->is_required || $field->key === 'esperienza') ? ['required'] : ['nullable'];
 
             $selectOptions = $field->optionsList();
 
@@ -85,6 +86,17 @@ class BookingSubmissionController extends Controller
         if ($requestedDate && BookingSubmission::confirmedAnimalsForDate($requestedDate) >= BookingSubmission::MAX_DAILY_ANIMALS) {
             return redirect('/#prenota')
                 ->withErrors(['fields.data_ora_preferita' => 'La giornata selezionata non è più disponibile. Scegli un altro giorno.'])
+                ->withInput();
+        }
+
+        $selectedExperience = Experience::query()
+            ->published()
+            ->where('title', Arr::get($validator->validated(), 'fields.esperienza'))
+            ->first();
+
+        if ($requestedDate && $selectedExperience && ! $selectedExperience->isAvailableOn(CarbonImmutable::parse($requestedDate)->isoWeekday())) {
+            return redirect('/#prenota')
+                ->withErrors(['fields.data_ora_preferita' => 'L’esperienza scelta non è disponibile nel giorno selezionato.'])
                 ->withInput();
         }
 

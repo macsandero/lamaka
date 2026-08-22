@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Experiences\Schemas;
 
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
@@ -62,6 +63,21 @@ class ExperienceForm
                     ->columnSpanFull(),
                 RichEditor::make('ideal_for')
                     ->label('Ideale per')
+                    ->columnSpanFull(),
+                CheckboxList::make('available_weekdays')
+                    ->label('Giorni disponibili')
+                    ->helperText('Seleziona i giorni della settimana nei quali questa esperienza può essere prenotata.')
+                    ->options([
+                        1 => 'Lunedì',
+                        2 => 'Martedì',
+                        3 => 'Mercoledì',
+                        4 => 'Giovedì',
+                        5 => 'Venerdì',
+                        6 => 'Sabato',
+                        7 => 'Domenica',
+                    ])
+                    ->default([1, 2, 3, 4, 5, 6, 7])
+                    ->columns(4)
                     ->columnSpanFull(),
                 FileUpload::make('image')
                     ->label('Immagine')

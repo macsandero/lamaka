@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AboutContents;
 
+use App\Filament\Forms\EnglishContent;
 use App\Filament\Resources\AboutContents\Pages\ManageAboutContents;
 use App\Models\HomepageContent;
 use BackedEnum;
@@ -54,6 +55,10 @@ class AboutContentResource extends Resource
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
+                EnglishContent::section([
+                    ['about_eyebrow', 'Sopratitolo'], ['about_title', 'Titolo'],
+                    ['about_body', 'Testo', 'rich'],
+                ]),
             ]);
     }
 

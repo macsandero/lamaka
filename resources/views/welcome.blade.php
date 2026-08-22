@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,14 +64,15 @@
             </a>
 
             <nav class="hidden md:flex items-center gap-10 text-xs font-semibold uppercase tracking-[0.24em] text-[#3f3d32]">
-                <a href="/#esperienze" class="js-scroll border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">Esperienze</a>
-                <a href="/#chi-siamo" class="js-scroll border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">Chi siamo</a>
-                <a href="/#animali" class="js-scroll border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">Animali</a>
+                <a href="/#esperienze" class="js-scroll border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">{{ __('site.experiences') }}</a>
+                <a href="/#chi-siamo" class="js-scroll border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">{{ __('site.about') }}</a>
+                <a href="/#animali" class="js-scroll border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">{{ __('site.animals') }}</a>
+                <span class="flex gap-2"><a href="{{ route('language.switch','it') }}" title="Italiano">🇮🇹</a><a href="{{ route('language.switch','en') }}" title="English">🇬🇧</a></span>
             </nav>
 
             <a href="/#prenota"
                class="js-scroll hidden md:inline-block border border-[#3f3d32] text-[#3f3d32] px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] transition duration-300 hover:bg-[#3f3d32] hover:text-[#f3efe7]">
-                Prenota
+                {{ __('site.book') }}
             </a>
 
             <button
@@ -90,12 +91,13 @@
 
         <div id="mobile-menu" class="hidden md:hidden border-t border-[#d8cdbd]">
             <div class="flex flex-col px-6 py-6 gap-6 text-xs uppercase tracking-[0.22em] text-[#5f574d]">
-                <a href="/#esperienze" class="js-scroll mobile-link">Esperienze</a>
-                <a href="/#chi-siamo" class="js-scroll mobile-link">Chi siamo</a>
-                <a href="/#animali" class="js-scroll mobile-link">Animali</a>
+                <a href="/#esperienze" class="js-scroll mobile-link">{{ __('site.experiences') }}</a>
+                <a href="/#chi-siamo" class="js-scroll mobile-link">{{ __('site.about') }}</a>
+                <a href="/#animali" class="js-scroll mobile-link">{{ __('site.animals') }}</a>
+                <div class="flex gap-5 text-xl"><a href="{{ route('language.switch','it') }}">🇮🇹</a><a href="{{ route('language.switch','en') }}">🇬🇧</a></div>
 
                 <a href="/#prenota" class="js-scroll mobile-link border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-center">
-                    Prenota
+                    {{ __('site.book') }}
                 </a>
             </div>
         </div>
@@ -154,7 +156,7 @@
                                 @endif
                             </div>
                             <span class="mt-6 inline-flex items-center gap-3 text-xs uppercase tracking-[0.22em]" style="color: #4f4a35;">
-                                <span>Scopri i dettagli</span>
+                                <span>{{ __('site.discover_details') }}</span>
                                 <span aria-hidden="true" style="font-size: 1.15rem; line-height: 1;">&rarr;</span>
                             </span>
                         </a>
@@ -232,7 +234,7 @@
 
                     @if ($errors->any())
                         <div class="mb-8 border border-red-300 bg-red-50 px-5 py-4 text-red-800 leading-relaxed">
-                            Controlla i campi evidenziati e riprova.
+                            {{ __('site.form_error') }}
                         </div>
                     @endif
 
@@ -276,11 +278,8 @@
                                     <label class="flex gap-3 text-[#5f574d] leading-relaxed">
                                         <input type="checkbox" name="{{ $fieldName }}" value="1" @checked($oldValue) class="mt-1 h-5 w-5 border-[#d8cdbd] text-[#6f6a45] focus:ring-[#6f6a45]">
                                         <span>
-                                            @if ($field->key === 'privacy' && str_contains($field->label, 'Informativa Privacy'))
-                                                @php
-                                                    [$privacyLabelBefore, $privacyLabelAfter] = explode('Informativa Privacy', $field->label, 2);
-                                                @endphp
-                                                {{ $privacyLabelBefore }}<a href="{{ route('legal.privacy') }}" class="border-b border-[#6f6a45]/45 text-[#4f4a35] transition hover:text-[#2f2a24]" target="_blank">Informativa Privacy</a>{{ $privacyLabelAfter }}
+                                            @if ($field->key === 'privacy')
+                                                {{ __('site.privacy_consent_before') }}<a href="{{ route('legal.privacy') }}" class="border-b border-[#6f6a45]/45 text-[#4f4a35] transition hover:text-[#2f2a24]" target="_blank">Privacy Policy</a>{{ __('site.privacy_consent_after') }}
                                             @else
                                                 {{ $field->label }}
                                             @endif
@@ -296,7 +295,7 @@
                                         <textarea id="booking-{{ $field->key }}" name="{{ $fieldName }}" rows="5" placeholder="{{ $field->placeholder }}" class="{{ $inputClasses }}">{{ $oldValue }}</textarea>
                                     @elseif ($field->type === 'select')
                                         <select id="booking-{{ $field->key }}" name="{{ $fieldName }}" class="{{ $inputClasses }}" @if($field->key === 'esperienza') required @endif>
-                                            <option value="">Seleziona</option>
+                                            <option value="">{{ __('site.select') }}</option>
                                             @foreach ($selectOptions as $option)
                                                 <option value="{{ $option }}" @selected($oldValue === $option)>{{ $option }}</option>
                                             @endforeach
@@ -304,7 +303,7 @@
                                     @elseif ($field->type === 'date')
                                         <input id="booking-{{ $field->key }}" type="hidden" name="{{ $fieldName }}" value="{{ $oldValue }}">
                                         <div id="booking-availability-calendar" class="booking-availability-calendar" aria-label="Calendario disponibilità"></div>
-                                        <p class="booking-calendar-legend"><span class="booking-calendar-unavailable">15</span> Giorno non disponibile o completo</p>
+                                        <p class="booking-calendar-legend"><span class="booking-calendar-unavailable">15</span> {{ __('site.unavailable_day') }}</p>
                                     @else
                                         <input id="booking-{{ $field->key }}" type="{{ $inputType }}" name="{{ $fieldName }}" value="{{ $oldValue }}" placeholder="{{ $field->placeholder }}" @if ($minimumValue) min="{{ $minimumValue }}" @endif class="{{ $inputClasses }} {{ $field->type === 'datetime' ? 'booking-datetime-input' : '' }}">
                                     @endif
@@ -374,7 +373,7 @@
                     </div>
 
                     <div>
-                        <h2 class="mb-7 text-4xl" style="font-family:'Cormorant Garamond',serif;">Seguici</h2>
+                        <h2 class="mb-7 text-4xl" style="font-family:'Cormorant Garamond',serif;">{{ __('site.follow_us') }}</h2>
                         @php
                             $instagramUrl = data_get($contact, 'instagram_url');
                             $instagramNote = data_get($contact, 'instagram_note') ?: data_get($contact, 'footer_note') ?: '<p>LAMAKA nasce per vivere la natura con rispetto, lentezza e attenzione agli animali.</p>';
@@ -425,9 +424,22 @@
         </footer>
     @endif
 
+    @php
+        $calendarTranslations = [
+            'chooseExperience' => __('site.choose_experience'),
+            'full' => __('site.full_day'),
+            'experienceUnavailable' => __('site.experience_unavailable'),
+            'unavailable' => __('site.unavailable'),
+            'chooseDay' => __('site.choose_day'),
+            'previousMonth' => __('site.previous_month'),
+            'nextMonth' => __('site.next_month'),
+            'weekdays' => __('site.weekdays'),
+        ];
+    @endphp
     <script>
         const unavailableBookingDates = @json($unavailableBookingDates ?? []);
         const experienceAvailability = @json($experienceAvailability ?? []);
+        const calendarI18n = @json($calendarTranslations);
         const bookingDateInput = document.getElementById('booking-data_ora_preferita')
             || document.getElementById('booking-data_preferita');
         const bookingExperienceInput = document.getElementById('booking-esperienza');
@@ -451,7 +463,7 @@
             const allowedWeekdays = () => experienceAvailability[bookingExperienceInput?.value] ?? [];
             const experienceMissingMessage = () => hasSelectedExperience()
                 ? ''
-                : '<p class="booking-calendar-prompt">Seleziona prima un’esperienza per visualizzare le date disponibili.</p>';
+                : `<p class="booking-calendar-prompt">${calendarI18n.chooseExperience}</p>`;
 
             const renderAvailabilityCalendar = () => {
                 const year = visibleMonth.getFullYear();
@@ -459,7 +471,7 @@
                 const first = new Date(year, month, 1);
                 const last = new Date(year, month + 1, 0);
                 const leading = (first.getDay() + 6) % 7;
-                const monthName = first.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });
+                const monthName = first.toLocaleDateString(@json(app()->getLocale() === 'en' ? 'en-GB' : 'it-IT'), { month: 'long', year: 'numeric' });
                 let days = '';
 
                 for (let index = 0; index < leading; index++) days += '<span class="booking-calendar-empty"></span>';
@@ -474,17 +486,17 @@
                     const experienceMissing = !hasSelectedExperience();
                     const disabled = experienceMissing || tooSoon || full || wrongWeekday;
                     const selected = bookingDateInput.value === dateValue;
-                    const reason = experienceMissing ? 'Seleziona prima un’esperienza' : (full ? 'Giornata completa' : (wrongWeekday ? 'Esperienza non disponibile' : 'Non disponibile'));
-                    days += `<button type="button" class="booking-calendar-day ${disabled ? 'is-unavailable' : ''} ${selected ? 'is-selected' : ''}" data-date="${dateValue}" ${disabled ? 'disabled' : ''} title="${disabled ? reason : 'Seleziona il giorno'}">${number}</button>`;
+                    const reason = experienceMissing ? calendarI18n.chooseExperience : (full ? calendarI18n.full : (wrongWeekday ? calendarI18n.experienceUnavailable : calendarI18n.unavailable));
+                    days += `<button type="button" class="booking-calendar-day ${disabled ? 'is-unavailable' : ''} ${selected ? 'is-selected' : ''}" data-date="${dateValue}" ${disabled ? 'disabled' : ''} title="${disabled ? reason : calendarI18n.chooseDay}">${number}</button>`;
                 }
 
                 availabilityCalendar.innerHTML = `${experienceMissingMessage()}
                     <div class="booking-calendar-header">
-                        <button type="button" data-calendar-nav="prev" aria-label="Mese precedente">‹</button>
+                        <button type="button" data-calendar-nav="prev" aria-label="${calendarI18n.previousMonth}">‹</button>
                         <strong>${monthName.charAt(0).toUpperCase() + monthName.slice(1)}</strong>
-                        <button type="button" data-calendar-nav="next" aria-label="Mese successivo">›</button>
+                        <button type="button" data-calendar-nav="next" aria-label="${calendarI18n.nextMonth}">›</button>
                     </div>
-                    <div class="booking-calendar-weekdays"><span>Lun</span><span>Mar</span><span>Mer</span><span>Gio</span><span>Ven</span><span>Sab</span><span>Dom</span></div>
+                    <div class="booking-calendar-weekdays">${calendarI18n.weekdays.map(day => `<span>${day}</span>`).join('')}</div>
                     <div class="booking-calendar-days">${days}</div>`;
 
                 availabilityCalendar.querySelectorAll('[data-calendar-nav]').forEach(button => button.addEventListener('click', () => {

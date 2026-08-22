@@ -2,23 +2,28 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasLocalizedContent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Animal extends Model
 {
+    use HasLocalizedContent;
+
     protected $fillable = [
         'name',
         'description',
         'image',
         'sort_order',
         'is_active',
+        'translations',
     ];
 
     protected function casts(): array
     {
         return [
             'is_active' => 'boolean',
+            ...$this->localizedContentCasts(),
         ];
     }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,18 +47,19 @@
             </a>
 
             <nav class="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.22em] text-[#5f574d]">
-                <a href="/#esperienze" class="hover:text-[#2f2a24] transition">Esperienze</a>
-                <a href="/#chi-siamo" class="hover:text-[#2f2a24] transition">Chi siamo</a>
-                <a href="/#animali" class="hover:text-[#2f2a24] transition">Animali</a>
-                <a href="/#contatti" class="hover:text-[#2f2a24] transition">Contatti</a>
+                <a href="/#esperienze" class="hover:text-[#2f2a24] transition">{{ __('site.experiences') }}</a>
+                <a href="/#chi-siamo" class="hover:text-[#2f2a24] transition">{{ __('site.about') }}</a>
+                <a href="/#animali" class="hover:text-[#2f2a24] transition">{{ __('site.animals') }}</a>
+                <a href="/#contatti" class="hover:text-[#2f2a24] transition">{{ __('site.contacts') }}</a>
+                <a href="{{ route('language.switch','it') }}">🇮🇹</a><a href="{{ route('language.switch','en') }}">🇬🇧</a>
             </nav>
 
             <a href="/#prenota" class="hidden md:inline-block border border-[#6f6a45] text-[#4f4a35] px-5 py-3 text-xs uppercase tracking-[0.22em] hover:bg-[#6f6a45] hover:text-white transition duration-500">
-                Prenota
+                {{ __('site.book') }}
             </a>
 
             <a href="{{ url('/').'/?esperienza='.rawurlencode($experience->title).'#prenota' }}" class="md:hidden border border-[#6f6a45] text-[#4f4a35] px-4 py-3 text-[10px] uppercase tracking-[0.2em]">
-                Prenota
+                {{ __('site.book') }}
             </a>
         </div>
     </header>
@@ -66,11 +67,11 @@
     <main class="pt-[104px]">
         <section class="recycled-paper paper-experiences py-24 md:py-32 px-6 md:px-12">
             <div class="max-w-6xl mx-auto">
-                <a href="/#esperienze" class="inline-block mb-10 text-xs uppercase tracking-[0.25em] text-[#7a6f63] hover:text-[#2f2a24] transition">Torna alle esperienze</a>
+                <a href="/#esperienze" class="inline-block mb-10 text-xs uppercase tracking-[0.25em] text-[#7a6f63] hover:text-[#2f2a24] transition">{{ __('site.back_experiences') }}</a>
 
                 <div class="grid lg:grid-cols-[.95fr_1.05fr] gap-14 items-start">
                     <div>
-                        <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">Esperienza</p>
+                        <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">{{ __('site.experience') }}</p>
                         <h1 class="text-5xl md:text-6xl leading-none mb-8" style="font-family:'Cormorant Garamond',serif;">
                             {{ $experience->title }}
                         </h1>
@@ -94,7 +95,7 @@
                     <div class="bg-white/55 border border-[#d8cdbd] p-6 md:p-10">
                         @if ($experience->experience_type)
                             <div class="mb-8">
-                                <p class="experience-label text-xl md:text-2xl mb-3" style="font-family:'Cormorant Garamond',serif;">Tipo esperienza</p>
+                                <p class="experience-label text-xl md:text-2xl mb-3" style="font-family:'Cormorant Garamond',serif;">{{ __('site.experience_type') }}</p>
                                 <div class="experience-copy text-[#2f2a24] text-xl leading-relaxed">
                                     @if ($hasHtml($experience->experience_type))
                                         {!! $experience->experience_type !!}
@@ -107,7 +108,7 @@
 
                         @if ($experience->purpose)
                             <div class="mb-8">
-                                <p class="experience-label text-xl md:text-2xl mb-3" style="font-family:'Cormorant Garamond',serif;">Finalità</p>
+                                <p class="experience-label text-xl md:text-2xl mb-3" style="font-family:'Cormorant Garamond',serif;">{{ __('site.purpose') }}</p>
                                 <div class="experience-copy text-[#2f2a24] text-xl leading-relaxed">
                                     @if ($hasHtml($experience->purpose))
                                         {!! $experience->purpose !!}
@@ -120,7 +121,7 @@
 
                         @if ($experience->experience_details)
                             <div class="mb-8">
-                                <p class="experience-label text-xl md:text-2xl mb-3" style="font-family:'Cormorant Garamond',serif;">Durante l’esperienza</p>
+                                <p class="experience-label text-xl md:text-2xl mb-3" style="font-family:'Cormorant Garamond',serif;">{{ __('site.during') }}</p>
                                 <div class="experience-copy text-[#2f2a24] text-xl leading-relaxed">
                                     @if ($hasHtml($experience->experience_details))
                                         {!! $experience->experience_details !!}
@@ -144,10 +145,10 @@
                             @if ($option['duration'] || $option['price'])
                                 <div class="mb-8 text-xl leading-relaxed">
                                     @if ($option['duration'])
-                                        <p><span class="experience-label">Durata</span> {{ $option['duration'] }}</p>
+                                        <p><span class="experience-label">{{ __('site.duration') }}</span> {{ $option['duration'] }}</p>
                                     @endif
                                     @if ($option['price'])
-                                        <p><span class="experience-label">Prezzo</span> <strong>{{ $option['price'] }}</strong></p>
+                                        <p><span class="experience-label">{{ __('site.price') }}</span> <strong>{{ $option['price'] }}</strong></p>
                                     @endif
                                 </div>
                             @endif
@@ -155,7 +156,7 @@
 
                         @if ($experience->durationNotesList())
                             <div class="mb-8 text-xl leading-relaxed">
-                                <p class="experience-label mb-3" style="font-family:'Cormorant Garamond',serif;">Note</p>
+                                <p class="experience-label mb-3" style="font-family:'Cormorant Garamond',serif;">{{ __('site.notes') }}</p>
                                 <ul class="experience-copy list-disc space-y-2 pl-6 text-[#2f2a24] text-xl leading-relaxed">
                                     @foreach ($experience->durationNotesList() as $note)
                                         <li>{{ $note }}</li>
@@ -166,7 +167,7 @@
 
                         @if ($experience->ideal_for)
                             <div class="text-xl leading-relaxed">
-                                <p class="experience-label mb-3" style="font-family:'Cormorant Garamond',serif;">Ideale per</p>
+                                <p class="experience-label mb-3" style="font-family:'Cormorant Garamond',serif;">{{ __('site.ideal_for') }}</p>
                                 <div class="experience-copy text-[#2f2a24] text-xl leading-relaxed">
                                     @if ($hasHtml($experience->ideal_for))
                                         {!! $experience->ideal_for !!}

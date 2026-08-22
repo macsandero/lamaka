@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasLocalizedContent;
 use Illuminate\Database\Eloquent\Model;
 
 class HomepageContent extends Model
 {
+    use HasLocalizedContent;
+
     protected $fillable = [
         'hero_eyebrow',
         'hero_title',
@@ -21,5 +24,11 @@ class HomepageContent extends Model
         'about_image',
         'animals_eyebrow',
         'animals_title',
+        'translations',
     ];
+
+    protected function casts(): array
+    {
+        return $this->localizedContentCasts();
+    }
 }

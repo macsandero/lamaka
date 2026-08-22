@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\LegalPages;
 
+use App\Filament\Forms\EnglishContent;
 use App\Filament\Resources\LegalPages\Pages\EditLegalPage;
 use App\Filament\Resources\LegalPages\Pages\ListLegalPages;
 use App\Models\LegalPage;
@@ -58,6 +59,9 @@ class LegalPageResource extends Resource
                             ->default(true),
                     ])
                     ->columns(2),
+                EnglishContent::section([
+                    ['title', 'Titolo'], ['body', 'Testo', 'rich'],
+                ]),
             ]);
     }
 

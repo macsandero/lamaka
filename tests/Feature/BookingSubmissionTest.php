@@ -215,7 +215,7 @@ class BookingSubmissionTest extends TestCase
 
         $this->get('/#prenota')
             ->assertOk()
-            ->assertSee('Seleziona prima un’esperienza per visualizzare le date disponibili.');
+            ->assertSee('chooseExperience');
     }
 
     public function test_privacy_booking_field_links_to_legal_page(): void
@@ -226,7 +226,7 @@ class BookingSubmissionTest extends TestCase
             ->assertOk()
             ->assertSee('Ho letto l’', false)
             ->assertSee('href="http://localhost/privacy-policy"', false)
-            ->assertSee('Informativa Privacy')
+            ->assertSee('Privacy Policy')
             ->assertSee('acconsento al trattamento dei miei dati per la gestione della richiesta.');
     }
 

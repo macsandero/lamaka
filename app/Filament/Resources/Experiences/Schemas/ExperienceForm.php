@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Experiences\Schemas;
 
+use App\Filament\Forms\EnglishContent;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
@@ -94,6 +95,16 @@ class ExperienceForm
                 Toggle::make('is_active')
                     ->label('Visibile')
                     ->default(true),
+                EnglishContent::section([
+                    ['title', 'Titolo'], ['description', 'Descrizione breve', 'rich'],
+                    ['experience_type', 'Tipo esperienza', 'rich'], ['purpose', 'Finalità', 'rich'],
+                    ['experience_details', 'Durante l’esperienza', 'rich'],
+                    ['short_duration', 'Durata 1'], ['short_price', 'Prezzo 1'],
+                    ['long_duration', 'Durata 2'], ['long_price', 'Prezzo 2'],
+                    ['third_duration', 'Durata 3'], ['third_price', 'Prezzo 3'],
+                    ['fourth_duration', 'Durata 4'], ['fourth_price', 'Prezzo 4'],
+                    ['duration_notes', 'Note', 'textarea'], ['ideal_for', 'Ideale per', 'rich'],
+                ]),
             ]);
     }
 }

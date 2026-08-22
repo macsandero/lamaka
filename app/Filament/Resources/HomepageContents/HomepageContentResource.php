@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\HomepageContents;
 
+use App\Filament\Forms\EnglishContent;
 use App\Filament\Resources\HomepageContents\Pages\ManageHomepageContents;
 use App\Models\HomepageContent;
 use BackedEnum;
@@ -83,6 +84,14 @@ class HomepageContentResource extends Resource
                             ->maxLength(255),
                     ])
                     ->columns(2),
+                EnglishContent::section([
+                    ['hero_eyebrow', 'Sopratitolo hero'], ['hero_title', 'Titolo hero', 'textarea'],
+                    ['hero_subtitle', 'Testo hero', 'rich'], ['hero_button_label', 'Pulsante hero'],
+                    ['experiences_eyebrow', 'Sopratitolo esperienze'], ['experiences_title', 'Titolo esperienze'],
+                    ['about_eyebrow', 'Sopratitolo chi siamo'], ['about_title', 'Titolo chi siamo'],
+                    ['about_body', 'Testo chi siamo', 'rich'], ['animals_eyebrow', 'Sopratitolo animali'],
+                    ['animals_title', 'Titolo animali', 'textarea'],
+                ]),
             ]);
     }
 

@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasLocalizedContent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class BookingFormField extends Model
 {
+    use HasLocalizedContent;
+
     public const TYPES = [
         'text' => 'Testo',
         'email' => 'Email',
@@ -31,6 +34,7 @@ class BookingFormField extends Model
         'is_active',
         'is_full_width',
         'sort_order',
+        'translations',
     ];
 
     protected static function booted(): void
@@ -48,6 +52,7 @@ class BookingFormField extends Model
             'is_required' => 'boolean',
             'is_active' => 'boolean',
             'is_full_width' => 'boolean',
+            ...$this->localizedContentCasts(),
         ];
     }
 
@@ -66,7 +71,7 @@ class BookingFormField extends Model
      */
     public function optionsList(): array
     {
-        return collect(preg_split('/\r\n|\r|\n/', (string) $this->options))
+        return collect(preg_split('/\r\n|\r|\n/', (string) $this->localized('options')))
             ->map(fn (string $option): string => trim($option))
             ->filter()
             ->values()

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasLocalizedContent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Experience extends Model
 {
+    use HasLocalizedContent;
+
     protected $fillable = [
         'title',
         'description',
@@ -27,6 +30,7 @@ class Experience extends Model
         'image',
         'sort_order',
         'is_active',
+        'translations',
     ];
 
     protected function casts(): array
@@ -34,6 +38,7 @@ class Experience extends Model
         return [
             'is_active' => 'boolean',
             'available_weekdays' => 'array',
+            ...$this->localizedContentCasts(),
         ];
     }
 

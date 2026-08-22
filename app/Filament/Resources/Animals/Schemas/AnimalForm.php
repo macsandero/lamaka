@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Animals\Schemas;
 
+use App\Filament\Forms\EnglishContent;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -36,6 +37,9 @@ class AnimalForm
                 Toggle::make('is_active')
                     ->label('Visibile')
                     ->default(true),
+                EnglishContent::section([
+                    ['name', 'Nome'], ['description', 'Descrizione', 'textarea'],
+                ]),
             ]);
     }
 }

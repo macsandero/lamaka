@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\BookingFormFields\Schemas;
 
+use App\Filament\Forms\EnglishContent;
 use App\Models\BookingFormField;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -61,6 +62,10 @@ class BookingFormFieldForm
                             ->default(true),
                     ])
                     ->columns(2),
+                EnglishContent::section([
+                    ['label', 'Etichetta'], ['placeholder', 'Placeholder'],
+                    ['help_text', 'Aiuto', 'textarea'], ['options', 'Opzioni', 'textarea'],
+                ]),
             ]);
     }
 }

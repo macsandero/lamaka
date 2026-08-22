@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\BookingFormSettings;
 
+use App\Filament\Forms\EnglishContent;
 use App\Filament\Resources\BookingFormSettings\Pages\ManageBookingFormSettings;
 use App\Models\BookingFormSetting;
 use BackedEnum;
@@ -70,6 +71,11 @@ class BookingFormSettingResource extends Resource
                             ->default(true),
                     ])
                     ->columns(2),
+                EnglishContent::section([
+                    ['eyebrow', 'Sopratitolo'], ['heading', 'Titolo'],
+                    ['body', 'Testo introduttivo', 'textarea'], ['submit_label', 'Testo pulsante'],
+                    ['success_message', 'Messaggio dopo invio', 'textarea'],
+                ]),
             ]);
     }
 

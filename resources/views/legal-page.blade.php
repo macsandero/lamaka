@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,14 +35,15 @@
             </a>
 
             <nav class="hidden md:flex items-center gap-10 text-xs font-semibold uppercase tracking-[0.24em] text-[#3f3d32]">
-                <a href="/#esperienze" class="border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">Esperienze</a>
-                <a href="/#chi-siamo" class="border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">Chi siamo</a>
-                <a href="/#animali" class="border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">Animali</a>
+                <a href="/#esperienze" class="border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">{{ __('site.experiences') }}</a>
+                <a href="/#chi-siamo" class="border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">{{ __('site.about') }}</a>
+                <a href="/#animali" class="border-b border-transparent pb-1 transition duration-300 hover:border-[#3f3d32] hover:text-[#2f2a24]">{{ __('site.animals') }}</a>
+                <a href="{{ route('language.switch','it') }}">🇮🇹</a><a href="{{ route('language.switch','en') }}">🇬🇧</a>
             </nav>
 
             <a href="/#prenota"
                class="hidden md:inline-block border border-[#3f3d32] text-[#3f3d32] px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] transition duration-300 hover:bg-[#3f3d32] hover:text-[#f3efe7]">
-                Prenota
+                {{ __('site.book') }}
             </a>
         </div>
     </header>
@@ -50,7 +51,7 @@
     <main class="pt-[104px]">
         <section class="recycled-paper paper-experiences min-h-[calc(100vh-104px)] px-6 py-24 md:px-12 md:py-32">
             <article class="mx-auto max-w-4xl bg-white/45 border border-[#d8cdbd] px-6 py-10 md:px-12 md:py-14">
-                <a href="/" class="inline-block mb-10 text-xs uppercase tracking-[0.25em] text-[#7a6f63] hover:text-[#2f2a24] transition">Torna al sito</a>
+                <a href="/" class="inline-block mb-10 text-xs uppercase tracking-[0.25em] text-[#7a6f63] hover:text-[#2f2a24] transition">{{ __('site.back_site') }}</a>
 
                 <p class="uppercase tracking-[0.3em] text-xs text-[#7a6f63] mb-4">LAMAKA</p>
                 <h1 class="text-5xl md:text-6xl leading-none mb-10" style="font-family:'Cormorant Garamond',serif;">
@@ -108,7 +109,7 @@
                     </div>
 
                     <div>
-                        <h2 class="mb-7 text-4xl" style="font-family:'Cormorant Garamond',serif;">Seguici</h2>
+                        <h2 class="mb-7 text-4xl" style="font-family:'Cormorant Garamond',serif;">{{ __('site.follow_us') }}</h2>
                         @php
                             $instagramUrl = data_get($contact, 'instagram_url');
                             $instagramNote = data_get($contact, 'instagram_note') ?: data_get($contact, 'footer_note') ?: '<p>LAMAKA nasce per vivere la natura con rispetto, lentezza e attenzione agli animali.</p>';

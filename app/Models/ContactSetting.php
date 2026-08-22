@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasLocalizedContent;
 use Illuminate\Database\Eloquent\Model;
 
 class ContactSetting extends Model
 {
+    use HasLocalizedContent;
+
     protected $fillable = [
         'business_name',
         'footer_logo',
@@ -33,12 +36,14 @@ class ContactSetting extends Model
         'booking_label',
         'booking_url',
         'is_active',
+        'translations',
     ];
 
     protected function casts(): array
     {
         return [
             'is_active' => 'boolean',
+            ...$this->localizedContentCasts(),
         ];
     }
 }

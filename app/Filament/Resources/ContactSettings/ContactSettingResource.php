@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ContactSettings;
 
+use App\Filament\Forms\EnglishContent;
 use App\Filament\Resources\ContactSettings\Pages\ManageContactSettings;
 use App\Models\ContactSetting;
 use BackedEnum;
@@ -138,6 +139,13 @@ class ContactSettingResource extends Resource
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
+                EnglishContent::section([
+                    ['heading', 'Titolo contatti'], ['body', 'Testo contatti', 'textarea'],
+                    ['footer_body', 'Testo footer', 'rich'], ['address', 'Indirizzo', 'textarea'],
+                    ['instagram_note', 'Testo Instagram', 'rich'], ['booking_label', 'Pulsante prenotazione'],
+                    ['footer_note', 'Nota footer', 'rich'], ['directions_label', 'Link indicazioni'],
+                    ['legal_text', 'Copyright'],
+                ]),
             ]);
     }
 

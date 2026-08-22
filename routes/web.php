@@ -14,6 +14,13 @@ use App\Models\HomepageContent;
 use App\Models\LegalPage;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/lingua/{locale}', function (string $locale) {
+    abort_unless(in_array($locale, ['it', 'en'], true), 404);
+    session(['locale' => $locale]);
+
+    return back();
+})->name('language.switch');
+
 Route::get('/', function () {
     return view('welcome', [
         'homepage' => HomepageContent::query()->first(),

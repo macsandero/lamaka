@@ -89,10 +89,11 @@ class BookingSubmissionController extends Controller
                 ->withInput();
         }
 
-        $selectedExperience = Experience::query()
-            ->published()
-            ->where('title', Arr::get($validator->validated(), 'fields.esperienza'))
-            ->first();
+        $selectedExperienceName = Arr::get($validator->validated(), 'fields.esperienza');
+        $selectedExperience = Experience::query()->published()->get()->first(
+            fn (Experience $experience): bool => $experience->title === $selectedExperienceName
+                || $experience->getRawOriginal('title') === $selectedExperienceName,
+        );
 
         if ($requestedDate && $selectedExperience && ! $selectedExperience->isAvailableOn(CarbonImmutable::parse($requestedDate)->isoWeekday())) {
             return redirect('/#prenota')

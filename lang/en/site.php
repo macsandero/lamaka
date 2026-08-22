@@ -13,4 +13,5 @@ return [
     'back_experiences' => 'Back to experiences', 'back_site' => 'Back to the website', 'experience' => 'Experience',
     'experience_type' => 'Experience type', 'purpose' => 'Purpose', 'during' => 'During the experience',
     'duration' => 'Duration', 'price' => 'Price', 'notes' => 'Notes', 'ideal_for' => 'Ideal for',
+    'book_experience' => 'Book this experience',
 ];

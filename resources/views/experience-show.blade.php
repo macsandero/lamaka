@@ -179,7 +179,7 @@
                         @endif
 
                         <a href="{{ url('/').'/?esperienza='.rawurlencode($experience->title).'#prenota' }}" class="mt-10 inline-block w-full bg-[#6f6a45] text-center text-white px-8 py-4 uppercase tracking-[0.25em] text-xs hover:bg-[#4f4a35] transition duration-500">
-                            Prenota questa esperienza
+                            {{ __('site.book_experience') }}
                         </a>
                     </div>
                 </div>

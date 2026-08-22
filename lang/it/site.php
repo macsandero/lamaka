@@ -13,4 +13,5 @@ return [
     'back_experiences' => 'Torna alle esperienze', 'back_site' => 'Torna al sito', 'experience' => 'Esperienza',
     'experience_type' => 'Tipo esperienza', 'purpose' => 'Finalità', 'during' => 'Durante l’esperienza',
     'duration' => 'Durata', 'price' => 'Prezzo', 'notes' => 'Note', 'ideal_for' => 'Ideale per',
+    'book_experience' => 'Prenota questa esperienza',
 ];

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Pages;
 
+use App\Filament\Concerns\HasSaveConfirmation;
 use App\Filament\Resources\Users\UserResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Hash;
@@ -9,6 +10,8 @@ use Illuminate\Support\Str;
 
 class CreateUser extends CreateRecord
 {
+    use HasSaveConfirmation;
+
     protected static string $resource = UserResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array

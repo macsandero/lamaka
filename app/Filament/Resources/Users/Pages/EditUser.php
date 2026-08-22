@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Pages;
 
+use App\Filament\Concerns\HasSaveConfirmation;
 use App\Filament\Resources\Users\UserResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class EditUser extends EditRecord
 {
+    use HasSaveConfirmation;
+
     protected static string $resource = UserResource::class;
 
     protected function getHeaderActions(): array

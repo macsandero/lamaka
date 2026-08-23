@@ -109,4 +109,67 @@ class BookingCalendarTest extends TestCase
 
         $this->assertDatabaseCount('booking_submissions', 1);
     }
+
+    public function test_cancelling_a_booking_keeps_it_visible_and_releases_its_animals(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $date = now()->addDays(5)->toDateString();
+        $booking = BookingSubmission::create([
+            'reference' => 'TO-CANCEL', 'data' => [], 'booking_date' => $date,
+            'animals' => 5, 'customer_name' => 'Cliente annullato',
+            'origin' => 'admin', 'status' => 'confirmed', 'confirmed_at' => now(),
+        ]);
+
+        $this->assertContains($date, BookingSubmission::unavailableDates());
+
+        $this->actingAs($admin)->post(route('agenda.cancel', $booking), [
+            'cancellation_reason' => 'Condizioni meteo',
+        ])->assertRedirect();
+
+        $booking->refresh();
+        $this->assertSame('cancelled', $booking->status);
+        $this->assertNull($booking->confirmed_at);
+        $this->assertNotNull($booking->cancelled_at);
+        $this->assertNotContains($date, BookingSubmission::unavailableDates());
+
+        $this->actingAs($admin)->get(route('agenda.index', ['date' => $date]))
+            ->assertOk()->assertSee('Cliente annullato')->assertSee('Annullata')->assertSee('Condizioni meteo');
+    }
+
+    public function test_modifying_date_recalculates_capacity_on_both_days(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $oldDate = now()->addDays(6)->toDateString();
+        $newDate = now()->addDays(7)->toDateString();
+        $booking = BookingSubmission::create([
+            'reference' => 'TO-MOVE', 'data' => [], 'booking_date' => $oldDate,
+            'animals' => 5, 'origin' => 'admin', 'status' => 'confirmed', 'confirmed_at' => now(),
+        ]);
+
+        $this->actingAs($admin)->put(route('agenda.update', $booking), [
+            'booking_date' => $newDate, 'start_time' => '14:00', 'end_time' => '15:30', 'animals' => 5,
+        ])->assertRedirect();
+
+        $this->assertNotContains($oldDate, BookingSubmission::unavailableDates());
+        $this->assertContains($newDate, BookingSubmission::unavailableDates());
+        $booking->refresh();
+        $this->assertSame($newDate, $booking->booking_date->toDateString());
+        $this->assertSame('14:00', $booking->start_time);
+        $this->assertSame('15:30', $booking->end_time);
+    }
+
+    public function test_cancellation_with_other_reason_requires_details(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $booking = BookingSubmission::create([
+            'reference' => 'OTHER-REASON', 'data' => [], 'booking_date' => now()->addDays(3),
+            'animals' => 1, 'origin' => 'admin', 'status' => 'confirmed', 'confirmed_at' => now(),
+        ]);
+
+        $this->actingAs($admin)->post(route('agenda.cancel', $booking), [
+            'cancellation_reason' => 'Altro',
+        ])->assertSessionHasErrors('cancellation_reason_other');
+
+        $this->assertNull($booking->fresh()->cancelled_at);
+    }
 }

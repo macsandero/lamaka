@@ -37,6 +37,7 @@ class BookingCalendarController extends Controller
             'dayBookings' => $monthBookings->get($selectedDate, collect()),
             'editBooking' => $editBooking,
             'sources' => BookingSubmission::SOURCES,
+            'cancellationReasons' => BookingSubmission::CANCELLATION_REASONS,
         ]);
     }
 
@@ -71,9 +72,35 @@ class BookingCalendarController extends Controller
         $bookingSubmission->fill($values);
         $bookingSubmission->status = 'confirmed';
         $bookingSubmission->confirmed_at = now();
+        $bookingSubmission->cancelled_at = null;
+        $bookingSubmission->cancellation_reason = null;
+        $bookingSubmission->cancellation_reason_other = null;
         $this->saveWithinCapacity($bookingSubmission);
 
-        return $this->successRedirect($bookingSubmission, 'Prenotazione completata e confermata.');
+        return $this->successRedirect($bookingSubmission, 'Prenotazione modificata e confermata. La disponibilità è stata ricalcolata.');
+    }
+
+    public function cancel(Request $request, BookingSubmission $bookingSubmission): RedirectResponse
+    {
+        $this->ensureAdmin($request);
+        $values = $request->validate([
+            'cancellation_reason' => ['required', Rule::in(BookingSubmission::CANCELLATION_REASONS)],
+            'cancellation_reason_other' => ['nullable', 'required_if:cancellation_reason,Altro', 'string', 'max:500'],
+        ]);
+
+        DB::transaction(function () use ($bookingSubmission, $values): void {
+            $bookingSubmission->forceFill([
+                'status' => 'cancelled',
+                'confirmed_at' => null,
+                'cancelled_at' => now(),
+                'cancellation_reason' => $values['cancellation_reason'],
+                'cancellation_reason_other' => $values['cancellation_reason'] === 'Altro'
+                    ? ($values['cancellation_reason_other'] ?? null)
+                    : null,
+            ])->save();
+        });
+
+        return $this->successRedirect($bookingSubmission, 'Prenotazione annullata. La disponibilità del giorno è stata aggiornata.');
     }
 
     private function validated(Request $request): array

@@ -77,6 +77,7 @@ Route::middleware('auth')->prefix('agenda')->name('agenda.')->group(function () 
     Route::get('/', [BookingCalendarController::class, 'index'])->name('index');
     Route::post('/prenotazioni', [BookingCalendarController::class, 'store'])->name('store');
     Route::put('/prenotazioni/{bookingSubmission}', [BookingCalendarController::class, 'update'])->name('update');
+    Route::post('/prenotazioni/{bookingSubmission}/annulla', [BookingCalendarController::class, 'cancel'])->name('cancel');
 });
 
 Route::get('/agenda.webmanifest', fn () => response(json_encode([

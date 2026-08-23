@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" href="/logo.png">
     <title>Agenda prenotazioni · LAMAKA</title>
     <style>
-        :root{--ink:#2f2a24;--olive:#6f6a45;--paper:#f4efe7;--line:#d8cdbd;--red:#a8392e;--green:#45614d}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.45 Inter,system-ui,sans-serif}.shell{max-width:1180px;margin:auto;padding:20px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}.top img{width:118px}.top a{color:var(--olive)}h1,h2,h3{font-family:Georgia,serif;font-weight:500}.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.85fr);gap:24px}.card{background:#fff9;border:1px solid var(--line);padding:20px;border-radius:16px;box-shadow:0 8px 28px #2f2a2410}.monthbar{display:flex;align-items:center;justify-content:space-between}.monthbar a{font-size:25px;color:var(--olive);text-decoration:none;padding:8px}.week,.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.week div{text-align:center;font-size:11px;text-transform:uppercase;letter-spacing:.08em;padding:10px 0}.day{min-height:92px;border:1px solid var(--line);border-radius:10px;padding:8px;text-decoration:none;color:inherit;background:#fff;overflow:hidden}.day.muted{opacity:.38}.day.selected{outline:3px solid #6f6a4566}.day.full{background:#eee5dc}.num{font-weight:700}.dot{display:block;margin-top:5px;padding:3px 5px;border-radius:5px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:#dfe9e1;color:var(--green)}.dot.pending{background:#f5d9d5;color:var(--red)}.booking{border-left:4px solid var(--green);padding:11px 12px;margin:10px 0;background:#f8faf8}.booking.pending{border-color:var(--red);background:#fff1ef}.booking a{color:var(--olive);font-weight:700}.badge{font-size:11px;text-transform:uppercase;font-weight:800;color:var(--red)}label{display:block;margin:13px 0 5px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#655f57}input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font:inherit}textarea{min-height:95px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.button{width:100%;border:0;border-radius:9px;background:var(--olive);color:white;padding:14px;margin-top:18px;font-weight:800;cursor:pointer}.flash,.errors{padding:12px;border-radius:9px;margin-bottom:14px}.flash{background:#dfe9e1}.errors{background:#f5d9d5;color:#7f2921}.empty{color:#766f65}.capacity{font-weight:700;color:var(--olive)}@media(max-width:800px){.shell{padding:14px}.layout{grid-template-columns:1fr}.day{min-height:66px;padding:5px}.week,.calendar{gap:3px}.dot{font-size:0;height:8px;width:8px;padding:0;border-radius:50%}.card{padding:14px}.two{grid-template-columns:1fr}}
+        :root{--ink:#2f2a24;--olive:#6f6a45;--paper:#f4efe7;--line:#d8cdbd;--red:#a8392e;--green:#45614d}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.45 Inter,system-ui,sans-serif}.shell{max-width:1180px;margin:auto;padding:20px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}.top img{width:118px}.top a{color:var(--olive)}h1,h2,h3{font-family:Georgia,serif;font-weight:500}.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.85fr);gap:24px}.card{background:#fff9;border:1px solid var(--line);padding:20px;border-radius:16px;box-shadow:0 8px 28px #2f2a2410}.monthbar{display:flex;align-items:center;justify-content:space-between}.monthbar a{font-size:25px;color:var(--olive);text-decoration:none;padding:8px}.week,.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.week div{text-align:center;font-size:11px;text-transform:uppercase;letter-spacing:.08em;padding:10px 0}.day{min-height:92px;border:1px solid var(--line);border-radius:10px;padding:8px;text-decoration:none;color:inherit;background:#fff;overflow:hidden}.day.muted{opacity:.38}.day.selected{outline:3px solid #6f6a4566}.day.full{background:#eee5dc}.num{font-weight:700}.dot{display:block;margin-top:5px;padding:3px 5px;border-radius:5px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:#dfe9e1;color:var(--green)}.dot.pending{background:#f5d9d5;color:var(--red)}.dot.cancelled{background:#e3e0dc;color:#6f6962;text-decoration:line-through}.booking{border-left:4px solid var(--green);padding:11px 12px;margin:10px 0;background:#f8faf8}.booking.pending{border-color:var(--red);background:#fff1ef}.booking.cancelled{border-color:#777;background:#eeeae5;color:#625d57}.booking a{color:var(--olive);font-weight:700}.badge{font-size:11px;text-transform:uppercase;font-weight:800;color:var(--red)}.badge.cancelled{color:#625d57}.booking-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:10px}.booking-actions a,.cancel-summary{font-weight:800}.cancel-summary{color:var(--red);cursor:pointer}.cancel-box{margin-top:10px;padding:12px;background:#fff;border:1px solid var(--line);border-radius:8px}.cancel-button{border:0;border-radius:8px;background:var(--red);color:#fff;padding:11px 14px;margin-top:12px;font-weight:800;cursor:pointer}label{display:block;margin:13px 0 5px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#655f57}input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font:inherit}textarea{min-height:95px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.button{width:100%;border:0;border-radius:9px;background:var(--olive);color:white;padding:14px;margin-top:18px;font-weight:800;cursor:pointer}.flash,.errors{padding:12px;border-radius:9px;margin-bottom:14px}.flash{background:#dfe9e1}.errors{background:#f5d9d5;color:#7f2921}.empty{color:#766f65}.capacity{font-weight:700;color:var(--olive)}@media(max-width:800px){.shell{padding:14px}.layout{grid-template-columns:1fr}.day{min-height:66px;padding:5px}.week,.calendar{gap:3px}.dot{font-size:0;height:8px;width:8px;padding:0;border-radius:50%}.card{padding:14px}.two{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
@@ -40,7 +40,7 @@
                         @endphp
                         <a class="day {{ !$day->isSameMonth($month)?'muted':'' }} {{ $date===$selectedDate?'selected':'' }} {{ $total>=5?'full':'' }}" href="{{ route('agenda.index',['date'=>$date,'month'=>$day->format('Y-m')]) }}#day-details">
                             <span class="num">{{ $day->day }}</span>
-                            @foreach($items->take(3) as $item)<span class="dot {{ $item->confirmed_at?'':'pending' }}">{{ $item->customer_name ?: 'Senza nome' }}</span>@endforeach
+                            @foreach($items->take(3) as $item)<span class="dot {{ $item->cancelled_at?'cancelled':($item->confirmed_at?'':'pending') }}">{{ $item->customer_name ?: 'Senza nome' }}</span>@endforeach
                         </a>
                     @endfor
                 </div>
@@ -49,13 +49,32 @@
                 <h2>{{ \Carbon\Carbon::parse($selectedDate)->locale('it')->translatedFormat('l d F Y') }}</h2>
                 <p class="capacity">Animali confermati: {{ $usedAnimals }}/5</p>
                 @forelse($dayBookings as $booking)
-                    <article class="booking {{ $booking->confirmed_at?'':'pending' }}">
-                        @if(!$booking->confirmed_at)<div class="badge">Da completare · richiesta dal sito</div>@endif
+                    <article class="booking {{ $booking->cancelled_at?'cancelled':($booking->confirmed_at?'':'pending') }}">
+                        @if($booking->cancelled_at)
+                            <div class="badge cancelled">Annullata</div>
+                        @elseif(!$booking->confirmed_at)
+                            <div class="badge">Da completare · richiesta dal sito</div>
+                        @endif
                         <strong>{{ $booking->customer_name ?: 'Cliente senza nome' }}</strong><br>
                         {{ $booking->participants ?? '–' }} partecipanti · {{ $booking->animals ?? '–' }} animali
                         @if($booking->start_time || $booking->end_time)<br>Orario: {{ $booking->start_time ? substr($booking->start_time, 0, 5) : '–' }}–{{ $booking->end_time ? substr($booking->end_time, 0, 5) : '–' }}@endif
                         @if($booking->phone)<br>{{ $booking->phone }}@endif @if($booking->email) · {{ $booking->email }}@endif
-                        <br><a href="{{ route('agenda.index',['date'=>$selectedDate,'month'=>$month->format('Y-m'),'edit'=>$booking->id]) }}">{{ $booking->confirmed_at?'Modifica':'Completa e conferma' }}</a>
+                        @if($booking->cancelled_at)<br><strong>Motivo:</strong> {{ $booking->cancellation_reason }}@if($booking->cancellation_reason_other) — {{ $booking->cancellation_reason_other }}@endif @endif
+                        <div class="booking-actions">
+                            <a href="{{ route('agenda.index',['date'=>$selectedDate,'month'=>$month->format('Y-m'),'edit'=>$booking->id]) }}">Modifica prenotazione</a>
+                            @if(!$booking->cancelled_at)
+                                <details>
+                                    <summary class="cancel-summary">Annulla prenotazione</summary>
+                                    <form class="cancel-box cancellation-form" method="post" action="{{ route('agenda.cancel',$booking) }}">
+                                        @csrf
+                                        <label>Motivo annullamento</label>
+                                        <select name="cancellation_reason" class="cancellation-reason" required><option value="">Seleziona</option>@foreach($cancellationReasons as $reason)<option>{{ $reason }}</option>@endforeach</select>
+                                        <div class="cancellation-other" hidden><label>Specifica il motivo</label><input name="cancellation_reason_other"></div>
+                                        <button class="cancel-button" type="submit">Conferma annullamento</button>
+                                    </form>
+                                </details>
+                            @endif
+                        </div>
                     </article>
                 @empty<p class="empty">Nessuna prenotazione per questo giorno.</p>@endforelse
             </div>
@@ -75,11 +94,11 @@
                 <label for="source">Fonte</label><select id="source" name="source"><option value="">Seleziona</option>@foreach($sources as $source)<option @selected($selectedSource===$source)>{{ $source }}</option>@endforeach</select>
                 <div id="source-other"><label for="source_other">Specifica altra fonte</label><input id="source_other" name="source_other" value="{{ old('source_other',$formBooking?->source_other) }}"></div>
                 <label for="notes">Note</label><textarea id="notes" name="notes">{{ old('notes',$formBooking?->notes) }}</textarea>
-                <button class="button" type="submit">Conferma prenotazione</button>
+                <button class="button" type="submit">{{ $formBooking && ($formBooking->confirmed_at || $formBooking->cancelled_at) ? 'Modifica prenotazione' : 'Conferma prenotazione' }}</button>
                 @if($formBooking)<p><a href="{{ route('agenda.index',['date'=>$selectedDate,'month'=>$month->format('Y-m')]) }}">Annulla modifica</a></p>@endif
             </form>
         </aside>
     </div>
 </main>
-<script>const source=document.getElementById('source'),other=document.getElementById('source-other');function toggleOther(){other.hidden=source.value!=='Altro'}source.addEventListener('change',toggleOther);toggleOther();</script>
+<script>const source=document.getElementById('source'),other=document.getElementById('source-other');function toggleOther(){other.hidden=source.value!=='Altro'}source.addEventListener('change',toggleOther);toggleOther();document.querySelectorAll('.cancellation-form').forEach(form=>{const reason=form.querySelector('.cancellation-reason'),otherReason=form.querySelector('.cancellation-other');reason.addEventListener('change',()=>otherReason.hidden=reason.value!=='Altro')});</script>
 </body></html>

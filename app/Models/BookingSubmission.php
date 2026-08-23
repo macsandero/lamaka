@@ -12,11 +12,16 @@ class BookingSubmission extends Model
         'Sito web', 'Instagram', 'Facebook', 'Google', 'Passaparola', 'Volantino', 'Altro',
     ];
 
+    public const CANCELLATION_REASONS = [
+        'Ripensamento cliente', 'Condizioni meteo', 'Altro',
+    ];
+
     public const STATUSES = [
         'new' => 'Nuova',
         'contacted' => 'Contattata',
         'confirmed' => 'Confermata',
         'closed' => 'Chiusa',
+        'cancelled' => 'Annullata',
     ];
 
     protected $fillable = [
@@ -38,6 +43,9 @@ class BookingSubmission extends Model
         'source_other',
         'origin',
         'confirmed_at',
+        'cancellation_reason',
+        'cancellation_reason_other',
+        'cancelled_at',
     ];
 
     protected function casts(): array
@@ -48,6 +56,7 @@ class BookingSubmission extends Model
             'participants' => 'integer',
             'animals' => 'integer',
             'confirmed_at' => 'datetime',
+            'cancelled_at' => 'datetime',
         ];
     }
 

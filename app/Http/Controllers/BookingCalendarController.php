@@ -163,10 +163,12 @@ class BookingCalendarController extends Controller
 
     private function successRedirect(BookingSubmission $booking, string $message): RedirectResponse
     {
-        return redirect()->route('agenda.index', [
+        $url = route('agenda.index', [
             'date' => $booking->booking_date?->toDateString(),
             'month' => $booking->booking_date?->format('Y-m'),
-        ])->with('success', $message);
+        ]).'#day-details';
+
+        return redirect()->to($url)->with('success', $message);
     }
 
     private function ensureAdmin(Request $request): void

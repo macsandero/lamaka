@@ -184,7 +184,7 @@ class BookingCalendarTest extends TestCase
 
         $this->actingAs($admin)->get(route('agenda.index', ['date' => $date]))
             ->assertOk()->assertSee('Conferma prenotazione')->assertSee('Modifica prenotazione')->assertSee('Annulla prenotazione')
-            ->assertSee('showModal()', false)->assertSee('booking-dialog');
+            ->assertSee('showModal()', false)->assertSee('booking-dialog')->assertSee('edit-'.$booking->id);
 
         $this->actingAs($admin)->post(route('agenda.confirm', $booking))
             ->assertRedirect(route('agenda.index', ['date' => $date, 'month' => substr($date, 0, 7)]).'#day-details');

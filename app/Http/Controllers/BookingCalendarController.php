@@ -103,6 +103,19 @@ class BookingCalendarController extends Controller
         return $this->successRedirect($bookingSubmission, 'Prenotazione annullata. La disponibilità del giorno è stata aggiornata.');
     }
 
+    public function confirm(Request $request, BookingSubmission $bookingSubmission): RedirectResponse
+    {
+        $this->ensureAdmin($request);
+
+        abort_if($bookingSubmission->cancelled_at, 422, 'Una prenotazione annullata deve essere modificata prima di poter essere confermata.');
+
+        $bookingSubmission->status = 'confirmed';
+        $bookingSubmission->confirmed_at = now();
+        $this->saveWithinCapacity($bookingSubmission);
+
+        return $this->successRedirect($bookingSubmission, 'Prenotazione confermata. La disponibilità è stata ricalcolata.');
+    }
+
     private function validated(Request $request): array
     {
         $values = $request->validate([

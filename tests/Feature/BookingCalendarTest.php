@@ -172,4 +172,34 @@ class BookingCalendarTest extends TestCase
 
         $this->assertNull($booking->fresh()->cancelled_at);
     }
+
+    public function test_pending_booking_can_be_confirmed_directly_from_summary_with_capacity_check(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $date = now()->addDays(4)->toDateString();
+        $booking = BookingSubmission::create([
+            'reference' => 'PENDING', 'data' => [], 'booking_date' => $date,
+            'animals' => 3, 'origin' => 'website', 'status' => 'new',
+        ]);
+
+        $this->actingAs($admin)->get(route('agenda.index', ['date' => $date]))
+            ->assertOk()->assertSee('Conferma prenotazione')->assertSee('Modifica prenotazione')->assertSee('Annulla prenotazione');
+
+        $this->actingAs($admin)->post(route('agenda.confirm', $booking))->assertRedirect();
+        $this->assertNotNull($booking->fresh()->confirmed_at);
+        $this->assertSame(3, BookingSubmission::confirmedAnimalsForDate($date));
+
+        $fullDate = now()->addDays(8)->toDateString();
+        BookingSubmission::create([
+            'reference' => 'ALMOST-FULL', 'data' => [], 'booking_date' => $fullDate,
+            'animals' => 4, 'origin' => 'admin', 'status' => 'confirmed', 'confirmed_at' => now(),
+        ]);
+        $blocked = BookingSubmission::create([
+            'reference' => 'BLOCKED-PENDING', 'data' => [], 'booking_date' => $fullDate,
+            'animals' => 2, 'origin' => 'website', 'status' => 'new',
+        ]);
+
+        $this->actingAs($admin)->post(route('agenda.confirm', $blocked))->assertSessionHasErrors('animals');
+        $this->assertNull($blocked->fresh()->confirmed_at);
+    }
 }

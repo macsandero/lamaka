@@ -109,4 +109,39 @@ class EggSalesTest extends TestCase
             ->assertSee('Uova mancanti')
             ->assertSee('>-3<', false);
     }
+
+    public function test_cancelled_order_remains_visible_but_is_removed_from_totals(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $contact = EggContact::create(['first_name' => 'Elena', 'last_name' => 'Neri', 'phone' => '789']);
+        EggDailyProduction::create(['production_date' => '2026-08-27', 'quantity' => 10]);
+        $order = EggOrder::create([
+            'egg_contact_id' => $contact->id, 'order_date' => '2026-08-27',
+            'quantity' => 4, 'unit_price' => .40, 'total_price' => 1.60,
+        ]);
+
+        $this->actingAs($admin)->patch(route('uova.orders.toggle-cancelled', $order))->assertRedirect();
+        $this->assertNotNull($order->fresh()->cancelled_at);
+
+        $this->actingAs($admin)->get(route('uova.index', ['date' => '2026-08-27', 'month' => '2026-08']))
+            ->assertOk()
+            ->assertSee('Elena Neri')
+            ->assertSee('Ripristina ordine')
+            ->assertSee('>10<', false);
+    }
+
+    public function test_pending_reservations_are_shown_below_final_balance(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $contact = EggContact::create(['first_name' => 'Paolo', 'last_name' => 'Blu', 'phone' => '321']);
+        EggDailyProduction::create(['production_date' => '2026-08-27', 'quantity' => 12]);
+        EggOrder::create([
+            'egg_contact_id' => $contact->id, 'order_date' => '2026-08-27',
+            'quantity' => 5, 'unit_price' => .40, 'total_price' => 2.00,
+        ]);
+
+        $this->actingAs($admin)->get(route('uova.index', ['date' => '2026-08-27', 'month' => '2026-08']))
+            ->assertOk()
+            ->assertSee('(di cui 5 già prenotate)');
+    }
 }

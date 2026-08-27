@@ -36,15 +36,16 @@ class EggSalesController extends Controller
 
         $openingBalance = (int) EggDailyProduction::query()
             ->whereDate('production_date', '<', $rangeStart)->sum('quantity')
-            - (int) EggOrder::query()->whereDate('order_date', '<', $rangeStart)->sum('quantity');
+            - (int) EggOrder::query()->whereNull('cancelled_at')->whereDate('order_date', '<', $rangeStart)->sum('quantity');
         $dailyStats = [];
         $runningBalance = $openingBalance;
         for ($day = $rangeStart; $day->lte($rangeEnd); $day = $day->addDay()) {
             $date = $day->toDateString();
             $dayOrders = $orders->get($date, collect());
             $produced = (int) ($productions->get($date)?->quantity ?? 0);
-            $ordered = (int) $dayOrders->sum('quantity');
-            $collected = (int) $dayOrders->where('is_collected', true)->sum('quantity');
+            $activeOrders = $dayOrders->whereNull('cancelled_at');
+            $ordered = (int) $activeOrders->sum('quantity');
+            $collected = (int) $activeOrders->where('is_collected', true)->sum('quantity');
             $dailyStats[$date] = [
                 'opening' => $runningBalance,
                 'produced' => $produced,
@@ -115,12 +116,29 @@ class EggSalesController extends Controller
     public function toggleCollected(Request $request, EggOrder $eggOrder): RedirectResponse
     {
         $this->ensureAdmin($request);
+        abort_if($eggOrder->cancelled_at, 422, 'Un ordine annullato non può essere segnato come ritirato.');
         $eggOrder->forceFill([
             'is_collected' => ! $eggOrder->is_collected,
             'collected_at' => $eggOrder->is_collected ? null : now(),
         ])->save();
 
         return $this->dayRedirect($eggOrder->order_date->toDateString(), $eggOrder->is_collected ? 'Ordine segnato come ritirato.' : 'Ordine riaperto.');
+    }
+
+    public function toggleCancelled(Request $request, EggOrder $eggOrder): RedirectResponse
+    {
+        $this->ensureAdmin($request);
+        $isReopening = $eggOrder->cancelled_at !== null;
+        $eggOrder->forceFill([
+            'cancelled_at' => $isReopening ? null : now(),
+            'is_collected' => $isReopening ? $eggOrder->is_collected : false,
+            'collected_at' => $isReopening ? $eggOrder->collected_at : null,
+        ])->save();
+
+        return $this->dayRedirect(
+            $eggOrder->order_date->toDateString(),
+            $isReopening ? 'Ordine ripristinato e disponibilità ricalcolata.' : 'Ordine annullato e disponibilità ricalcolata.',
+        );
     }
 
     public function destroyOrder(Request $request, EggOrder $eggOrder): RedirectResponse
@@ -159,9 +177,9 @@ class EggSalesController extends Controller
     private function statsForDate(string $date): array
     {
         $opening = (int) EggDailyProduction::query()->whereDate('production_date', '<', $date)->sum('quantity')
-            - (int) EggOrder::query()->whereDate('order_date', '<', $date)->sum('quantity');
+            - (int) EggOrder::query()->whereNull('cancelled_at')->whereDate('order_date', '<', $date)->sum('quantity');
         $produced = (int) EggDailyProduction::query()->whereDate('production_date', $date)->value('quantity');
-        $orders = EggOrder::query()->whereDate('order_date', $date);
+        $orders = EggOrder::query()->whereNull('cancelled_at')->whereDate('order_date', $date);
         $ordered = (int) (clone $orders)->sum('quantity');
         $collected = (int) (clone $orders)->where('is_collected', true)->sum('quantity');
 

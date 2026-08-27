@@ -12,7 +12,7 @@ class EggOrder extends Model
 
     protected $fillable = [
         'egg_contact_id', 'created_by_user_id', 'order_date', 'quantity', 'unit_price', 'total_price',
-        'is_collected', 'collected_at', 'notes',
+        'is_collected', 'collected_at', 'cancelled_at', 'notes',
     ];
 
     protected function casts(): array
@@ -23,6 +23,7 @@ class EggOrder extends Model
             'total_price' => 'decimal:2',
             'is_collected' => 'boolean',
             'collected_at' => 'datetime',
+            'cancelled_at' => 'datetime',
         ];
     }
 

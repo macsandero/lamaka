@@ -88,6 +88,7 @@ Route::middleware('auth')->prefix('uova')->name('uova.')->group(function () {
     Route::delete('/rubrica/{eggContact}', [EggSalesController::class, 'destroyContact'])->name('contacts.destroy');
     Route::post('/ordini', [EggSalesController::class, 'storeOrder'])->name('orders.store');
     Route::patch('/ordini/{eggOrder}/ritiro', [EggSalesController::class, 'toggleCollected'])->name('orders.toggle-collected');
+    Route::patch('/ordini/{eggOrder}/annulla', [EggSalesController::class, 'toggleCancelled'])->name('orders.toggle-cancelled');
     Route::delete('/ordini/{eggOrder}', [EggSalesController::class, 'destroyOrder'])->name('orders.destroy');
     Route::put('/produzione', [EggSalesController::class, 'saveProduction'])->name('production.save');
     Route::put('/impostazioni', [EggSalesController::class, 'saveSettings'])->name('settings.save');

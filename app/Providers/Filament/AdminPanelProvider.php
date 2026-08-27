@@ -48,6 +48,11 @@ class AdminPanelProvider extends PanelProvider
                     ->icon(Heroicon::OutlinedCalendarDays)
                     ->group('Prenotazioni')
                     ->sort(-10),
+                NavigationItem::make('Vendita uova')
+                    ->url('/uova')
+                    ->icon(Heroicon::OutlinedShoppingCart)
+                    ->group('Vendita uova')
+                    ->sort(-9),
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([

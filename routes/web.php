@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdminPasswordSetupController;
 use App\Http\Controllers\BookingCalendarController;
 use App\Http\Controllers\BookingSubmissionController;
+use App\Http\Controllers\EggSalesController;
 use App\Models\Animal;
 use App\Models\BookingFormField;
 use App\Models\BookingFormSetting;
@@ -79,6 +80,17 @@ Route::middleware('auth')->prefix('agenda')->name('agenda.')->group(function () 
     Route::put('/prenotazioni/{bookingSubmission}', [BookingCalendarController::class, 'update'])->name('update');
     Route::post('/prenotazioni/{bookingSubmission}/conferma', [BookingCalendarController::class, 'confirm'])->name('confirm');
     Route::post('/prenotazioni/{bookingSubmission}/annulla', [BookingCalendarController::class, 'cancel'])->name('cancel');
+});
+
+Route::middleware('auth')->prefix('uova')->name('uova.')->group(function () {
+    Route::get('/', [EggSalesController::class, 'index'])->name('index');
+    Route::post('/rubrica', [EggSalesController::class, 'storeContact'])->name('contacts.store');
+    Route::delete('/rubrica/{eggContact}', [EggSalesController::class, 'destroyContact'])->name('contacts.destroy');
+    Route::post('/ordini', [EggSalesController::class, 'storeOrder'])->name('orders.store');
+    Route::patch('/ordini/{eggOrder}/ritiro', [EggSalesController::class, 'toggleCollected'])->name('orders.toggle-collected');
+    Route::delete('/ordini/{eggOrder}', [EggSalesController::class, 'destroyOrder'])->name('orders.destroy');
+    Route::put('/produzione', [EggSalesController::class, 'saveProduction'])->name('production.save');
+    Route::put('/impostazioni', [EggSalesController::class, 'saveSettings'])->name('settings.save');
 });
 
 Route::get('/agenda.webmanifest', fn () => response(json_encode([

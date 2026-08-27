@@ -144,4 +144,30 @@ class EggSalesTest extends TestCase
             ->assertOk()
             ->assertSee('(di cui 5 già prenotate)');
     }
+
+    public function test_statistics_filter_sums_production_collected_sales_and_revenue(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $contact = EggContact::create(['first_name' => 'Sara', 'last_name' => 'Gialli', 'phone' => '555']);
+        EggDailyProduction::create(['production_date' => '2026-08-10', 'quantity' => 9]);
+        EggDailyProduction::create(['production_date' => '2026-08-11', 'quantity' => 11]);
+        EggOrder::create([
+            'egg_contact_id' => $contact->id, 'order_date' => '2026-08-10',
+            'quantity' => 6, 'unit_price' => .50, 'total_price' => 3.00,
+            'is_collected' => true, 'collected_at' => now(),
+        ]);
+        EggOrder::create([
+            'egg_contact_id' => $contact->id, 'order_date' => '2026-08-11',
+            'quantity' => 4, 'unit_price' => .50, 'total_price' => 2.00,
+        ]);
+
+        $this->actingAs($admin)->get(route('uova.index', [
+            'stats_from' => '2026-08-10', 'stats_to' => '2026-08-11',
+        ]))->assertOk()
+            ->assertSee('Statistiche')
+            ->assertSee('>20<', false)
+            ->assertSee('>6<', false)
+            ->assertSee('€ 3,00')
+            ->assertSee('egg-stats-chart');
+    }
 }

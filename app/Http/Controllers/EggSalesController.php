@@ -57,6 +57,34 @@ class EggSalesController extends Controller
             $runningBalance = $dailyStats[$date]['closing'];
         }
 
+        $statsValues = $request->validate([
+            'stats_from' => ['nullable', 'date'],
+            'stats_to' => ['nullable', 'date', 'after_or_equal:stats_from'],
+        ]);
+        $statsFrom = CarbonImmutable::parse($statsValues['stats_from'] ?? $month->startOfMonth())->startOfDay();
+        $statsTo = CarbonImmutable::parse($statsValues['stats_to'] ?? ($statsValues['stats_from'] ?? $month->endOfMonth()))->startOfDay();
+        $statsProductions = EggDailyProduction::query()
+            ->whereBetween('production_date', [$statsFrom, $statsTo])
+            ->pluck('quantity', 'production_date');
+        $statsSales = EggOrder::query()
+            ->whereNull('cancelled_at')
+            ->where('is_collected', true)
+            ->whereBetween('order_date', [$statsFrom, $statsTo])
+            ->selectRaw('order_date, SUM(quantity) as quantity, SUM(total_price) as revenue')
+            ->groupBy('order_date')
+            ->get()
+            ->keyBy(fn (EggOrder $order) => $order->order_date->toDateString());
+        $statsChart = [];
+        for ($day = $statsFrom; $day->lte($statsTo); $day = $day->addDay()) {
+            $date = $day->toDateString();
+            $statsChart[] = [
+                'date' => $date,
+                'label' => $day->format('d/m'),
+                'produced' => (int) ($statsProductions[$date] ?? 0),
+                'sold' => (int) ($statsSales->get($date)?->quantity ?? 0),
+            ];
+        }
+
         return view('admin.egg-sales', [
             'month' => $month,
             'selectedDate' => $selectedDate,
@@ -67,6 +95,12 @@ class EggSalesController extends Controller
             'contacts' => EggContact::query()->orderBy('last_name')->orderBy('first_name')->get(),
             'settings' => EggSaleSetting::current(),
             'production' => $productions->get($selectedDate),
+            'statsFrom' => $statsFrom,
+            'statsTo' => $statsTo,
+            'statsProduced' => array_sum(array_column($statsChart, 'produced')),
+            'statsSold' => array_sum(array_column($statsChart, 'sold')),
+            'statsRevenue' => (float) $statsSales->sum('revenue'),
+            'statsChart' => $statsChart,
         ]);
     }
 

@@ -40,7 +40,7 @@ class AdminLoginController extends Controller
                 ->withErrors(['email' => 'Questo utente deve prima impostare la password dal link di primo accesso.']);
         }
 
-        Filament::auth()->login($user);
+        Filament::auth()->login($user, remember: true);
         $request->session()->regenerate();
 
         return redirect()->intended(Filament::getPanel('admin')->getUrl());

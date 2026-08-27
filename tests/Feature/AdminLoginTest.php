@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -27,6 +28,7 @@ class AdminLoginTest extends TestCase
         ]);
 
         $response->assertRedirect();
+        $response->assertCookie(Filament::auth()->getRecallerName());
         $this->assertAuthenticatedAs($user);
     }
 

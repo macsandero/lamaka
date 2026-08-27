@@ -147,6 +147,13 @@
     .lamaka-login-button:hover {
         background: #4f4a35;
     }
+
+    .lamaka-login-remember {
+        color: #5f574d;
+        font-size: .78rem;
+        line-height: 1.35;
+        margin: .15rem 0 0;
+    }
 </style>
 
 <div class="lamaka-auth-card">
@@ -205,6 +212,8 @@
                 class="lamaka-login-input"
             >
         </div>
+
+        <p class="lamaka-login-remember">L’accesso resterà memorizzato su questo dispositivo. Usa “Esci” se il telefono o computer è condiviso.</p>
 
         <button type="submit" class="lamaka-login-button">
             Accedi

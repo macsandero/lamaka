@@ -26,7 +26,9 @@ class EggSalesTest extends TestCase
             ->assertOk()
             ->assertSee('Vendita uova')
             ->assertSee('Rubrica')
-            ->assertSee('Impostazioni vendita uova');
+            ->assertSee('Impostazioni vendita uova')
+            ->assertSee('contact-dialog')
+            ->assertSee('showModal()', false);
     }
 
     public function test_admin_can_create_contact_and_order_with_current_price(): void

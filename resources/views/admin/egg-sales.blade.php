@@ -72,7 +72,7 @@
         <aside class="stack">
             <div class="card">
                 <h2>Produzione del giorno</h2>
-                <form method="post" action="{{ route('uova.production.save') }}">@csrf @method('PUT')
+                <form method="post" action="{{ route('uova.production.save') }}">@csrf
                     <input type="hidden" name="production_date" value="{{ $selectedDate }}">
                     <label for="production_quantity">Uova prodotte</label><input id="production_quantity" type="number" name="quantity" min="0" required value="{{ old('quantity',$production?->quantity ?? 0) }}">
                     <button class="button" type="submit">Aggiorna produzione</button>

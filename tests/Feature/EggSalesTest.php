@@ -57,6 +57,27 @@ class EggSalesTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_update_daily_production_and_return_to_calendar(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        $response = $this->actingAs($admin)->post(route('uova.production.save'), [
+            'production_date' => '2026-08-27',
+            'quantity' => 18,
+        ]);
+
+        $response->assertRedirect(route('uova.index', [
+            'date' => '2026-08-27', 'month' => '2026-08',
+        ]).'#giorno');
+        $this->assertDatabaseHas('egg_daily_productions', [
+            'production_date' => '2026-08-27 00:00:00',
+            'quantity' => 18,
+        ]);
+        $this->followRedirects($response)
+            ->assertOk()
+            ->assertSee('Produzione giornaliera aggiornata.');
+    }
+
     public function test_order_shows_the_initial_for_the_account_that_created_it(): void
     {
         $admin = User::factory()->create(['email' => 'vera.munzi@gmail.com', 'is_admin' => true]);

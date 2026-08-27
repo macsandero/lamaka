@@ -76,6 +76,14 @@ class EggSalesTest extends TestCase
         $this->followRedirects($response)
             ->assertOk()
             ->assertSee('Produzione giornaliera aggiornata.');
+
+        $this->actingAs($admin)->post(route('uova.production.save'), [
+            'production_date' => '2026-08-27',
+            'quantity' => 23,
+        ])->assertRedirect();
+
+        $this->assertDatabaseCount('egg_daily_productions', 1);
+        $this->assertSame(23, EggDailyProduction::firstOrFail()->quantity);
     }
 
     public function test_order_shows_the_initial_for_the_account_that_created_it(): void

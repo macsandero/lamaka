@@ -191,10 +191,18 @@ class EggSalesController extends Controller
             'production_date' => ['required', 'date'],
             'quantity' => ['required', 'integer', 'min:0', 'max:10000'],
         ]);
-        EggDailyProduction::updateOrCreate(
-            ['production_date' => $values['production_date']],
-            ['quantity' => $values['quantity']],
-        );
+        $production = EggDailyProduction::query()
+            ->whereDate('production_date', $values['production_date'])
+            ->first();
+
+        if ($production) {
+            $production->update(['quantity' => $values['quantity']]);
+        } else {
+            EggDailyProduction::create([
+                'production_date' => $values['production_date'],
+                'quantity' => $values['quantity'],
+            ]);
+        }
 
         return $this->dayRedirect($values['production_date'], 'Produzione giornaliera aggiornata.');
     }

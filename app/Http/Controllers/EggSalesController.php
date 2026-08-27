@@ -24,7 +24,7 @@ class EggSalesController extends Controller
         $rangeEnd = $month->endOfMonth()->endOfWeek();
 
         $orders = EggOrder::query()
-            ->with('contact')
+            ->with(['contact', 'creator'])
             ->whereBetween('order_date', [$rangeStart, $rangeEnd])
             ->orderBy('created_at')
             ->get()
@@ -104,6 +104,7 @@ class EggSalesController extends Controller
         $unitPrice = (float) EggSaleSetting::current()->unit_price;
         EggOrder::create([
             ...$values,
+            'created_by_user_id' => $request->user()->getKey(),
             'unit_price' => $unitPrice,
             'total_price' => round($unitPrice * (int) $values['quantity'], 2),
         ]);

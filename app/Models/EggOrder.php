@@ -11,7 +11,7 @@ class EggOrder extends Model
     use HasFactory;
 
     protected $fillable = [
-        'egg_contact_id', 'order_date', 'quantity', 'unit_price', 'total_price',
+        'egg_contact_id', 'created_by_user_id', 'order_date', 'quantity', 'unit_price', 'total_price',
         'is_collected', 'collected_at', 'notes',
     ];
 
@@ -29,5 +29,20 @@ class EggOrder extends Model
     public function contact(): BelongsTo
     {
         return $this->belongsTo(EggContact::class, 'egg_contact_id');
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by_user_id');
+    }
+
+    public function getCreatorInitialAttribute(): ?string
+    {
+        return match (strtolower((string) $this->creator?->email)) {
+            'macsandero@gmail.com' => 'S',
+            'vera.munzi@gmail.com' => 'V',
+            'federicotoson07@gmail.com' => 'F',
+            default => null,
+        };
     }
 }

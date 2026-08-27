@@ -47,11 +47,28 @@ class EggSalesTest extends TestCase
 
         $this->assertDatabaseHas('egg_orders', [
             'egg_contact_id' => $contact->id,
+            'created_by_user_id' => $admin->id,
             'quantity' => 12,
             'unit_price' => 0.55,
             'total_price' => 6.60,
             'is_collected' => false,
         ]);
+    }
+
+    public function test_order_shows_the_initial_for_the_account_that_created_it(): void
+    {
+        $admin = User::factory()->create(['email' => 'vera.munzi@gmail.com', 'is_admin' => true]);
+        $contact = EggContact::create(['first_name' => 'Mario', 'last_name' => 'Rossi', 'phone' => '123']);
+
+        $this->actingAs($admin)->post(route('uova.orders.store'), [
+            'egg_contact_id' => $contact->id,
+            'order_date' => '2026-08-27',
+            'quantity' => 6,
+        ]);
+
+        $this->actingAs($admin)->get(route('uova.index', ['date' => '2026-08-27', 'month' => '2026-08']))
+            ->assertOk()
+            ->assertSee('title="Inserito da vera.munzi@gmail.com">V</span>', false);
     }
 
     public function test_daily_balance_is_carried_forward_and_collection_changes_status(): void

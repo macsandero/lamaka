@@ -51,8 +51,10 @@ class BookingFormSetting extends Model
 
     public function suspensionMessage(): string
     {
-        return filled($this->booking_suspension_message)
+        $message = filled($this->booking_suspension_message)
             ? $this->booking_suspension_message
             : __('site.bookings_suspended');
+
+        return str_replace('{data_scadenza}', $this->booking_suspension_until?->format('d/m/Y') ?? '', $message);
     }
 }

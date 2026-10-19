@@ -140,6 +140,31 @@ class BookingSuspensionTest extends TestCase
             ->assertSessionHasErrors(['booking' => 'Bookings will resume soon.']);
     }
 
+    public function test_expiry_date_tag_is_expanded_in_notices_and_tracks_date_changes(): void
+    {
+        $this->travelTo(CarbonImmutable::parse('2026-10-19', 'Europe/Rome'));
+        $settings = $this->suspendBookings([
+            'booking_suspension_until' => '2026-10-31',
+            'booking_suspension_message' => 'Prenotazioni sospese fino al {data_scadenza} incluso.',
+            'translations' => ['en' => ['booking_suspension_message' => 'Bookings suspended until {data_scadenza} inclusive.']],
+        ]);
+
+        $this->get('/')
+            ->assertSee('Prenotazioni sospese fino al 31/10/2026 incluso.')
+            ->assertDontSee('{data_scadenza}');
+        $experience = Experience::query()->published()->firstOrFail();
+        $this->get(route('experiences.show', $experience))
+            ->assertSee(json_encode('Prenotazioni sospese fino al 31/10/2026 incluso.'), false);
+        $this->post(route('booking.store'), [])
+            ->assertSessionHasErrors(['booking' => 'Prenotazioni sospese fino al 31/10/2026 incluso.']);
+
+        $settings->update(['booking_suspension_until' => '2026-11-15']);
+        $this->withSession(['locale' => 'en'])->get('/')
+            ->assertSee('Bookings suspended until 15/11/2026 inclusive.')
+            ->assertDontSee('{data_scadenza}');
+        $this->assertSame('Prenotazioni sospese fino al {data_scadenza} incluso.', $settings->fresh()->getRawOriginal('booking_suspension_message'));
+    }
+
     public function test_admin_switch_shows_required_fields_and_persists_suspension(): void
     {
         $admin = User::factory()->create(['is_admin' => true]);

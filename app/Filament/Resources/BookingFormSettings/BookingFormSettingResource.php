@@ -57,7 +57,7 @@ class BookingFormSettingResource extends Resource
                             ->required(fn (Get $get): bool => (bool) $get('bookings_suspended')),
                         Textarea::make('booking_suspension_message')
                             ->label('Avviso per i clienti')
-                            ->helperText('Compare al clic su “Prenota questa esperienza”, per tutte le esperienze, e al posto del modulo di prenotazione.')
+                            ->helperText('Compare al clic su “Prenota questa esperienza” e al posto del modulo. Usa {data_scadenza} per mostrare la data impostata, ad esempio: Prenotazioni sospese fino al {data_scadenza} incluso.')
                             ->rows(4)
                             ->maxLength(2000)
                             ->visible(fn (Get $get): bool => (bool) $get('bookings_suspended'))
@@ -65,7 +65,7 @@ class BookingFormSettingResource extends Resource
                             ->columnSpanFull(),
                         Textarea::make('translations.en.booking_suspension_message')
                             ->label('Avviso per i clienti (EN)')
-                            ->helperText('Facoltativo. Se vuoto, viene mostrato il testo italiano.')
+                            ->helperText('Facoltativo. Se vuoto, viene mostrato il testo italiano. Anche qui puoi usare {data_scadenza}, nel formato giorno/mese/anno.')
                             ->rows(4)
                             ->maxLength(2000)
                             ->visible(fn (Get $get): bool => (bool) $get('bookings_suspended'))

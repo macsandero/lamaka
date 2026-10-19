@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\BookingSubmissions\Pages;
 
+use App\Filament\Actions\EditBookingSubmissionAction;
 use App\Filament\Resources\BookingSubmissions\BookingSubmissionResource;
-use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewBookingSubmission extends ViewRecord
@@ -13,7 +13,7 @@ class ViewBookingSubmission extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            EditAction::make(),
+            EditBookingSubmissionAction::make(),
         ];
     }
 }

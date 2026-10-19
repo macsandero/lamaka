@@ -22,6 +22,12 @@ class BookingSubmissionController extends Controller
 {
     public function store(Request $request): RedirectResponse
     {
+        if ($suspension = BookingFormSetting::currentSuspension()) {
+            return redirect('/#prenota')
+                ->withErrors(['booking' => $suspension->suspensionMessage()])
+                ->withInput();
+        }
+
         if (filled($request->input('lamaka_confirm_url'))) {
             Log::info('Booking submission blocked by honeypot.', [
                 'ip_address' => $request->ip(),
@@ -61,7 +67,7 @@ class BookingSubmissionController extends Controller
             };
 
             if (in_array($field->type, ['date', 'datetime'], true)) {
-                $fieldRules[] = 'after_or_equal:'.now()->addDay()->startOfDay()->toDateTimeString();
+                $fieldRules[] = 'after_or_equal:'.CarbonImmutable::today(config('app.display_timezone', 'Europe/Rome'))->addDay()->toDateString();
             }
 
             if (in_array($field->type, ['text', 'tel', 'textarea'], true)) {
@@ -124,6 +130,7 @@ class BookingSubmissionController extends Controller
             'data' => $data,
             'status' => 'new',
             'booking_date' => $requestedDate,
+            'experience_id' => $selectedExperience?->id,
             'participants' => is_numeric(Arr::get($input, 'partecipanti')) ? (int) Arr::get($input, 'partecipanti') : null,
             'customer_name' => Arr::get($input, 'nome') ?: Arr::get($input, 'name'),
             'phone' => Arr::get($input, 'telefono'),

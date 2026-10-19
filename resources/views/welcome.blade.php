@@ -210,15 +210,20 @@
                     <h2 class="text-5xl md:text-6xl mb-8" style="font-family:'Cormorant Garamond',serif;">
                         {{ data_get($bookingSettings, 'heading', 'Prenota la tua esperienza') }}
                     </h2>
+                    @unless ($bookingSuspension)
                     <p class="text-[#5f574d] leading-relaxed text-lg max-w-2xl">
                         {{ data_get($bookingSettings, 'body', 'Compila il modulo con le informazioni principali. Ti ricontatteremo per confermare disponibilità, dettagli e orari.') }}
                     </p>
+                    @endunless
 
                     @if (data_get($bookingSettings, 'image'))
                         <img src="{{ $mediaUrl(data_get($bookingSettings, 'image')) }}" alt="Prenota LAMAKA" class="mt-10 h-[360px] w-full max-w-2xl object-cover">
                     @endif
                 </div>
 
+                @if ($bookingSuspension)
+                    <div role="status" class="bg-white/55 border border-[#d8cdbd] p-6 md:p-10 text-[#4f4a35] text-lg leading-relaxed whitespace-pre-line">{{ $bookingSuspension->suspensionMessage() }}</div>
+                @else
                 <form method="POST" action="{{ route('booking.store') }}" class="booking-form bg-white/55 border border-[#d8cdbd] p-6 md:p-10">
                     @csrf
                     <div aria-hidden="true" style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;">
@@ -245,8 +250,8 @@
                                 $oldValue = old("fields.{$field->key}", request($field->key));
                                 $inputType = $field->type === 'datetime' ? 'datetime-local' : $field->type;
                                 $minimumValue = match ($field->type) {
-                                    'date' => now()->addDay()->toDateString(),
-                                    'datetime' => now()->addDay()->startOfDay()->format('Y-m-d\TH:i'),
+                                    'date' => now(config('app.display_timezone', 'Europe/Rome'))->addDay()->toDateString(),
+                                    'datetime' => now(config('app.display_timezone', 'Europe/Rome'))->addDay()->startOfDay()->format('Y-m-d\TH:i'),
                                     default => null,
                                 };
                                 $selectOptions = $field->optionsList();
@@ -324,6 +329,7 @@
                         {{ data_get($bookingSettings, 'submit_label', 'Invia richiesta') }}
                     </button>
                 </form>
+                @endif
             </div>
         </section>
 
@@ -446,8 +452,8 @@
         const availabilityCalendar = document.getElementById('booking-availability-calendar');
 
         if (bookingDateInput && availabilityCalendar) {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+            const todayValue = @json(now(config('app.display_timezone', 'Europe/Rome'))->toDateString());
+            const today = new Date(`${todayValue}T12:00:00`);
             let visibleMonth = bookingDateInput.value
                 ? new Date(`${bookingDateInput.value}T12:00:00`)
                 : new Date(today.getFullYear(), today.getMonth(), 1);
@@ -480,7 +486,7 @@
                     const date = new Date(year, month, number, 12);
                     const dateValue = localDate(date);
                     const isoWeekday = date.getDay() === 0 ? 7 : date.getDay();
-                    const tooSoon = date <= today;
+                    const tooSoon = dateValue <= todayValue;
                     const full = unavailableBookingDates.includes(dateValue);
                     const wrongWeekday = !allowedWeekdays().map(Number).includes(isoWeekday);
                     const experienceMissing = !hasSelectedExperience();
@@ -575,5 +581,6 @@
         }
     </script>
 
+    @include('partials.booking-suspension')
 </body>
 </html>

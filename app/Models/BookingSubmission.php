@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BookingSubmission extends Model
 {
@@ -32,6 +33,7 @@ class BookingSubmission extends Model
         'ip_address',
         'user_agent',
         'booking_date',
+        'experience_id',
         'start_time',
         'end_time',
         'participants',
@@ -64,6 +66,7 @@ class BookingSubmission extends Model
     {
         return (int) static::query()
             ->whereDate('booking_date', $date)
+            ->where('status', 'confirmed')
             ->whereNotNull('confirmed_at')
             ->when($exceptId, fn ($query) => $query->whereKeyNot($exceptId))
             ->sum('animals');
@@ -74,12 +77,18 @@ class BookingSubmission extends Model
         return static::query()
             ->selectRaw('booking_date, SUM(animals) as animals_total')
             ->whereNotNull('booking_date')
+            ->where('status', 'confirmed')
             ->whereNotNull('confirmed_at')
             ->groupBy('booking_date')
             ->havingRaw('SUM(animals) >= ?', [static::MAX_DAILY_ANIMALS])
             ->pluck('booking_date')
             ->map(fn ($date) => substr((string) $date, 0, 10))
             ->values()->all();
+    }
+
+    public function experience(): BelongsTo
+    {
+        return $this->belongsTo(Experience::class);
     }
 
     /**

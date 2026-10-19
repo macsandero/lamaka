@@ -29,6 +29,7 @@ Route::get('/', function () {
         'animals' => Animal::query()->published()->ordered()->get(),
         'contact' => ContactSetting::query()->where('is_active', true)->first(),
         'bookingSettings' => BookingFormSetting::query()->where('is_active', true)->first(),
+        'bookingSuspension' => BookingFormSetting::currentSuspension(),
         'bookingFields' => BookingFormField::query()->published()->ordered()->get(),
         'unavailableBookingDates' => BookingSubmission::unavailableDates(),
         'experienceAvailability' => Experience::query()->published()->get()
@@ -43,6 +44,7 @@ Route::get('/esperienze/{experience}', function (Experience $experience) {
 
     return view('experience-show', [
         'experience' => $experience,
+        'bookingSuspension' => BookingFormSetting::currentSuspension(),
         'contact' => ContactSetting::query()->where('is_active', true)->first(),
     ]);
 })->name('experiences.show');

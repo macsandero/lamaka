@@ -186,5 +186,6 @@
             </div>
         </section>
     </main>
+    @include('partials.booking-suspension')
 </body>
 </html>

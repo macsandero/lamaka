@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\BookingSubmissions\Tables;
 
+use App\Filament\Actions\EditBookingSubmissionAction;
 use App\Models\BookingSubmission;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -46,7 +46,7 @@ class BookingSubmissionsTable
             ->defaultSort('created_at', 'desc')
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
+                EditBookingSubmissionAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

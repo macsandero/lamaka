@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\BookingSubmission;
+use App\Models\Experience;
+use App\Services\BookingManager;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class BookingCalendarController extends Controller
@@ -18,13 +18,14 @@ class BookingCalendarController extends Controller
     {
         $this->ensureAdmin($request);
 
-        $selectedDate = $request->date('date')?->toDateString() ?? now()->toDateString();
+        $selectedDate = $request->date('date')?->toDateString() ?? now(config('app.display_timezone', 'Europe/Rome'))->toDateString();
         $month = CarbonImmutable::parse($request->string('month')->value() ?: $selectedDate)->startOfMonth();
         $editBooking = $request->integer('edit')
             ? BookingSubmission::query()->findOrFail($request->integer('edit'))
             : null;
 
         $monthBookings = BookingSubmission::query()
+            ->with('experience')
             ->whereBetween('booking_date', [$month->startOfMonth(), $month->endOfMonth()])
             ->orderBy('created_at')
             ->get()
@@ -38,6 +39,7 @@ class BookingCalendarController extends Controller
             'editBooking' => $editBooking,
             'sources' => BookingSubmission::SOURCES,
             'cancellationReasons' => BookingSubmission::CANCELLATION_REASONS,
+            'experiences' => Experience::query()->ordered()->get(),
         ]);
     }
 
@@ -55,7 +57,7 @@ class BookingCalendarController extends Controller
             'confirmed_at' => now(),
         ]);
 
-        $this->saveWithinCapacity($booking);
+        app(BookingManager::class)->save($booking);
 
         return $this->successRedirect($booking, 'Prenotazione confermata e salvata.');
     }
@@ -75,7 +77,7 @@ class BookingCalendarController extends Controller
         $bookingSubmission->cancelled_at = null;
         $bookingSubmission->cancellation_reason = null;
         $bookingSubmission->cancellation_reason_other = null;
-        $this->saveWithinCapacity($bookingSubmission);
+        app(BookingManager::class)->save($bookingSubmission);
 
         return $this->successRedirect($bookingSubmission, 'Prenotazione modificata e confermata. La disponibilità è stata ricalcolata.');
     }
@@ -88,17 +90,7 @@ class BookingCalendarController extends Controller
             'cancellation_reason_other' => ['nullable', 'required_if:cancellation_reason,Altro', 'string', 'max:500'],
         ]);
 
-        DB::transaction(function () use ($bookingSubmission, $values): void {
-            $bookingSubmission->forceFill([
-                'status' => 'cancelled',
-                'confirmed_at' => null,
-                'cancelled_at' => now(),
-                'cancellation_reason' => $values['cancellation_reason'],
-                'cancellation_reason_other' => $values['cancellation_reason'] === 'Altro'
-                    ? ($values['cancellation_reason_other'] ?? null)
-                    : null,
-            ])->save();
-        });
+        app(BookingManager::class)->save($bookingSubmission, [...$values, 'status' => 'cancelled']);
 
         return $this->successRedirect($bookingSubmission, 'Prenotazione annullata. La disponibilità del giorno è stata aggiornata.');
     }
@@ -111,7 +103,7 @@ class BookingCalendarController extends Controller
 
         $bookingSubmission->status = 'confirmed';
         $bookingSubmission->confirmed_at = now();
-        $this->saveWithinCapacity($bookingSubmission);
+        app(BookingManager::class)->save($bookingSubmission);
 
         return $this->successRedirect($bookingSubmission, 'Prenotazione confermata. La disponibilità è stata ricalcolata.');
     }
@@ -120,10 +112,11 @@ class BookingCalendarController extends Controller
     {
         $values = $request->validate([
             'booking_date' => ['required', 'date'],
+            'experience_id' => ['nullable', Rule::exists('experiences', 'id')],
             'start_time' => ['nullable', 'date_format:H:i'],
             'end_time' => ['nullable', 'date_format:H:i', 'after:start_time'],
             'participants' => ['nullable', 'integer', 'min:0'],
-            'animals' => ['nullable', 'integer', 'min:0', 'max:5'],
+            'animals' => ['required', 'integer', 'min:1', 'max:'.BookingSubmission::MAX_DAILY_ANIMALS],
             'customer_name' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255'],
@@ -137,28 +130,6 @@ class BookingCalendarController extends Controller
         }
 
         return $values;
-    }
-
-    private function saveWithinCapacity(BookingSubmission $booking): void
-    {
-        DB::transaction(function () use ($booking): void {
-            BookingSubmission::query()
-                ->whereDate('booking_date', $booking->booking_date)
-                ->lockForUpdate()->get();
-
-            $used = BookingSubmission::confirmedAnimalsForDate(
-                CarbonImmutable::parse($booking->booking_date)->toDateString(),
-                $booking->exists ? $booking->getKey() : null,
-            );
-
-            if ($used + (int) ($booking->animals ?? 0) > BookingSubmission::MAX_DAILY_ANIMALS) {
-                throw ValidationException::withMessages([
-                    'animals' => 'Per questo giorno restano disponibili '.max(0, BookingSubmission::MAX_DAILY_ANIMALS - $used).' animali.',
-                ]);
-            }
-
-            $booking->save();
-        });
     }
 
     private function successRedirect(BookingSubmission $booking, string $message): RedirectResponse

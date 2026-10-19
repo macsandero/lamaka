@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'bookings_suspended' => 'Bookings are temporarily suspended.',
     'experiences' => 'Experiences', 'about' => 'About us', 'animals' => 'Animals', 'book' => 'Book now',
     'discover_details' => 'Discover the details', 'contacts' => 'Contact us', 'follow_us' => 'Follow us',
     'directions' => 'Directions', 'select' => 'Select', 'form_error' => 'Please check the highlighted fields and try again.',

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'bookings_suspended' => 'Le prenotazioni sono temporaneamente sospese.',
     'experiences' => 'Esperienze', 'about' => 'Chi siamo', 'animals' => 'Animali', 'book' => 'Prenota',
     'discover_details' => 'Scopri i dettagli', 'contacts' => 'Contatti', 'follow_us' => 'Seguici',
     'directions' => 'Indicazioni stradali', 'select' => 'Seleziona', 'form_error' => 'Controlla i campi evidenziati e riprova.',

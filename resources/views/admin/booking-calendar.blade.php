@@ -20,7 +20,7 @@
 @php
     $start = $month->startOfMonth()->startOfWeek(\Carbon\CarbonInterface::MONDAY);
     $end = $month->endOfMonth()->endOfWeek(\Carbon\CarbonInterface::SUNDAY);
-    $usedAnimals = (int) $dayBookings->whereNotNull('confirmed_at')->sum('animals');
+    $usedAnimals = (int) $dayBookings->where('status', 'confirmed')->whereNotNull('confirmed_at')->sum('animals');
     $formBooking = $editBooking;
 @endphp
 <main class="shell">
@@ -39,7 +39,7 @@
                     @for($day=$start; $day->lte($end); $day=$day->addDay())
                         @php
                             $date = $day->toDateString(); $items = $monthBookings->get($date, collect());
-                            $total = (int) $items->whereNotNull('confirmed_at')->sum('animals');
+                            $total = (int) $items->where('status', 'confirmed')->whereNotNull('confirmed_at')->sum('animals');
                         @endphp
                         <a class="day {{ !$day->isSameMonth($month)?'muted':'' }} {{ $date===$selectedDate?'selected':'' }} {{ $total>=5?'full':'' }}" href="{{ route('agenda.index',['date'=>$date,'month'=>$day->format('Y-m')]) }}#day-details">
                             <span class="num">{{ $day->day }}</span>
@@ -55,10 +55,15 @@
                     <article class="booking {{ $booking->cancelled_at?'cancelled':($booking->confirmed_at?'':'pending') }}">
                         @if($booking->cancelled_at)
                             <div class="badge cancelled">Annullata</div>
+                        @elseif($booking->status === 'closed')
+                            <div class="badge cancelled">Chiusa</div>
+                        @elseif($booking->status === 'contacted')
+                            <div class="badge">Contattata · da confermare</div>
                         @elseif(!$booking->confirmed_at)
                             <div class="badge">Da completare · richiesta dal sito</div>
                         @endif
                         <strong>{{ $booking->customer_name ?: 'Cliente senza nome' }}</strong><br>
+                        @if($booking->experience){{ $booking->experience->title }}<br>@endif
                         {{ $booking->participants ?? '–' }} partecipanti · {{ $booking->animals ?? '–' }} animali
                         @if($booking->start_time || $booking->end_time)<br>Orario: {{ $booking->start_time ? substr($booking->start_time, 0, 5) : '–' }}–{{ $booking->end_time ? substr($booking->end_time, 0, 5) : '–' }}@endif
                         @if($booking->phone)<br>{{ $booking->phone }}@endif @if($booking->email) · {{ $booking->email }}@endif
@@ -77,9 +82,10 @@
                                 <div class="dialog-top"><h3>{{ !$booking->confirmed_at && !$booking->cancelled_at ? 'Completa e conferma prenotazione' : 'Modifica prenotazione' }}</h3><button class="dialog-close" type="button" data-dialog-close aria-label="Chiudi">×</button></div>
                                 <form class="dialog-edit-form" method="post" action="{{ route('agenda.update',$booking) }}">
                                     @csrf @method('PUT')
+                                    <label>Esperienza</label><select name="experience_id"><option value="">Altro / prenotazione generica</option>@foreach($experiences as $experience)<option value="{{ $experience->id }}" @selected($booking->experience_id == $experience->id)>{{ $experience->title }}</option>@endforeach</select>
                                     <label>Giorno</label><input type="date" name="booking_date" value="{{ $booking->booking_date?->toDateString() }}" required>
                                     <div class="two"><div><label>Dalle ore</label><input type="time" name="start_time" value="{{ $booking->start_time ? substr($booking->start_time,0,5) : '' }}"></div><div><label>Alle ore</label><input type="time" name="end_time" value="{{ $booking->end_time ? substr($booking->end_time,0,5) : '' }}"></div></div>
-                                    <div class="two"><div><label>Numero partecipanti</label><input type="number" min="0" name="participants" value="{{ $booking->participants }}"></div><div><label>Numero animali</label><input type="number" min="0" max="5" name="animals" value="{{ $booking->animals }}"></div></div>
+                                    <div class="two"><div><label>Numero partecipanti</label><input type="number" min="0" name="participants" value="{{ $booking->participants }}"></div><div><label>Numero animali</label><input type="number" min="1" max="5" name="animals" value="{{ $booking->animals }}" required></div></div>
                                     <label>Nome e cognome del cliente</label><input name="customer_name" value="{{ $booking->customer_name }}">
                                     <label>Numero di telefono</label><input type="tel" name="phone" value="{{ $booking->phone }}">
                                     <label>Indirizzo email</label><input type="email" name="email" value="{{ $booking->email }}">
@@ -112,9 +118,10 @@
             @if($errors->any())<div class="errors">{{ $errors->first() }}</div>@endif
             <form method="post" action="{{ $formBooking ? route('agenda.update',$formBooking) : route('agenda.store') }}">
                 @csrf @if($formBooking) @method('PUT') @endif
+                <label for="experience_id">Esperienza</label><select id="experience_id" name="experience_id"><option value="">Altro / prenotazione generica</option>@foreach($experiences as $experience)<option value="{{ $experience->id }}" @selected(old('experience_id', $formBooking?->experience_id) == $experience->id)>{{ $experience->title }}</option>@endforeach</select>
                 <label for="booking_date">Giorno</label><input id="booking_date" type="date" name="booking_date" value="{{ old('booking_date',$formBooking?->booking_date?->toDateString() ?? $selectedDate) }}" required>
                 <div class="two"><div><label for="start_time">Dalle ore</label><input id="start_time" type="time" name="start_time" value="{{ old('start_time', $formBooking?->start_time ? substr($formBooking->start_time, 0, 5) : null) }}"></div><div><label for="end_time">Alle ore</label><input id="end_time" type="time" name="end_time" value="{{ old('end_time', $formBooking?->end_time ? substr($formBooking->end_time, 0, 5) : null) }}"></div></div>
-                <div class="two"><div><label for="participants">Numero partecipanti</label><input id="participants" type="number" min="0" name="participants" value="{{ old('participants',$formBooking?->participants) }}"></div><div><label for="animals">Numero animali</label><input id="animals" type="number" min="0" max="5" name="animals" value="{{ old('animals',$formBooking?->animals) }}"></div></div>
+                <div class="two"><div><label for="participants">Numero partecipanti</label><input id="participants" type="number" min="0" name="participants" value="{{ old('participants',$formBooking?->participants) }}"></div><div><label for="animals">Numero animali</label><input id="animals" type="number" min="1" max="5" name="animals" value="{{ old('animals',$formBooking?->animals) }}" required></div></div>
                 <label for="customer_name">Nome e cognome del cliente</label><input id="customer_name" name="customer_name" value="{{ old('customer_name',$formBooking?->customer_name) }}">
                 <label for="phone">Numero di telefono</label><input id="phone" type="tel" name="phone" value="{{ old('phone',$formBooking?->phone) }}">
                 <label for="email">Indirizzo email</label><input id="email" type="email" name="email" value="{{ old('email',$formBooking?->email) }}">

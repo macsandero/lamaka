@@ -7,12 +7,14 @@ use App\Filament\Resources\BookingFormSettings\Pages\ManageBookingFormSettings;
 use App\Models\BookingFormSetting;
 use BackedEnum;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -28,7 +30,7 @@ class BookingFormSettingResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Prenotazioni';
 
-    protected static ?string $navigationLabel = 'Testi modulo';
+    protected static ?string $navigationLabel = 'Impostazioni prenotazioni';
 
     protected static ?string $modelLabel = 'testi modulo';
 
@@ -40,6 +42,36 @@ class BookingFormSettingResource extends Resource
     {
         return $schema
             ->components([
+                Section::make('Sospensione prenotazioni')
+                    ->description('Sospende tutte le nuove richieste dal sito, con precedenza sui giorni disponibili delle esperienze.')
+                    ->schema([
+                        Toggle::make('bookings_suspended')
+                            ->label('Sospendi le prenotazioni')
+                            ->helperText('Disattiva l’interruttore per riaprire subito le prenotazioni.')
+                            ->default(false)
+                            ->live(),
+                        DatePicker::make('booking_suspension_until')
+                            ->label('Sospendi fino al')
+                            ->helperText('Il giorno selezionato è incluso. Le prenotazioni riaprono automaticamente il giorno successivo, secondo l’ora italiana.')
+                            ->visible(fn (Get $get): bool => (bool) $get('bookings_suspended'))
+                            ->required(fn (Get $get): bool => (bool) $get('bookings_suspended')),
+                        Textarea::make('booking_suspension_message')
+                            ->label('Avviso per i clienti')
+                            ->helperText('Compare al clic su “Prenota questa esperienza”, per tutte le esperienze, e al posto del modulo di prenotazione.')
+                            ->rows(4)
+                            ->maxLength(2000)
+                            ->visible(fn (Get $get): bool => (bool) $get('bookings_suspended'))
+                            ->required(fn (Get $get): bool => (bool) $get('bookings_suspended'))
+                            ->columnSpanFull(),
+                        Textarea::make('translations.en.booking_suspension_message')
+                            ->label('Avviso per i clienti (EN)')
+                            ->helperText('Facoltativo. Se vuoto, viene mostrato il testo italiano.')
+                            ->rows(4)
+                            ->maxLength(2000)
+                            ->visible(fn (Get $get): bool => (bool) $get('bookings_suspended'))
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(2),
                 Section::make('Sezione prenota')
                     ->schema([
                         TextInput::make('eyebrow')
@@ -90,6 +122,13 @@ class BookingFormSettingResource extends Resource
                 IconColumn::make('is_active')
                     ->label('Attivo')
                     ->boolean(),
+                IconColumn::make('bookings_suspended')
+                    ->label('Prenotazioni sospese')
+                    ->state(fn (BookingFormSetting $record): bool => $record->bookingsAreSuspended())
+                    ->boolean(),
+                TextColumn::make('booking_suspension_until')
+                    ->label('Scadenza sospensione')
+                    ->date('d/m/Y'),
             ])
             ->filters([
                 //
